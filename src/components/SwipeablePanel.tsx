@@ -2,13 +2,16 @@ import { useState } from 'react';
 import { Global } from '@emotion/react';
 import { styled } from '@mui/material/styles';
 import { grey } from '@mui/material/colors';
-import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import Skeleton from '@mui/material/Skeleton';
 import Typography from '@mui/material/Typography';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 
 const drawerBleeding = 58;
+
+interface SwipeablePanelProps {
+  children: React.ReactNode;
+}
 
 const Puller = styled('div')(({ theme }) => ({
   width: 30,
@@ -23,7 +26,7 @@ const Puller = styled('div')(({ theme }) => ({
   }),
 }));
 
-export default function SwipeablePanel() {
+export default function SwipeablePanel({ children }: SwipeablePanelProps) {
   const [open, setOpen] = useState(false);
 
   const toggleDrawer = (newOpen: boolean) => () => {
@@ -70,6 +73,7 @@ export default function SwipeablePanel() {
           
             {/* Obsah supliku */}
             <Box sx={{ px: 2, pb: 2, height: '100%', overflow: 'auto'}}>
+              {children}
               <Skeleton variant="rectangular" height="100%" />
             </Box>
 

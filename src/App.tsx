@@ -1,8 +1,9 @@
-import { CssBaseline, useMediaQuery, List, ListItem, ListItemText, Box, Stack } from '@mui/material';
+import { CssBaseline, useMediaQuery, List, ListItem, ListItemText, Box } from '@mui/material';
 import './App.css';
 import Header from './components/Header'
 import TemporaryPanel from './components/TemporaryPanel';
 import SwipeablePanel from './components/SwipeablePanel';
+import TripTile from './components/TripTile';
 
 function App() {
   const isMobile = useMediaQuery('(max-width:600px)');
@@ -26,9 +27,13 @@ function App() {
         <Box sx={{ flexShrink: 0 }}>
           <Header />
         </Box>
-        <Box sx={{ flexGrow: 1, backgroundColor: 'mistyrose' }}>
-          {!isMobile && <TemporaryPanel />}
-          {isMobile && <SwipeablePanel />}
+        <Box sx={{ flexGrow: 1 }}>
+        {!isMobile && <TemporaryPanel>
+          <TripTile/>
+        </TemporaryPanel>}
+        {isMobile && <SwipeablePanel>
+          <TripTile/>
+        </SwipeablePanel>}
         </Box>
       </Box>
     </>

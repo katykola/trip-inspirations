@@ -22,11 +22,11 @@ export default function AccountMenu() {
             justifyContent: "space-between",
             alignItems: "center",
             px: '2rem',
-            backgroundColor: 'burlywood'
+            backgroundColor: '#222222'
         }}
       >
 
-        <Typography>Trip Chest</Typography>
+        <Typography sx={{color:'white'}}>Trip Chest</Typography>
 
           <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
             <Button variant='contained'>+ Nový</Button>

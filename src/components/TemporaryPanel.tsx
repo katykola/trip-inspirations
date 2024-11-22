@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Button, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Divider, Typography, Stack, IconButton } from '@mui/material';
+import { Box, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Divider, Stack } from '@mui/material';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
@@ -7,7 +7,11 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 
 const drawerWidth = 500;
 
-export default function TemporaryPanel() {
+interface TemporaryPanelProps {
+  children: React.ReactNode;
+}
+
+export default function TemporaryPanel({ children }: TemporaryPanelProps) {
   const [open, setOpen] = useState(true);
 
   const toggleDrawer = (newOpen: boolean) => () => {
@@ -73,7 +77,7 @@ export default function TemporaryPanel() {
         }}
       >
         <Stack direction='row'>
-          {DrawerList}
+          {children}
           <Box onClick={toggleDrawer(false)} 
           sx={{
             display: 'flex',
