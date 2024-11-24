@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Divider, Stack } from '@mui/material';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
+import { Box, Drawer, Stack } from '@mui/material';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 
@@ -18,38 +16,8 @@ export default function TemporaryPanel({ children }: TemporaryPanelProps) {
     setOpen(newOpen);
   };
 
-  const DrawerList = (
-    <Box sx={{ width: drawerWidth }} role="presentation" onClick={toggleDrawer(false)}>
-      <List>
-        {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
-      <Divider />
-      <List>
-        {['All mail', 'Trash', 'Spam'].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
-    </Box>
-  );
-
   return (
-    <Box sx={{ position: 'relative', height: '100vh', display: 'flex', alignItems: 'center' }}>
+    <Box sx={{ position: 'relative', height: 'calc(100vh-4rem)', display: 'flex', alignItems: 'center' }}>
 
       <Box onClick={toggleDrawer(true)} 
           sx={{
