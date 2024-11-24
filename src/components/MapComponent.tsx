@@ -1,11 +1,48 @@
+import { useEffect, useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
-import { divIcon } from 'leaflet';
+// import { divIcon } from 'leaflet';
 import markerIconUrl from '../images/marker-icon.png'; // Import the image
 import MarkerClusterGroup from 'react-leaflet-cluster';
+import { db } from '../config/firebase-config';
+import { collection, getDocs } from 'firebase/firestore';
+
+interface Trip {
+  id: string;
+  title: string;
+  link: string;
+  lat: number;
+  lng: number;
+}
 
 export default function MapComponent () {
+
+  const [trips, setTrips] = useState<Trip[]>([]);
+
+  useEffect(() => {
+    const getTrips = async () => {
+      try {
+        const data = await getDocs(collection(db, 'DUMMY_DATA'));
+        const filteredData = data.docs.map((doc) => {
+          const tripData = doc.data();
+          return {
+            id: doc.id,
+            title: tripData.title,
+            link: tripData.link,
+            lat: tripData.coordinates._lat,
+            lng: tripData.coordinates._long,
+            notes: tripData.notes,
+          } as Trip;
+        });
+        setTrips(filteredData);
+        console.log(filteredData);
+      } catch (error) {
+        console.error('Error getting documents: ', error);
+      }
+    };
+    getTrips();
+  }, []);
 
   const markerIcon = new L.Icon({
     iconUrl: markerIconUrl,
@@ -14,31 +51,6 @@ export default function MapComponent () {
     popupAnchor: [1, -34],
     shadowSize: [41, 41]
   });
-
-  const markers = [
-    { 
-      lat: 48.80556, 
-      lng: 16.6378,
-      popup: {
-        title: 'Marker 2',
-        text: 'This is a custom popup text',
-      },    
-    },
-    { lat: 48.80320, 
-      lng: 16.6320,
-      popup: {
-        title: 'Marker 2',
-        text: 'This is a custom popup text',
-      },
-    },
-    { lat: 48.80320, 
-      lng: 16.6320,
-      popup: {
-        title: 'Marker 3',
-        text: 'This is a custom popup text',
-      },    
-    }
-  ]
 
 // Cluster custom icon + styling
 
@@ -79,15 +91,16 @@ export default function MapComponent () {
         chunkedLoading
         // iconCreateFunction={createClusterCustomIcon}
       >
-      {markers.map((marker, index) => (
-        <Marker key={index} position={[marker.lat, marker.lng]} icon={markerIcon}>
-          <Popup>
-          <h3>{marker.popup.title}</h3>
-          {marker.popup.text}          
-          </Popup>
-        </Marker>
-      ))}
+        {trips.map((trip) => (
+          <Marker key={trip.id} position={[trip.lat, trip.lng]} icon={markerIcon}>
+            <Popup>
+              <strong>{trip.title}</strong><br />
+              <a href={trip.link} target="_blank" rel="noopener noreferrer">{trip.link}</a><br />
+            </Popup>
+          </Marker>
+        ))}
       </MarkerClusterGroup>
     </MapContainer>
   );
+
 };

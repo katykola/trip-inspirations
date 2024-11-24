@@ -1,20 +1,28 @@
 import { Box, Typography, Link } from '@mui/material';
 
-export default function TripTile(){
+interface TripTileProps {
+  title: string;
+  link: string;
+}
+
+export default function TripTile({ title, link }: TripTileProps){
+
     return(
         <Box sx={{ border: '1px solid #ccc', borderRadius: '8px', overflow: 'hidden', maxWidth: '400px', margin: '16px', display: 'flex', alignItems: 'center' }}>
-        <Box sx={{ height: '200px', overflow: 'hidden' }}>
+        <Box sx={{ height: '150px', overflow: 'hidden' }}>
           <img
-            src="https://images.unsplash.com/photo-1633258771437-f56a2d916738?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fGFscHN8ZW58MHwwfDB8fHwy"
+            src="https://images.unsplash.com/photo-1659282130892-7538aa7f804d?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTI0fHxhbHBzfGVufDB8MHwwfHx8Mg%3D%3D"
             alt="Trip Image"
             style={{ width: '100%', height: '100%', objectFit: 'cover' }}
           />
         </Box>
-        <Box sx={{ padding: '16px' }}>
-          <Typography variant="h6">Titulek článku s výletem</Typography>
+        <Box sx={{ padding: '16px', textAlign:'left' }}>
+          <Typography variant="body1">{title}</Typography>
+          <Typography variant="body2">
           <Link href="https://weinwien.com" target="_blank" rel="noopener noreferrer">
-            https://wirinwien.com
+            {link}
           </Link>
+          </Typography>
         </Box>
       </Box>
     )

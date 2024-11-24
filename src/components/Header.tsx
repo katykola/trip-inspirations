@@ -26,7 +26,7 @@ export default function AccountMenu() {
         }}
       >
 
-        <Typography sx={{color:'white'}}>Trip Chest</Typography>
+        <Typography sx={{color:'white'}}>Trip Snap</Typography>
 
           <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
             <Button variant='contained'>+ Nový</Button>

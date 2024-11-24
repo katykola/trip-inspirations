@@ -3,7 +3,7 @@ import { Box, Drawer, Stack } from '@mui/material';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 
-const drawerWidth = 500;
+const drawerWidth = 400;
 
 interface TemporaryPanelProps {
   children: React.ReactNode;

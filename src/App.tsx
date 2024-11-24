@@ -1,4 +1,4 @@
-import { CssBaseline, useMediaQuery, List, ListItem, ListItemText, Box, Stack } from '@mui/material';
+import { CssBaseline, useMediaQuery, Box, Stack } from '@mui/material';
 import './App.css';
 import Header from './components/Header'
 import TemporaryPanel from './components/TemporaryPanel';
