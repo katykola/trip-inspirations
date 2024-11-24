@@ -13,7 +13,7 @@ export default function TripTile(){
         <Box sx={{ padding: '16px' }}>
           <Typography variant="h6">Titulek článku s výletem</Typography>
           <Link href="https://weinwien.com" target="_blank" rel="noopener noreferrer">
-            https://weinwien.com
+            https://wirinwien.com
           </Link>
         </Box>
       </Box>

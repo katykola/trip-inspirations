@@ -74,7 +74,6 @@ export default function SwipeablePanel({ children }: SwipeablePanelProps) {
             {/* Obsah supliku */}
             <Box sx={{ px: 2, pb: 2, height: '100%', overflow: 'auto'}}>
               {children}
-              <Skeleton variant="rectangular" height="100%" />
             </Box>
 
           </SwipeableDrawer>

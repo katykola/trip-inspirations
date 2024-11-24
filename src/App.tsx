@@ -3,7 +3,7 @@ import './App.css';
 import Header from './components/Header'
 import TemporaryPanel from './components/TemporaryPanel';
 import SwipeablePanel from './components/SwipeablePanel';
-import TripTile from './components/TripTile';
+import TripList from './components/TripList';
 
 function App() {
   const isMobile = useMediaQuery('(max-width:600px)');
@@ -29,10 +29,10 @@ function App() {
         </Box>
         <Box sx={{ flexGrow: 1 }}>
         {!isMobile && <TemporaryPanel>
-          <TripTile/>
+          <TripList/>
         </TemporaryPanel>}
         {isMobile && <SwipeablePanel>
-          <TripTile/>
+          <TripList/>
         </SwipeablePanel>}
         </Box>
       </Box>
