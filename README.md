@@ -1,1 +1,1 @@
-# Travel Inspirations
+# Trip Snap
