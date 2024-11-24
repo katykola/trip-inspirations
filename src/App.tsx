@@ -4,6 +4,7 @@ import Header from './components/Header'
 import TemporaryPanel from './components/TemporaryPanel';
 import SwipeablePanel from './components/SwipeablePanel';
 import TripList from './components/TripList';
+import MapComponent from './components/MapComponent';
 
 function App() {
   const isMobile = useMediaQuery('(max-width:600px)');
@@ -27,6 +28,7 @@ function App() {
         <Box sx={{ flexShrink: 0 }}>
           <Header />
         </Box>
+        <MapComponent />
         <Box sx={{ flexGrow: 1 }}>
         {!isMobile && <TemporaryPanel>
           <TripList/>
@@ -35,6 +37,7 @@ function App() {
           <TripList/>
         </SwipeablePanel>}
         </Box>
+  
       </Box>
     </>
   );
