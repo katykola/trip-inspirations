@@ -6,6 +6,8 @@ import TemporaryPanel from './components/TemporaryPanel';
 import SwipeablePanel from './components/SwipeablePanel';
 import TripList from './components/TripList';
 import TripDetail from './components/TripDetail';
+import TripNew from './components/TripNew';
+import TripNewForm from './components/TripNewForm';
 import MapComponent from './components/MapComponent';
 import { db } from './config/firebase-config';
 import { collection, getDocs } from 'firebase/firestore';
@@ -13,6 +15,7 @@ import { collection, getDocs } from 'firebase/firestore';
 interface Trip {
   id: string;
   title: string;
+  notes: string;
   link: string;
   lat: number;
   lng: number;
@@ -23,6 +26,8 @@ function App() {
 
   const [trips, setTrips] = useState<Trip[]>([]);
   const [selectedTripId, setSelectedTripId] = useState<string | null>(null);
+  const [showTripNew, setShowTripNew] = useState<boolean>(false);
+  const [showTripNewForm, setShowTripNewForm] = useState<boolean>(false);
 
   useEffect(() => {
     const getTrips = async () => {
@@ -46,18 +51,40 @@ function App() {
     setSelectedTripId(null);
   };
 
+  const handleShowTripNew = () => {
+    setShowTripNew(true);
+  };
+
+  const handleCloseTripNew = () => {
+    setShowTripNew(false);
+  };
+
+  const handleShowTripNewForm = () => {
+    setShowTripNewForm(true);
+  };
+
+  const handleBackToTripNew = () => {
+    setShowTripNewForm(false);
+  };
+
   return (
     <>
       <CssBaseline />
       <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
         <Box sx={{ flexShrink: 0 }}>
-          <Header />
+         <Header onShowTripNew={handleShowTripNew} />
         </Box>
         <Box sx={{ flexGrow: 1 }}>
-          {!isMobile && 
+        {!isMobile && 
           <Stack direction='row' sx={{ width: '100%' }}>
             <TemporaryPanel>
-              {selectedTripId ? (
+              {showTripNew ? (
+                showTripNewForm ? (
+                  <TripNewForm onBack={handleBackToTripNew} />
+                ) : (
+                  <TripNew onContinue={handleShowTripNewForm} onClose={handleCloseTripNew} />
+                )
+              ) : selectedTripId ? (
                 <TripDetail id={selectedTripId} onBack={handleBackToList} />
               ) : (
                 <TripList onTripSelect={handleTripSelect} />

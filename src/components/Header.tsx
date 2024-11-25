@@ -2,7 +2,12 @@ import { useState } from 'react';
 import { Box, Button, Avatar, Menu, MenuItem, ListItemIcon, Divider, IconButton, Tooltip, Stack, Typography } from '@mui/material';
 import { PersonAdd, Settings, Logout } from '@mui/icons-material';
 
-export default function AccountMenu() {
+interface HeaderProps {
+  onShowTripNew: () => void;
+}
+
+export default function AccountMenu({ onShowTripNew }: HeaderProps) {
+
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -11,6 +16,7 @@ export default function AccountMenu() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
   return (
     <>
 
@@ -29,7 +35,9 @@ export default function AccountMenu() {
         <Typography sx={{color:'white'}}>Trip Snap</Typography>
 
           <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
-            <Button variant='contained'>+ Nový</Button>
+
+            <Button onClick={onShowTripNew} variant='contained'>+ Nový</Button>
+            
             <Tooltip title="Account settings">
               <IconButton
                 onClick={handleClick}
