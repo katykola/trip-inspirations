@@ -7,6 +7,7 @@ import markerIconUrl from '../images/marker-icon.png'; // Import the image
 import MarkerClusterGroup from 'react-leaflet-cluster';
 import { db } from '../config/firebase-config';
 import { collection, getDocs } from 'firebase/firestore';
+import { Typography } from '@mui/material';
 
 interface Trip {
   id: string;
@@ -16,7 +17,14 @@ interface Trip {
   lng: number;
 }
 
-export default function MapComponent () {
+interface MapComponentProps {
+  id: string;
+  title: string;
+  link: string;
+  onTripSelect: (id: string) => void;
+}
+
+export default function MapComponent ({ id, onTripSelect }: MapComponentProps) {
 
   const [trips, setTrips] = useState<Trip[]>([]);
 
@@ -36,7 +44,6 @@ export default function MapComponent () {
           } as Trip;
         });
         setTrips(filteredData);
-        console.log(filteredData);
       } catch (error) {
         console.error('Error getting documents: ', error);
       }
@@ -79,6 +86,10 @@ export default function MapComponent () {
   //   }
   // `;
 
+  const handleClick = () => {
+    onTripSelect(id);
+    console.log('Selected Trip ID:', id);
+  };
 
   return (
     
@@ -94,7 +105,7 @@ export default function MapComponent () {
         {trips.map((trip) => (
           <Marker key={trip.id} position={[trip.lat, trip.lng]} icon={markerIcon}>
             <Popup>
-              <strong>{trip.title}</strong><br />
+              <Typography onClick={handleClick}>{trip.title}</Typography>
               <a href={trip.link} target="_blank" rel="noopener noreferrer">{trip.link}</a><br />
             </Popup>
           </Marker>

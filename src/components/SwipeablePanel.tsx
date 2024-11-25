@@ -3,11 +3,10 @@ import { Global } from '@emotion/react';
 import { styled } from '@mui/material/styles';
 import { grey } from '@mui/material/colors';
 import Box from '@mui/material/Box';
-import Skeleton from '@mui/material/Skeleton';
 import Typography from '@mui/material/Typography';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 
-const drawerBleeding = 58;
+const drawerBleeding = 54;
 
 interface SwipeablePanelProps {
   children: React.ReactNode;
@@ -38,7 +37,7 @@ export default function SwipeablePanel({ children }: SwipeablePanelProps) {
       <Global
         styles={{
           '.MuiDrawer-root > .MuiPaper-root': {
-            height: `calc(50% - ${drawerBleeding}px)`,
+            height: `calc(100% - ${drawerBleeding}px - 4rem)`,
             overflow: 'visible',
           },
         }}

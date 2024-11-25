@@ -8,10 +8,14 @@ interface Trip {
   id: string;
   title: string;
   link: string;
+  imageUrl: string;
 }
 
-export default function TripList() {
+interface TripListProps {
+  onTripSelect: (id: string) => void;
+}
 
+export default function TripList({ onTripSelect }: TripListProps) {
   const [trips, setTrips] = useState<Trip[]>([]);
 
   useEffect(() => {
@@ -30,7 +34,7 @@ export default function TripList() {
   return (
     <Stack>
       {trips.map((trip) => (
-        <TripTile key={trip.id} title={trip.title} link={trip.link} />
+        <TripTile key={trip.id} id={trip.id} title={trip.title} link={trip.link}  onTripSelect={onTripSelect} />
       ))}
     </Stack>
   );
