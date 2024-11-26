@@ -65,7 +65,7 @@ export default function TripDetail({ id, onBack }: TripDetailProps) {
   }
       
     return(
-        <Box sx={{ p: 3 }}>
+        <Stack spacing={3} sx={{ p: 3 }}>
         <Button onClick={onBack}>Back to List</Button>
         <Box sx={{ width: '100%',  overflow: 'hidden' }}>
           <img
@@ -104,6 +104,6 @@ export default function TripDetail({ id, onBack }: TripDetailProps) {
             <Button variant='contained'>Editovat</Button>
             <Button variant='contained'>Smazat</Button>
         </Stack>
-        </Box>
+        </Stack>
     )
 }
