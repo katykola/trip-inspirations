@@ -45,7 +45,9 @@ export default function TemporaryPanel({ children }: TemporaryPanelProps) {
         }}
       >
         <Stack direction='row'>
+
           {children}
+          
           <Box onClick={toggleDrawer(false)} 
           sx={{
             display: 'flex',

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
-import markerIconUrl from '../images/marker-icon.png'; // Import the image
+import markerIconUrl from '../images/marker-icon.png';
 import MarkerClusterGroup from 'react-leaflet-cluster';
 import { db } from '../config/firebase-config';
 import { collection, getDocs, GeoPoint } from 'firebase/firestore';

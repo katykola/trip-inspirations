@@ -3,7 +3,6 @@ import TemporaryPanel from '../components/TemporaryPanel';
 import TripList from '../components/TripList';
 import TripDetail from '../components/TripDetail';
 import TripNew from '../components/TripNew';
-import TripNewForm from '../components/TripNewForm';
 import MapComponent from '../components/MapComponent';
 import { Trip } from '../types/types';
 
@@ -32,21 +31,21 @@ export default function HomeScreenDesktop({
   }: HomeScreenDesktopProps) {
     
 return (
-        <Stack direction='row' sx={{ width: '100%' }}>
-        <TemporaryPanel>
-          {showTripNew ? (
-            showTripNewForm ? (
-              <TripNewForm onBack={handleBackToTripNew} />
-            ) : (
-              <TripNew onContinue={handleShowTripNewForm} onClose={handleCloseTripNew} />
-            )
-          ) : selectedTripId ? (
-            <TripDetail id={selectedTripId} onBack={handleBackToList} />
-          ) : (
-            <TripList onTripSelect={handleTripSelect} />
-          )}
-        </TemporaryPanel>
-        <MapComponent trips={trips} onTripSelect={handleTripSelect} />
-      </Stack>
+  <Stack direction='row' sx={{ width: '100%' }}>
+  {showTripNew ? (
+    <TripNew onContinue={handleShowTripNewForm} onClose={handleCloseTripNew} />
+    ) : (
+    <>
+      <TemporaryPanel>
+        {selectedTripId ? (
+          <TripDetail id={selectedTripId} onBack={handleBackToList} />
+        ) : (
+          <TripList onTripSelect={handleTripSelect} />
+        )}
+      </TemporaryPanel>
+      <MapComponent trips={trips} onTripSelect={handleTripSelect} />
+    </>
+    )}
+  </Stack>
     )
 }
