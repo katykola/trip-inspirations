@@ -4,7 +4,7 @@ import { db } from '../config/firebase-config';
 import { Trip } from '../types/types';
 
 const fetchTrips = async (): Promise<Trip[]> => {
-  const data = await getDocs(collection(db, 'DUMMY_DATA'));
+  const data = await getDocs(collection(db, 'trips'));
   return data.docs.map((doc) => ({ id: doc.id, ...doc.data() })) as Trip[];
 };
 

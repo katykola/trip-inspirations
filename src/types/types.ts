@@ -1,10 +1,11 @@
 interface Trip {
     id: string;
     title: string;
-    notes: string;
-    link: string;
+    description: string;
+    url: string;
     lat: number;
     lng: number;
+    images: string[];
   }
 
 export type { Trip };

@@ -2,18 +2,14 @@ import { useState, useEffect } from 'react';
 import { Box, Stack, Typography, Link, Button, CircularProgress } from '@mui/material';
 import { db } from '../config/firebase-config';
 import { doc, getDoc } from 'firebase/firestore';
-
-interface Trip {
-    id: string;
-    title: string;
-    notes: string;
-    link: string;
-  }
-  
-  interface TripDetailProps {
-    id: string;
-    onBack: () => void;
-  }
+import { Trip } from '../types/types';
+import Nature from '../images/nature.jpg';
+ 
+interface TripDetailProps {
+  id: string;
+  trips: Trip[];
+  onBack: () => void;
+}
 
 export default function TripDetail({ id, onBack }: TripDetailProps) {
 
@@ -23,7 +19,7 @@ export default function TripDetail({ id, onBack }: TripDetailProps) {
   useEffect(() => {
     const getTrip = async () => {
       try {
-        const docRef = doc(db, 'DUMMY_DATA', id);
+        const docRef = doc(db, 'trips', id);
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
           setTrip({
@@ -63,46 +59,42 @@ export default function TripDetail({ id, onBack }: TripDetailProps) {
       </Box>
     );
   }
+
+  console.log('Trip:', trip.id);
+  console.log('Images:', trip.images);
       
     return(
         <Stack spacing={3} sx={{ p: 3 }}>
         <Button onClick={onBack}>Back to List</Button>
-        <Box sx={{ width: '100%',  overflow: 'hidden' }}>
+        <Box sx={{ width: '100%', overflow: 'hidden' }}>
+        <img
+          src={trip.images && trip.images.length > 0 ? trip.images[0] : Nature}
+          alt="Trip Image"
+          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+        />
+      </Box>
+      <Stack direction='row' spacing={1}>
+        {trip.images && trip.images.length > 0 ?
+        (trip.images.slice(1).map((image, index) => (
+          <Box key={index} sx={{ width: '100%', overflow: 'hidden' }}>
           <img
-            src="https://images.unsplash.com/photo-1659282130892-7538aa7f804d?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTI0fHxhbHBzfGVufDB8MHwwfHx8Mg%3D%3D"
-            alt="Trip Image"
-            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+          src={image}
+          alt={`Trip Image ${index + 1}`}
+          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
           />
-        </Box>
-        <Stack direction='row' spacing={1}>
-        <Box sx={{  }}>
-          <img
-            src="https://images.unsplash.com/photo-1659282130892-7538aa7f804d?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTI0fHxhbHBzfGVufDB8MHwwfHx8Mg%3D%3D"
-            alt="Trip Image"
-            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-          />
-        </Box>
-        <Box sx={{  }}>
-          <img
-            src="https://images.unsplash.com/photo-1659282130892-7538aa7f804d?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTI0fHxhbHBzfGVufDB8MHwwfHx8Mg%3D%3D"
-            alt="Trip Image"
-            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-          />
-        </Box>        
-        <Box sx={{  }}>
-          <img
-            src="https://images.unsplash.com/photo-1659282130892-7538aa7f804d?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTI0fHxhbHBzfGVufDB8MHwwfHx8Mg%3D%3D"
-            alt="Trip Image"
-            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-          />
-        </Box>
-        </Stack>
-        <Typography variant="body1">{trip.title}</Typography>
-        <Typography variant="body2">{trip.notes}</Typography>
-        <Link>{trip.link}</Link>
+          </Box>
+        )))
+        : null
+      }
+      </Stack>        
+      <Typography variant="body1">{trip.title}</Typography>
+        <Typography variant="body2">{trip.description}</Typography>
+        <Link href={trip.url} target="_blank" rel="noopener noreferrer">
+          {trip.url}
+        </Link>        
         <Stack direction='row' sx={{ alignItems: 'center', justifyContent: 'space-between' }}>
-            <Button variant='contained'>Editovat</Button>
-            <Button variant='contained'>Smazat</Button>
+            <Button variant='contained'>Edit</Button>
+            <Button variant='contained'>Delete</Button>
         </Stack>
         </Stack>
     )

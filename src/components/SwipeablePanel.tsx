@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Global } from '@emotion/react';
 import { styled } from '@mui/material/styles';
 import { grey } from '@mui/material/colors';
@@ -32,6 +32,18 @@ export default function SwipeablePanel({ children }: SwipeablePanelProps) {
     setOpen(newOpen);
   };
 
+  useEffect(() => {
+    if (open) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [open]);
+
   return (
     <>
       <Global
@@ -43,42 +55,38 @@ export default function SwipeablePanel({ children }: SwipeablePanelProps) {
         }}
       />
 
-          <SwipeableDrawer
-            anchor="bottom"
-            open={open}
-            onClose={toggleDrawer(false)}
-            onOpen={toggleDrawer(true)}
-            swipeAreaWidth={drawerBleeding}
-            disableSwipeToOpen={false}
-            ModalProps={{
-                keepMounted: true,
-            }}
-            >
-            <Box
-              sx={{
-                  position: 'absolute',
-                  top: -drawerBleeding,
-                  borderTopLeftRadius: 8,
-                  borderTopRightRadius: 8,
-                  visibility: 'visible',
-                  right: 0,
-                  left: 0,
-                  backgroundColor: 'white'
-                }}
-                >
-            <Puller/>
-            <Typography sx={{ p: 2, color: 'text.secondary' }}>51 results</Typography>
-            </Box>
-          
-            {/* Obsah supliku */}
-            <Box sx={{ px: 2, pb: 2, height: '100%', overflow: 'auto'}}>
-              {children}
-            </Box>
+      <SwipeableDrawer
+        anchor="bottom"
+        open={open}
+        onClose={toggleDrawer(false)}
+        onOpen={toggleDrawer(true)}
+        swipeAreaWidth={drawerBleeding}
+        disableSwipeToOpen={false}
+        ModalProps={{
+          keepMounted: true,
+        }}
+      >
+        <Box
+          sx={{
+            position: 'absolute',
+            top: -drawerBleeding,
+            borderTopLeftRadius: 8,
+            borderTopRightRadius: 8,
+            visibility: 'visible',
+            right: 0,
+            left: 0,
+            backgroundColor: 'white',
+          }}
+        >
+          <Puller />
+          <Typography sx={{ p: 2, color: 'text.secondary' }}>51 results</Typography>
+        </Box>
 
-          </SwipeableDrawer>
-
-      
-      </>
-
+        {/* Drawer content */}
+        <Box sx={{ px: 2, pb: 2, height: '100%', overflow: 'auto' }}>
+          {children}
+        </Box>
+      </SwipeableDrawer>
+    </>
   );
 }

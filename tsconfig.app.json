@@ -25,5 +25,5 @@
     "composite": true // Enable composite mode
 
   },
-  "include": ["src"]
+  "include": ["src", "proxy.js"]
 }

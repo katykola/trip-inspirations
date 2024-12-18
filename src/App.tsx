@@ -1,6 +1,6 @@
 import './App.css';
 import { useTrips } from './hooks/useTrips';
-import MainScreen from './screens/MainScreen';
+import HomePage from './pages/HomePage';
 
 
 export default function App() {
@@ -16,6 +16,6 @@ export default function App() {
   }
 
   return (
-    <MainScreen trips={trips || []}/>
+    <HomePage trips={trips || []}/>
   );
 }

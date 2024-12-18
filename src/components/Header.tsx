@@ -1,20 +1,29 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Box, Button, Avatar, Menu, MenuItem, ListItemIcon, Divider, IconButton, Tooltip, Stack, Typography } from '@mui/material';
 import { PersonAdd, Settings, Logout } from '@mui/icons-material';
+import { headerHeight } from '../config/styling';
 
-interface HeaderProps {
-  onShowTripNew: () => void;
-}
 
-export default function AccountMenu({ onShowTripNew }: HeaderProps) {
+export default function Header() {
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+  const navigate = useNavigate();
+
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleHomePageClick = () => {
+    navigate('/');
+  };
+
+  const handleNewTripClick = () => {
+    navigate('/new');
   };
 
   return (
@@ -23,7 +32,7 @@ export default function AccountMenu({ onShowTripNew }: HeaderProps) {
       <Stack 
         direction='row'
         sx={{
-            height: '4rem',
+            height: headerHeight,
             width: '100%',
             justifyContent: "space-between",
             alignItems: "center",
@@ -32,11 +41,11 @@ export default function AccountMenu({ onShowTripNew }: HeaderProps) {
         }}
       >
 
-        <Typography sx={{color:'white'}}>Trip Snap</Typography>
+        <Typography onClick={handleHomePageClick} sx={{color:'white', cursor: 'pointer'}}>Trip Snap</Typography>
 
           <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
 
-            <Button onClick={onShowTripNew} variant='contained'>+ Nový</Button>
+            <Button onClick={handleNewTripClick} variant='contained'>+ New</Button>
             
             <Tooltip title="Account settings">
               <IconButton
