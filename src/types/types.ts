@@ -6,6 +6,10 @@ interface Trip {
     lat: number;
     lng: number;
     images: string[];
+    coordinates: {
+        lat: number;
+        lng: number;
+    };
   }
 
 export type { Trip };

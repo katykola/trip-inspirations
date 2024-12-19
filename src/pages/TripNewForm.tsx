@@ -1,28 +1,14 @@
 import { useState } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
-import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { TextField, Button, Stack, Grid } from '@mui/material';
-import MapWithCoordinates from './MapWithCoordinates';
+import MapWithCoordinates from '../components/MapWithCoordinates';
+import tripNewSchema from '../utils/schemas';
 
 interface TripNewFormProps {
   onBack: () => void;
   onSubmit: (data: any, reset: () => void) => void;
 }
-
-const tripNewSchema = z.object({
-  title: z.string().min(1, 'Title is required'),
-  description: z.string().optional(),
-  url: z.string()
-    .optional()
-    .refine((value) => !value || z.string().url().safeParse(value).success, {
-      message: 'Invalid URL',
-    }),
-  coordinates: z.object({
-    lat: z.number(),
-    lng: z.number(),
-  }).optional(),
-});
 
 export default function TripNewForm({ onBack, onSubmit }: TripNewFormProps) {
   const methods = useForm({
@@ -31,11 +17,16 @@ export default function TripNewForm({ onBack, onSubmit }: TripNewFormProps) {
   const { register, handleSubmit, formState: { errors }, reset } = methods;
   const [coordinates, setCoordinates] = useState<{ lat: number; lng: number } | null>(null);
 
+  console.log(coordinates);
+  console.log(coordinates?.lat);
+
   const handleFormSubmit = (data: any) => {
     if (coordinates) {
       data.lat = coordinates.lat;
       data.lng = coordinates.lng;
+      delete data.coordinates;
     }
+    console.log('Form submitted:', data);
     onSubmit(data, reset);
   };
 

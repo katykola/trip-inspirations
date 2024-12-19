@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
-import { Box, Stack, Typography, Link, Button, CircularProgress } from '@mui/material';
+import { Box, Stack, Typography, Button, CircularProgress, Link as LinkHref } from '@mui/material';
+import { Link, useNavigate } from 'react-router-dom';
 import { db } from '../config/firebase-config';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, deleteDoc } from 'firebase/firestore';
 import { Trip } from '../types/types';
 import Nature from '../images/nature.jpg';
  
@@ -15,6 +16,7 @@ export default function TripDetail({ id, onBack }: TripDetailProps) {
 
   const [trip, setTrip] = useState<Trip | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const getTrip = async () => {
@@ -39,6 +41,17 @@ export default function TripDetail({ id, onBack }: TripDetailProps) {
     getTrip();
   }, [id]);
 
+  const handleDelete = async () => {
+    try {
+      const docRef = doc(db, 'trips', id);
+      await deleteDoc(docRef);
+      console.log('Document successfully deleted!');
+      navigate('/'); // Navigate back to the trips list after deletion
+    } catch (error) {
+      console.error('Error deleting document: ', error);
+    }
+  };
+
   if (loading) {
     return (
       <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
@@ -59,9 +72,6 @@ export default function TripDetail({ id, onBack }: TripDetailProps) {
       </Box>
     );
   }
-
-  console.log('Trip:', trip.id);
-  console.log('Images:', trip.images);
       
     return(
         <Stack spacing={3} sx={{ p: 3 }}>
@@ -89,12 +99,12 @@ export default function TripDetail({ id, onBack }: TripDetailProps) {
       </Stack>        
       <Typography variant="body1">{trip.title}</Typography>
         <Typography variant="body2">{trip.description}</Typography>
-        <Link href={trip.url} target="_blank" rel="noopener noreferrer">
+        <LinkHref href={trip.url} target="_blank" rel="noopener noreferrer">
           {trip.url}
-        </Link>        
+        </LinkHref>        
         <Stack direction='row' sx={{ alignItems: 'center', justifyContent: 'space-between' }}>
-            <Button variant='contained'>Edit</Button>
-            <Button variant='contained'>Delete</Button>
+            <Link to={`/trip/${id}/edit`}><Button variant='contained'>Edit</Button></Link>
+            <Button variant='contained' onClick={handleDelete}>Delete</Button>
         </Stack>
         </Stack>
     )

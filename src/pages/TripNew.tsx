@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
 import { Stack, Typography, RadioGroup, FormControlLabel, Radio, Button, TextField } from '@mui/material';
+import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { db } from '../config/firebase-config';
 import { collection, addDoc } from 'firebase/firestore';
-import TripScraperForm from '../components/TripScraperForm';
-import TripNewForm from '../components/TripNewForm';
+import TripScraperForm from './TripScraperForm';
+import TripNewForm from './TripNewForm';
 import { fetchAndParse } from '../utils/scraper';
 
 interface TripNewProps {
   onContinue: () => void;
-  onClose: () => void;
 }
 
-export default function TripNew({ onContinue, onClose }: TripNewProps) {
+export default function TripNew({ onContinue }: TripNewProps) {
   const [selectedOption, setSelectedOption] = useState('');
   const [showForm, setShowForm] = useState(false);
   const [scrapedData, setScrapedData] = useState<{ title: string; description: string; images: string[] } | null>(null);
@@ -98,7 +98,7 @@ export default function TripNew({ onContinue, onClose }: TripNewProps) {
             />
           </RadioGroup>
           <Stack direction='row' sx={{ justifyContent: 'space-between' }}>
-            <Button onClick={onClose} variant='contained'>Back</Button>
+            <Link to="/"><Button variant='contained'>Back</Button></Link>
             <Button onClick={handleContinue} variant='contained' disabled={!selectedOption || (selectedOption === 'loadTripFromURL' && !url)}>Continue</Button>
           </Stack>
         </>

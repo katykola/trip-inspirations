@@ -77,7 +77,7 @@ function MapComponent({ tripId, trips, onTripSelect, selectedTripId = null }: Ma
             <Typography variant="body2">{trip.title}</Typography>
           </Popup>
         </Marker>
-      ))}
+      ))}z
       <MapScroller selectedTripId={selectedTripId} fetchedTrips={fetchedTrips} />
     </MapContainer>
   );

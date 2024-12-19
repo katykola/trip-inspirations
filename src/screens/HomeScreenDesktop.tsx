@@ -26,19 +26,18 @@ export default function HomeScreenDesktop({
   showTripNew,
   selectedTripId,
   handleShowTripNewForm,
-  handleCloseTripNew,
   handleTripSelect,
   handleBackToList,
 }: HomeScreenDesktopProps) {
+  
   const [isPanelOpen, setIsPanelOpen] = useState(true);
 
   const handleTogglePanel = (open: boolean) => {
     setIsPanelOpen(open);
-    console.log('Panel open:', open);
   };
 
   const renderTripNew = showTripNew && (
-    <TripNew onContinue={handleShowTripNewForm} onClose={handleCloseTripNew} />
+    <TripNew onContinue={handleShowTripNewForm} />
   );
 
   const renderTripDetail = selectedTripId && (

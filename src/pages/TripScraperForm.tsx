@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
-import { TextField, Button, Stack, Grid, Typography, Checkbox, Box, TextareaAutosize } from '@mui/material';
-import MapWithCoordinates from './MapWithCoordinates';
+import { useImageSelection } from '../hooks/useImageSelection';
+import { TextField, Button, Stack, Grid, Typography, TextareaAutosize } from '@mui/material';
+import MapWithCoordinates from '../components/MapWithCoordinates';
+import ImagesCheckboxComponent from '../components/ImagesChecboxComponent';
 
 interface TripScraperFormProps {
   onBack: () => void;
@@ -12,18 +14,10 @@ interface TripScraperFormProps {
 
 export default function TripScraperForm({ onBack, onSubmit, scrapedData, url }: TripScraperFormProps) {
   const methods = useForm();
-  const { register, handleSubmit, formState: { errors }, watch, reset, setValue } = methods;
-  const [selectedImages, setSelectedImages] = useState<string[]>([]);
+  const { register, handleSubmit, formState: { errors }, reset } = methods;
+  const { selectedImages, handleImageCheckboxChange } = useImageSelection();
   const [coordinates, setCoordinates] = useState<{ lat: number; lng: number } | null>(null);
 
-
-  const handleImageCheckboxChange = (image: string) => {
-    setSelectedImages((prevSelectedImages) =>
-      prevSelectedImages.includes(image)
-        ? prevSelectedImages.filter((img) => img !== image)
-        : [...prevSelectedImages, image]
-    );
-  };
 
   const handleFormSubmit = (data: any) => {
     data.images = selectedImages;
@@ -31,10 +25,10 @@ export default function TripScraperForm({ onBack, onSubmit, scrapedData, url }: 
     if (coordinates) {
       data.lat = coordinates.lat;
       data.lng = coordinates.lng;
+      delete data.coordinates;
     }
     onSubmit(data, reset);
     reset(); // Reset the form fields after submission
-    setSelectedImages([]); // Reset the selected images
   };
 
   return (
@@ -64,24 +58,7 @@ export default function TripScraperForm({ onBack, onSubmit, scrapedData, url }: 
                 <>
                   <Grid container spacing={2}>
                     {scrapedData.images.slice(0, 6).map((image, index) => (
-                      <Grid item xs={6} sm={4} key={index}>
-                        <Box sx={{ position: 'relative' }}>
-                          <img src={image} alt={`Scraped image ${index + 1}`} style={{ width: '100%', height: 'auto' }} />
-                          <Checkbox
-                            checked={selectedImages.includes(image)}
-                            onChange={() => handleImageCheckboxChange(image)}
-                            sx={{
-                              position: 'absolute',
-                              top: 8,
-                              left: 8,
-                              color: 'white',
-                              '& .MuiSvgIcon-root': {
-                                backgroundColor: 'white',
-                              }, 
-                            }}
-                          />
-                        </Box>
-                      </Grid>
+                      <ImagesCheckboxComponent key={index} index={index} image={image} selectedImages={selectedImages} handleImageCheckboxChange={handleImageCheckboxChange} />
                     ))}
                   </Grid>
                 </>
