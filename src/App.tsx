@@ -1,7 +1,6 @@
 import './App.css';
 import { useTrips } from './hooks/useTrips';
-import HomePage from './pages/HomePage';
-
+import AppRouter from './routes/AppRouter';
 
 export default function App() {
 
@@ -16,6 +15,6 @@ export default function App() {
   }
 
   return (
-    <HomePage trips={trips || []}/>
+    <AppRouter trips={trips || []}/>
   );
 }

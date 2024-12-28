@@ -8,11 +8,9 @@ import Nature from '../images/nature.jpg';
  
 interface TripDetailProps {
   id: string;
-  trips: Trip[];
-  onBack: () => void;
 }
 
-export default function TripDetail({ id, onBack }: TripDetailProps) {
+export default function TripDetail({ id }: TripDetailProps) {
 
   const [trip, setTrip] = useState<Trip | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -40,6 +38,10 @@ export default function TripDetail({ id, onBack }: TripDetailProps) {
     };
     getTrip();
   }, [id]);
+
+  function onBack() {
+    navigate('/');
+  }
 
   const handleDelete = async () => {
     try {

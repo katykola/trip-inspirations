@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import { Box, Typography, Link } from '@mui/material';
 import { Trip } from '../types/types';
 import Nature from '../images/nature.jpg';
@@ -5,14 +6,15 @@ import Nature from '../images/nature.jpg';
 interface TripTileProps {
   id: string;
   trip: Trip;
-  onTripSelect: (id: string) => void;
 }
 
 
-export default function TripTile({ id, trip, onTripSelect }: TripTileProps) {
+export default function TripTile({ id, trip }: TripTileProps) {
+
+  const navigate = useNavigate();
 
   const handleClick = () => {
-    onTripSelect(id);
+    navigate(`/trip/${id}`);
   };
 
     return(

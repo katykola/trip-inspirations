@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useForm, FormProvider } from 'react-hook-form';
 import { useImageSelection } from '../hooks/useImageSelection';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -18,6 +18,7 @@ interface TripScraperFormProps {
 
 export default function TripEditForm({ onSubmit }: TripScraperFormProps) {
 
+    const navigate = useNavigate();
     const { id } = useParams<{ id: string }>();    
     const { data: trip, isLoading } = useTrip(id || '');
     const { selectedImages, handleImageCheckboxChange } = useImageSelection();
@@ -59,6 +60,10 @@ export default function TripEditForm({ onSubmit }: TripScraperFormProps) {
           }
         onSubmit(data, reset);
         reset();
+    }
+
+    function onBack(){
+        navigate(`/trip/${id}`);
     }
 
     if (!id) {
@@ -124,7 +129,7 @@ export default function TripEditForm({ onSubmit }: TripScraperFormProps) {
                     helperText={errors.coordinates ? 'Please enter the address or select coordinates from the map.' : ''}
                     />
                     <Stack direction='row' sx={{ justifyContent: 'space-between' }}>
-                    <Button variant='contained'>Back</Button>
+                    <Button onClick={onBack} variant='contained'>Back</Button>
                     <Button type="submit" variant="contained" color="primary">
                         Save
                     </Button>

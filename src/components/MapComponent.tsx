@@ -13,11 +13,30 @@ interface MapComponentProps {
   tripId?: string;
   selectedTripId?: string | null;
   trips?: Trip[];
-  onTripSelect?: (id: string) => void; // Make onTripSelect optional
+  onTripSelect?: (id: string) => void;
 }
 
 function MapComponent({ tripId, trips, onTripSelect, selectedTripId = null }: MapComponentProps) {
+
   const [fetchedTrips, setFetchedTrips] = useState<Trip[]>([]);
+
+  const [currentLocation, setCurrentLocation] = useState<[number, number] | null>(null);
+
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setCurrentLocation([position.coords.latitude, position.coords.longitude]);
+        },
+        (error) => {
+          console.error('Error getting current location:', error);
+        }
+      );
+    }
+  }, []);
+
+  console.log('Current Location:', currentLocation);
+  
   const markerIcon = new L.Icon({
     iconUrl: markerIconUrl,
     iconSize: [32, 32],
@@ -39,10 +58,13 @@ function MapComponent({ tripId, trips, onTripSelect, selectedTripId = null }: Ma
 
   useEffect(() => {
     if (tripId && singleTrip) {
+      console.log('Single Trip:', singleTrip);
       setFetchedTrips([singleTrip]);
     } else if (trips) {
+      console.log('Multiple Trips:', trips);
       setFetchedTrips(trips);
     } else if (multipleTrips) {
+      console.log('Multiple Trips:', multipleTrips);
       setFetchedTrips(multipleTrips);
     }
   }, [tripId, singleTrip, trips, multipleTrips]);
@@ -58,7 +80,7 @@ function MapComponent({ tripId, trips, onTripSelect, selectedTripId = null }: Ma
     return <div>Loading...</div>;
   }
 
-  const center: [number, number] = selectedTripId && singleTrip ? [singleTrip.lat, singleTrip.lng] : [48.80556, 16.6378];
+  const center: [number, number] = currentLocation ? currentLocation : selectedTripId && singleTrip ? [singleTrip?.lat, singleTrip?.lng] : [49.195061, 16.606836];
 
   return (
     <MapContainer center={center} zoom={13} style={{ height: 'calc(100vh - 4rem)', width: '100%' }}>
