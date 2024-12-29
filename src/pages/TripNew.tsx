@@ -8,11 +8,8 @@ import TripScraperForm from './TripScraperForm';
 import TripNewForm from './TripNewForm';
 import { fetchAndParse } from '../utils/scraper';
 
-interface TripNewProps {
-  onContinue: () => void;
-}
 
-export default function TripNew({ onContinue }: TripNewProps) {
+export default function TripNew() {
   const [selectedOption, setSelectedOption] = useState('');
   const [showForm, setShowForm] = useState(false);
   const [scrapedData, setScrapedData] = useState<{ title: string; description: string; images: string[] } | null>(null);
@@ -42,8 +39,6 @@ export default function TripNew({ onContinue }: TripNewProps) {
       setShowForm(true);
       console.log('Show form set to true');
       navigate('/new?tab=make_new');
-    } else {
-      onContinue();
     }
   };
 

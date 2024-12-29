@@ -1,21 +1,20 @@
 import { useState } from 'react';
 import { Stack, Box } from '@mui/material';
 import TemporaryPanel from '../components/TemporaryPanel';
-import TripList from '../components/TripList';
 import MapComponent from '../components/MapComponent';
 import { Trip } from '../types/types';
 
 const DRAWER_WIDTH = 400;
 
-interface HomeScreenDesktopProps {
+interface ScreenDesktopProps {
   trips: Trip[];
-  handleTripSelect: (id: string) => void;
+  children: React.ReactNode;
 }
 
-export default function HomeScreenDesktop({
+export default function ScreenDesktop({
   trips,
-  handleTripSelect,
-}: HomeScreenDesktopProps) {
+  children
+}: ScreenDesktopProps) {
   
   const [isPanelOpen, setIsPanelOpen] = useState(true);
 
@@ -29,12 +28,12 @@ export default function HomeScreenDesktop({
         <TemporaryPanel onToggle={handleTogglePanel}>
           <Box sx={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
             <Box sx={{ width: DRAWER_WIDTH }}>
-              <TripList trips={trips}/>
+              {children}
             </Box>
           </Box>
         </TemporaryPanel>
       </Stack>
-      <MapComponent trips={trips} onTripSelect={handleTripSelect} />
+      <MapComponent trips={trips} />
     </Stack>
   );
 }

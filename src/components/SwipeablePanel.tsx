@@ -13,12 +13,12 @@ interface SwipeablePanelProps {
 }
 
 const Puller = styled('div')(({ theme }) => ({
-  width: 30,
-  height: 6,
+  width: 40,
+  height: 4,
   backgroundColor: grey[300],
   borderRadius: 3,
   position: 'absolute',
-  top: 8,
+  top: 10,
   left: 'calc(50% - 15px)',
   ...theme.applyStyles('dark', {
     backgroundColor: grey[900],
@@ -26,6 +26,7 @@ const Puller = styled('div')(({ theme }) => ({
 }));
 
 export default function SwipeablePanel({ children }: SwipeablePanelProps) {
+
   const [open, setOpen] = useState(false);
 
   const toggleDrawer = (newOpen: boolean) => () => {
@@ -65,6 +66,9 @@ export default function SwipeablePanel({ children }: SwipeablePanelProps) {
         ModalProps={{
           keepMounted: true,
         }}
+        BackdropProps={{
+          style: { backgroundColor: 'transparent' }, // Make the backdrop transparent
+        }}
       >
         <Box
           sx={{
@@ -79,11 +83,11 @@ export default function SwipeablePanel({ children }: SwipeablePanelProps) {
           }}
         >
           <Puller />
-          <Typography sx={{ p: 2, color: 'text.secondary' }}>51 results</Typography>
+          <Typography sx={{ p: 2, mt: 1,  color: 'text.secondary', textAlign: 'center', fontWeight: 'bolder' }}>51 trips</Typography>
         </Box>
 
         {/* Drawer content */}
-        <Box sx={{ px: 2, pb: 2, height: '100%', overflow: 'auto' }}>
+        <Box sx={{ px: 2, pb: 2, height: '100%', overflow: 'auto', width: '100%' }}>
           {children}
         </Box>
       </SwipeableDrawer>

@@ -17,32 +17,10 @@ interface AppRouterProps {
 export default function AppRouter({ trips }: AppRouterProps) {
 
   const [selectedTripId, setSelectedTripId] = useState<string | null>(null);
-  const [showTripNew, setShowTripNew] = useState<boolean>(false);
-  const [showTripNewForm, setShowTripNewForm] = useState<boolean>(false);
 
   const handleTripSelect = (id: string) => {
     console.log('handleTripSelect:', id);
     setSelectedTripId(id);
-  };
-
-  const handleBackToList = () => {
-    console.log('handleBackToList');
-    setSelectedTripId(null);
-  };
-
-  const handleCloseTripNew = () => {
-    console.log('handleCloseTripNew');
-    setShowTripNew(false);
-  };
-
-  const handleShowTripNewForm = () => {
-    console.log('handleShowTripNewForm');
-    setShowTripNewForm(true);
-  };
-
-  const handleBackToTripNew = () => {
-    console.log('handleBackToTripNew');
-    setShowTripNewForm(false);
   };
 
   const handleSubmit = async (data: any, reset: () => void) => {
@@ -69,23 +47,18 @@ export default function AppRouter({ trips }: AppRouterProps) {
               path="/"
               element={<HomePage 
                 trips={trips}
-                showTripNew={showTripNew}
-                showTripNewForm={showTripNewForm}
                 selectedTripId={selectedTripId}
-                handleBackToTripNew={handleBackToTripNew}
-                handleShowTripNewForm={handleShowTripNewForm}
-                handleCloseTripNew={handleCloseTripNew}
                 handleTripSelect={handleTripSelect}
-                handleBackToList={handleBackToList}
                 />}
             />
             <Route
               path="/new"
-              element={<TripNew onContinue={handleShowTripNewForm}  />}
+              element={<TripNew />}
             />
             <Route
               path="/trip/:id"
-              element={<TripDetailPage/>
+              element={<TripDetailPage
+              />
               }
             />
             <Route
