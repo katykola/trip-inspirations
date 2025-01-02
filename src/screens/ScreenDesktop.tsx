@@ -2,18 +2,15 @@ import { useState } from 'react';
 import { Stack, Box } from '@mui/material';
 import TemporaryPanel from '../components/TemporaryPanel';
 import MapComponent from '../components/MapComponent';
-import { Trip } from '../types/types';
 
 const DRAWER_WIDTH = 400;
 
 interface ScreenDesktopProps {
-  trips: Trip[];
   children: React.ReactNode;
 }
 
 export default function ScreenDesktop({
-  trips,
-  children
+  children,
 }: ScreenDesktopProps) {
   
   const [isPanelOpen, setIsPanelOpen] = useState(true);
@@ -33,7 +30,7 @@ export default function ScreenDesktop({
           </Box>
         </TemporaryPanel>
       </Stack>
-      <MapComponent trips={trips} />
+      <MapComponent/>
     </Stack>
   );
 }

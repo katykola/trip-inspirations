@@ -5,6 +5,7 @@ import 'leaflet/dist/leaflet.css';
 import { useFormContext } from 'react-hook-form';
 import '../styles/MapWithCoordinates.css'; // Import the custom CSS file
 
+
 interface MapWithCoordinatesProps {
   coordinates: { lat: number; lng: number } | null;
   setCoordinates: (coordinates: { lat: number; lng: number }) => void;

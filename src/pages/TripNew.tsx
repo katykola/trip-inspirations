@@ -32,7 +32,7 @@ export default function TripNew() {
       if (data) {
         setScrapedData(data);
         setShowForm(true);
-        console.log('Show form set to true with scraped data:', data);
+        console.log('Show form set to true with scraped data:', data);  
         navigate('/new?tab=save_from_url');
       }
     } else if (selectedOption === 'makeNewTrip') {
@@ -52,6 +52,7 @@ export default function TripNew() {
       const docRef = await addDoc(collection(db, 'trips'), data);
       console.log('Document written with ID: ', docRef.id);
       reset();
+      return docRef.id; // Return the new trip ID
     } catch (e) {
       console.error('Error adding document: ', e);
     }

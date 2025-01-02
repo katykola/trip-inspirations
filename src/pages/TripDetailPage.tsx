@@ -8,6 +8,7 @@ import TripDetail from '../components/TripDetail';
 import ScreenDesktop from '../screens/ScreenDesktop';
 
 
+
 export default function TripDetailPage() {
 
   const isMobile = useMediaQuery(smallScreenBreakpoint);
@@ -44,10 +45,10 @@ export default function TripDetailPage() {
     <>
       {!isMobile ? (
         <>
-        <ScreenDesktop trips={[trip]} >
+        <ScreenDesktop  >
           <TripDetail id={id} />
         </ScreenDesktop>
-          <MapComponent selectedTripId={id}/>
+          <MapComponent />
         </>
       ) : (
         <Box>

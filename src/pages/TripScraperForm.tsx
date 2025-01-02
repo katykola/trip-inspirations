@@ -1,36 +1,51 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { data, useNavigate } from 'react-router-dom';
 import { useForm, FormProvider } from 'react-hook-form';
 import { useImageSelection } from '../hooks/useImageSelection';
 import { TextField, Button, Stack, Grid, Typography, TextareaAutosize } from '@mui/material';
 import MapWithCoordinates from '../components/MapWithCoordinates';
 import ImagesCheckboxComponent from '../components/ImagesChecboxComponent';
+import { useLocation } from '../context/LocationContext';
+
 
 interface TripScraperFormProps {
   onBack: () => void;
-  onSubmit: (data: any, reset: () => void) => void;
   scrapedData: { title: string; description: string; images: string[] } | null;
   url: string;
+  onSubmit: (data: any, reset: () => Promise<string | undefined>) => Promise<string | undefined>;
 }
 
 export default function TripScraperForm({ onBack, onSubmit, scrapedData, url }: TripScraperFormProps) {
+
+  const navigate  = useNavigate();
   const methods = useForm();
   const { register, handleSubmit, formState: { errors }, reset } = methods;
   const { selectedImages, handleImageCheckboxChange } = useImageSelection();
   const [coordinates, setCoordinates] = useState<{ lat: number; lng: number } | null>(null);
+  const { selectedLocation, setSelectedLocation } = useLocation();
 
 
-  const handleFormSubmit = (data: any) => {
+  const handleFormSubmit = async (data: any) => {
     data.images = selectedImages;
     data.url = url; // Add the URL to the submitted data
     if (coordinates) {
       data.lat = coordinates.lat;
       data.lng = coordinates.lng;
+      setSelectedLocation([coordinates.lat, coordinates.lng]);
       delete data.coordinates;
+    }  
+    const newTripId = await onSubmit(data, async () => {
+      reset();
+      return undefined;
+    });
+    if (newTripId) {
+      navigate(`/trip/${newTripId}`); // Navigate to the new trip's detail page
     }
-    onSubmit(data, reset);
     reset(); // Reset the form fields after submission
   };
 
+  console.log('selectedLocation', selectedLocation);
+  
   return (
     <FormProvider {...methods}>
       <form onSubmit={handleSubmit(handleFormSubmit)}>

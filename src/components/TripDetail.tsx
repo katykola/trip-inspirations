@@ -5,6 +5,8 @@ import { db } from '../config/firebase-config';
 import { doc, getDoc, deleteDoc } from 'firebase/firestore';
 import { Trip } from '../types/types';
 import Nature from '../images/nature.jpg';
+import { useLocation } from '../context/LocationContext';
+
  
 interface TripDetailProps {
   id: string;
@@ -14,6 +16,7 @@ export default function TripDetail({ id }: TripDetailProps) {
 
   const [trip, setTrip] = useState<Trip | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const { setSelectedLocation } = useLocation();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -25,7 +28,7 @@ export default function TripDetail({ id }: TripDetailProps) {
           setTrip({
             id: docSnap.id,
             ...docSnap.data(),
-          } as Trip);      
+          } as Trip);  
         } else {
           console.error('No such document!');
         }
@@ -38,6 +41,12 @@ export default function TripDetail({ id }: TripDetailProps) {
     };
     getTrip();
   }, [id]);
+
+  useEffect(() => {
+    if(trip){
+      setSelectedLocation([trip?.lat, trip?.lng])
+    }
+  }, [trip]);
 
   function onBack() {
     navigate('/');
@@ -74,6 +83,7 @@ export default function TripDetail({ id }: TripDetailProps) {
       </Box>
     );
   }
+
       
     return(
         <Stack spacing={3} sx={{ p: 3 }}>
