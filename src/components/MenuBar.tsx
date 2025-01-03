@@ -27,6 +27,15 @@ export default function MenuBar() {
         <TextField
           value={currentLocation ? 'Current Location' : 'Selected Location'}
           disabled
+          sx={{
+            maxHeight: '2.5rem', // Restricting height to 2.5rem
+            '& .MuiOutlinedInput-root': {
+              height: '2.5rem', // Ensures the input field respects the height
+            },
+            '& .MuiInputAdornment-root': {
+              height: '2.5rem', // Aligns the adornment with the input
+            },
+          }}
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
@@ -38,10 +47,16 @@ export default function MenuBar() {
         <Select
           value={mapRadius}
           onChange={handleRadiusChange}
-          displayEmpty
-          fullWidth
-          sx={{flex: '0 1 auto', maxWidth: 'max-content', backgroundColor: 'white'}}
-          startAdornment={
+          sx={{
+            flex: '0 1 auto',
+            maxWidth: 'max-content',
+            backgroundColor: 'white',
+            maxHeight: '2.5rem', // Restricting height to 3rem
+            overflow: 'hidden', // Ensures no content spills out
+            '& .MuiSelect-select': {
+              lineHeight: '3rem', // Ensures proper alignment within the height limit
+            },
+          }}          startAdornment={
             <InputAdornment position="start">
               <Adjust />
             </InputAdornment>

@@ -1,4 +1,4 @@
-const headerHeight = '4rem';
-const menuBarHeight = '4rem';
+const headerHeight = '3rem';
+const menuBarHeight = '3rem';
 
 export { headerHeight, menuBarHeight };
