@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Stack, Box } from '@mui/material';
 import TemporaryPanel from '../components/TemporaryPanel';
 import MapComponent from '../components/MapComponent';
+import MenuBar from '../components/MenuBar';
 
 const DRAWER_WIDTH = 400;
 
@@ -20,6 +21,8 @@ export default function ScreenDesktop({
   };
 
   return (
+    <>
+    <MenuBar/>
     <Stack direction="row" sx={{ position: 'relative', width: '100%' }}>
       <Stack direction="row" >
         <TemporaryPanel onToggle={handleTogglePanel}>
@@ -32,5 +35,6 @@ export default function ScreenDesktop({
       </Stack>
       <MapComponent/>
     </Stack>
+    </>
   );
 }

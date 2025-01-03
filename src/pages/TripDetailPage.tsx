@@ -48,13 +48,14 @@ export default function TripDetailPage() {
         <ScreenDesktop  >
           <TripDetail id={id} />
         </ScreenDesktop>
-          <MapComponent />
         </>
       ) : (
+        <>
         <Box>
           <h1>Trip Detail Page</h1>
           <p>Selected Trip ID: {id}</p>
         </Box>
+        </>
       )}
     </>
   );

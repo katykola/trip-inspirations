@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Box, Button, Avatar, Menu, MenuItem, ListItemIcon, Divider, IconButton, Tooltip, Stack, Typography } from '@mui/material';
+import { Button, Avatar, Menu, MenuItem, ListItemIcon, Divider, IconButton, Tooltip, Stack, Typography } from '@mui/material';
 import { PersonAdd, Settings, Logout } from '@mui/icons-material';
 import { headerHeight } from '../config/styling';
 
@@ -26,6 +26,7 @@ export default function Header() {
     navigate('/new');
   };
 
+
   return (
     <>
 
@@ -43,9 +44,9 @@ export default function Header() {
 
         <Typography onClick={handleHomePageClick} sx={{color:'white', cursor: 'pointer'}}>Trip Snap</Typography>
 
-          <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
+          <Stack direction='row' sx={{gap: '1rem', alignItems: 'center'}}>
 
-            <Button onClick={handleNewTripClick} variant='contained'>+ New</Button>
+            <Button onClick={handleNewTripClick} variant='contained'>+New Trip</Button>
             
             <Tooltip title="Account settings">
               <IconButton
@@ -55,11 +56,13 @@ export default function Header() {
                 aria-controls={open ? 'account-menu' : undefined}
                 aria-haspopup="true"
                 aria-expanded={open ? 'true' : undefined}
-              >
+                >
                 <Avatar sx={{ width: 32, height: 32 }}>M</Avatar>
               </IconButton>
             </Tooltip>
-          </Box>
+
+          </Stack>
+
           <Menu
             anchorEl={anchorEl}
             id="account-menu"

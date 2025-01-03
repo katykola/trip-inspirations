@@ -1,8 +1,8 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Header from '../components/Header';
 import { CssBaseline, Box } from '@mui/material';
 import { collection, addDoc } from 'firebase/firestore';
 import { db } from '../config/firebase-config';
+import Header from '../components/Header';
 import HomePage from '../pages/HomePage';
 import TripNew from '../pages/TripNew';
 import TripDetailPage from '../pages/TripDetailPage';

@@ -42,10 +42,10 @@ const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: numbe
       });
       setVisibleTrips(filteredTrips);
     } else {
-      setVisibleTrips(trips || []);
+      setVisibleTrips([]);
     }
     setIsLoading(false);
-  }, [currentLocation, trips]);
+  }, [currentLocation, trips, mapRadius]);
 
     return (
         <VisibleTripsContext.Provider value={{ isLoading, visibleTrips }}>

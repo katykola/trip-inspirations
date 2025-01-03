@@ -9,6 +9,7 @@ import { greenMarkerIcon, markerIcon } from '../utils/mapMarkers';
 import MapScroller from './MapScroller';
 import { useLocation } from '../context/LocationContext';
 import { useVisibleTrips } from '../context/VisibleTripsContext';
+import { headerHeight, menuBarHeight } from '../config/styling';
 
 export default function MapComponent() {
 
@@ -17,43 +18,49 @@ export default function MapComponent() {
   const { data: singleTrip, isLoading: singleTripLoading } = useTrip(id || ''); // single trip based on params id
   const { selectedLocation, currentLocation, mapRadius } = useLocation();
   const { visibleTrips, isLoading: visibleTripsLoading } = useVisibleTrips();
+
   
   if (singleTripLoading || visibleTripsLoading) {
     return <div>Loading...</div>;
   }
   
-  const handleClick = (id: string) => {
-    navigate(`/trip/${id}`); // Navigate to trip detail page
-  };
 
   const center = selectedLocation || currentLocation || [48.210033, 16.363449];
-  const zoom = selectedLocation ? 14 : 10;
-
+  const zoom = selectedLocation ? 14 : mapRadius === 5000 ? 12 : mapRadius === 10000 ? 11 : mapRadius === 30000 ? 10 : mapRadius === 50000 ? 9 : mapRadius === 100000 ? 8 : mapRadius === 300000 ? 6 : 5;
+    
   if (!center) {
-    return <div>Loading map...</div>;
-  }
+      return <div>Loading map...</div>;
+    }
+    
+    const handleClick = (id: string) => {
+      navigate(`/trip/${id}`); // Navigate to trip detail page
+    };
 
+    console.log('Visible Trips:', visibleTrips);
+
+  
   return (
-    <MapContainer center={center} zoom={zoom} style={{ height: 'calc(100vh - 4rem)', width: '100%' }}>
+    <MapContainer 
+      key={`${center}-${mapRadius}`} //ensure that markers are cleared and re-rendered correctly to avoid duplication
+      center={center} 
+      zoom={zoom} 
+      style={{ height: `calc(100vh - (${headerHeight} + ${menuBarHeight}))`, width: '100%' }}
+    >
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       />
-      <MarkerClusterGroup>
-        {visibleTrips &&
-          visibleTrips.map((trip) => (
-            <Marker
-              key={trip.id}
-              position={[trip.lat, trip.lng]}
-              eventHandlers={{
-                click: () => {
-                  handleClick(trip.id);
-                },
-              }}
-            >
-            </Marker>
-          ))}
-      </MarkerClusterGroup>
+    <MarkerClusterGroup key={`cluster-${mapRadius}-${visibleTrips.length}`}>
+      {visibleTrips.map((trip) => (
+        <Marker
+          key={trip.id}
+          position={[trip.lat, trip.lng]}
+          eventHandlers={{
+            click: () => handleClick(trip.id),
+          }}
+        />
+      ))}
+    </MarkerClusterGroup>
       {center && (
         <Circle
           center={center}

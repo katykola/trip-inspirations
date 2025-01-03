@@ -4,6 +4,7 @@ import ScreenDesktop from '../screens/ScreenDesktop';
 import SwipeablePanel from '../components/SwipeablePanel';
 import MapComponent from '../components/MapComponent';
 import TripList from '../components/TripList';
+import MenuBar from '../components/MenuBar';
 
 
 export default function HomePage() {
@@ -18,6 +19,7 @@ export default function HomePage() {
       </ScreenDesktop>
      ) : (
       <>
+      <MenuBar />
       <MapComponent />
       <SwipeablePanel>
         <TripList />
