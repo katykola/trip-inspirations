@@ -2,25 +2,25 @@
   "files": [],
   "references": [
     { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.node.json" }
+    { "path": "./tsconfig.build.json" }
   ],
   "compilerOptions": {
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "module": "commonjs",
-    // "rootDir": "./src",
-    "target": "es6",
-    "jsx": "react-jsx", // Ensure the jsx option is set
-    "lib": ["dom", "es2015"],
+    "module": "esnext",
+    "rootDir": "./src",
+    "target": "es2022",
+    "jsx": "react-jsx", 
+    "lib": ["dom", "es2015", "es2020"],
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    // "outDir": "./dist",
+    "outDir": "./dist",
     "noEmit": true,
-    // "removeComments": true,
-    // "sourceMap": true
+    "removeComments": true,
+    "sourceMap": true
   },
   "include": ["src", "proxy.js"]
 }

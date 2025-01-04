@@ -12,4 +12,7 @@ export default defineConfig({
   optimizeDeps: {
     include: ['axios', 'cheerio'],
   },
+  build: {
+    target: 'es2022', // Or esnext, depending on what works for you
+  },
 });

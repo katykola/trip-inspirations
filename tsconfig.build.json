@@ -1,0 +1,15 @@
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+      "composite": true, 
+      "noEmit": false,
+      "outDir": "./dist",
+      "rootDir": "./src",
+      "declaration": true,
+      "declarationMap": true,
+      "removeComments": true,
+      "module": "esnext",
+      "sourceMap": false
+    },
+    "include": ["src"]
+  }

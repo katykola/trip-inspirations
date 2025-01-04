@@ -38,7 +38,7 @@ export default function Header() {
             justifyContent: "space-between",
             alignItems: "center",
             px: '2rem',
-            backgroundColor: '#222222'
+            backgroundColor: 'pink'
         }}
       >
 
