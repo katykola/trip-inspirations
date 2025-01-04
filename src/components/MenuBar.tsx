@@ -20,7 +20,7 @@ export default function MenuBar() {
           gap: '1rem',
           alignItems: "center", 
           px: '2rem',
-          borderBottom: '1px solid grey'
+          borderBottom: '1px solid grey',
         }}
       >
         <Typography >Search your trips:</Typography>

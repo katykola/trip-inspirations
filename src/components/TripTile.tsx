@@ -20,7 +20,7 @@ export default function TripTile({ id, trip }: TripTileProps) {
       onClick={handleClick}
       sx={{
         border: '1px solid #ccc',
-        borderRadius: '8px',
+        borderRadius: '5px',
         overflow: 'hidden',
         width: '100%',
         maxWidth: '400px',
@@ -29,12 +29,16 @@ export default function TripTile({ id, trip }: TripTileProps) {
         alignItems: 'center',
         cursor: 'pointer',
         flexDirection: { xs: 'column', sm: 'row' }, // Responsive layout
+        '&:hover': {
+          border: '1px solid grey',
+          boxShadow: '0 0 5px 0 rgba(0,0,0,0.2)',
+        },
       }}
     >
       <Box
         sx={{
           flex: { xs: '0 0 100%', sm: '0 0 40%' },
-          height: { xs: '200px', sm: '150px' },
+          height: { xs: '150px', sm: '100px' },
           overflow: 'hidden',
         }}
       >
@@ -43,6 +47,7 @@ export default function TripTile({ id, trip }: TripTileProps) {
           style={{ width: '100%', height: '100%', objectFit: 'cover' }}
         />
       </Box>
+
       <Box
         sx={{
           padding: '16px',
@@ -52,12 +57,13 @@ export default function TripTile({ id, trip }: TripTileProps) {
         }}
       >
         <Typography variant="body1">{trip.title}</Typography>
-        <Typography variant="body2">
+        {/* <Typography variant="body2">
           <Link href={trip.url} target="_blank" rel="noopener noreferrer">
             {trip.url}
           </Link>
-        </Typography>
+        </Typography> */}
       </Box>
+      
     </Box>
   );
 }

@@ -9,6 +9,7 @@ import MapScroller from './MapScroller';
 import { useLocation } from '../context/LocationContext';
 import { useVisibleTrips } from '../context/VisibleTripsContext';
 import { headerHeight, menuBarHeight } from '../config/styling';
+import L from 'leaflet';
 
 export default function MapComponent() {
 
@@ -35,7 +36,11 @@ export default function MapComponent() {
       navigate(`/trip/${id}`); // Navigate to trip detail page
     };
 
-    console.log('Visible Trips:', visibleTrips);
+    // Create a custom icon with an "X" symbol
+    const customIcon = L.divIcon({
+      className: 'custom-center-icon',
+      html: '<div style="font-size: 20px; color: #333333">x</div>',
+    });
 
   
   return (
@@ -61,15 +66,21 @@ export default function MapComponent() {
       ))}
     </MarkerClusterGroup>
       {center && (
-        <Circle
-          center={center}
-          radius={mapRadius}
-          color="black"
-          fillColor="black"
-          fillOpacity={0.05} // More transparent fill
-          opacity={0.2} // More transparent border          
-          weight={1} // Thinner border
-        />
+      <>
+      <Circle
+        center={center}
+        radius={mapRadius}
+        color="black"
+        fillColor="black"
+        fillOpacity={0.05} // More transparent fill
+        opacity={0.4} // More transparent border          
+        weight={1} // Thinner border
+      />
+      <Marker
+        position={center}
+        icon={customIcon} // Custom icon class for styling
+      />
+    </>
       )}
       <MapScroller singleTripId={singleTrip ? singleTrip.id : ''} multipleTrips={visibleTrips || []} />
     </MapContainer>

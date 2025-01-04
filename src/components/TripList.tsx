@@ -8,7 +8,7 @@ export default function TripList() {
     
   return (
     <Stack>
-      <Typography variant="h6">{visibleTrips.length} Trips</Typography>
+      <Typography sx={{ color: 'grey', textAlign: 'left', pl: '1rem', pt: '1rem' }}>{visibleTrips.length} Trips</Typography>
       {visibleTrips.map((trip) => (
         <TripTile key={trip.id} id={trip.id} trip={trip} />
       ))}

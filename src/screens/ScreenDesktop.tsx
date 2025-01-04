@@ -3,7 +3,7 @@ import TemporaryPanel from '../components/TemporaryPanel';
 import MapComponent from '../components/MapComponent';
 import MenuBar from '../components/MenuBar';
 
-const DRAWER_WIDTH = 400;
+const DRAWER_WIDTH = 350;
 
 interface ScreenDesktopProps {
   children: React.ReactNode;

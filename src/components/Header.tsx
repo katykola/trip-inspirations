@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button, Avatar, Menu, MenuItem, ListItemIcon, Divider, IconButton, Tooltip, Stack, Typography } from '@mui/material';
 import { PersonAdd, Settings, Logout } from '@mui/icons-material';
 import { headerHeight } from '../config/styling';
+import { Map } from '@mui/icons-material';
 
 
 export default function Header() {
@@ -38,11 +39,15 @@ export default function Header() {
             justifyContent: "space-between",
             alignItems: "center",
             px: '2rem',
-            backgroundColor: 'pink'
+            backgroundColor: 'white',
+            borderBottom: '1px solid lightgrey'
         }}
       >
 
-        <Typography onClick={handleHomePageClick} sx={{color:'white', cursor: 'pointer'}}>Trip Snap</Typography>
+          <Stack direction='row' alignItems='center' onClick={handleHomePageClick} sx={{color:'black', cursor: 'pointer'}}>
+            <Map sx={{ mr: 1 }} />
+            <Typography>Trip Snap</Typography>
+          </Stack>
 
           <Stack direction='row' sx={{gap: '1rem', alignItems: 'center'}}>
 

@@ -30,6 +30,12 @@ export const LocationProvider = ({ children }: { children: ReactNode }) => {
       }
     }, []);
 
+    useEffect(() => {
+      if (mapRadius) {
+        console.log('Map radius:', mapRadius);
+      }
+    }, [mapRadius]);
+
   return (
     <LocationContext.Provider value={{ selectedLocation, setSelectedLocation, currentLocation, setCurrentLocation, mapRadius, setMapRadius }}>
       {children}
