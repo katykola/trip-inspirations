@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { Box, Typography, Link, Stack } from '@mui/material';
+import { Box, Typography, Link } from '@mui/material';
 import { Trip } from '../types/types';
 import Nature from '../images/nature.jpg';
 

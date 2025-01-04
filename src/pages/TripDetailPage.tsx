@@ -2,7 +2,6 @@ import { useParams } from 'react-router-dom';
 import { Box, Typography, CircularProgress, Button } from '@mui/material';
 import { useMediaQuery } from '@mui/material';
 import { smallScreenBreakpoint } from '../config/breakpoints';
-import MapComponent from '../components/MapComponent';
 import { useTrip } from '../hooks/useTrip';
 import TripDetail from '../components/TripDetail';
 import ScreenDesktop from '../screens/ScreenDesktop';

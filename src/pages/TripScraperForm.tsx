@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { data, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useForm, FormProvider } from 'react-hook-form';
 import { useImageSelection } from '../hooks/useImageSelection';
 import { TextField, Button, Stack, Grid, Typography, TextareaAutosize } from '@mui/material';

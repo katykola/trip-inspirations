@@ -5,7 +5,6 @@ import MarkerClusterGroup from 'react-leaflet-markercluster';
 import 'leaflet/dist/leaflet.css';
 import { useTrip } from '../hooks/useTrip';
 import '../styles/MapWithCoordinates.css';
-import { greenMarkerIcon, markerIcon } from '../utils/mapMarkers';
 import MapScroller from './MapScroller';
 import { useLocation } from '../context/LocationContext';
 import { useVisibleTrips } from '../context/VisibleTripsContext';
