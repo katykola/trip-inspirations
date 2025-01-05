@@ -33,9 +33,6 @@ async function fetchAndParse(url: string): Promise<ScrapedData | undefined> {
       }
     });
 
-    // Log the extracted images for debugging
-    console.log('Extracted Images:', images);
-
     // Return the extracted data
     return { title, description, images };
   } catch (error) {

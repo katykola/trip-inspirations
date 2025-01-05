@@ -11,6 +11,21 @@ import { useVisibleTrips } from '../context/VisibleTripsContext';
 import { headerHeight, menuBarHeight } from '../config/styling';
 import L from 'leaflet';
 
+// Fix for default icon paths
+import markerIcon from 'leaflet/dist/images/marker-icon.png';
+import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
+import markerShadow from 'leaflet/dist/images/marker-shadow.png';
+
+delete L.Icon.Default.prototype.options.iconUrl;
+delete L.Icon.Default.prototype.options.iconRetinaUrl;
+delete L.Icon.Default.prototype.options.shadowUrl;
+
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: markerIcon2x,
+  iconUrl: markerIcon,
+  shadowUrl: markerShadow,
+});
+
 export default function MapComponent() {
 
   const { id } = useParams();
@@ -35,6 +50,7 @@ export default function MapComponent() {
     const handleClick = (id: string) => {
       navigate(`/trip/${id}`); // Navigate to trip detail page
     };
+    
 
     // Create a custom icon with an "X" symbol
     const customIcon = L.divIcon({
