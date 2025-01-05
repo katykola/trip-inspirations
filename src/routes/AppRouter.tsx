@@ -25,38 +25,38 @@ export default function AppRouter() {
   };
 
   return (
-  <LocationProvider>
-    <VisibleTripsProvider>
-    <Router>
-      <CssBaseline />
-      <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-        <Box sx={{ flexShrink: 0 }}>
-          <Header />
+    <LocationProvider>
+      <VisibleTripsProvider>
+      <Router>
+        <CssBaseline />
+        <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+          <Box sx={{ flexShrink: 0 }}>
+            <Header />
+          </Box>
+          <Box sx={{ flexGrow: 1 }}>
+              <Routes>
+                <Route
+                  path="/"
+                  element={<HomePage/>}
+                />
+                <Route
+                  path="/new"
+                  element={<TripNew />}
+                />
+                <Route
+                  path="/trip/:id"
+                  element={<TripDetailPage/>
+                  }
+                />
+                <Route
+                  path="/trip/:id/edit"
+                  element={<TripEditForm onSubmit={handleSubmit}/>}
+                />
+              </Routes>
+          </Box>
         </Box>
-        <Box sx={{ flexGrow: 1 }}>
-            <Routes>
-              <Route
-                path="/"
-                element={<HomePage/>}
-              />
-              <Route
-                path="/new"
-                element={<TripNew />}
-              />
-              <Route
-                path="/trip/:id"
-                element={<TripDetailPage/>
-                }
-              />
-              <Route
-                path="/trip/:id/edit"
-                element={<TripEditForm onSubmit={handleSubmit}/>}
-              />
-            </Routes>
-        </Box>
-      </Box>
-    </Router>
-  </VisibleTripsProvider>
-  </LocationProvider>
+      </Router>
+    </VisibleTripsProvider>
+    </LocationProvider>
   );
 }

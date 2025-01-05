@@ -16,7 +16,7 @@ export const LocationProvider = ({ children }: { children: ReactNode }) => {
   const [currentLocation, setCurrentLocation] = useState<[number, number] | null>(null);
   const [mapRadius, setMapRadius] = useState(30000);
 
-    //Get current location
+  //Get current location
     useEffect(() => {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
@@ -29,12 +29,6 @@ export const LocationProvider = ({ children }: { children: ReactNode }) => {
       );
       }
     }, []);
-
-    useEffect(() => {
-      if (mapRadius) {
-        console.log('Map radius:', mapRadius);
-      }
-    }, [mapRadius]);
 
   return (
     <LocationContext.Provider value={{ selectedLocation, setSelectedLocation, currentLocation, setCurrentLocation, mapRadius, setMapRadius }}>
