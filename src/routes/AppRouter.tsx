@@ -25,9 +25,9 @@ export default function AppRouter() {
   };
 
   return (
-  <Router>
     <LocationProvider>
       <VisibleTripsProvider>
+      <Router>
         <CssBaseline />
         <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
           <Box sx={{ flexShrink: 0 }}>
@@ -55,8 +55,8 @@ export default function AppRouter() {
               </Routes>
           </Box>
         </Box>
+      </Router>
     </VisibleTripsProvider>
     </LocationProvider>
-  </Router>
   );
 }

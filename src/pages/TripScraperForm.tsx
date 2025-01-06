@@ -31,6 +31,7 @@ export default function TripScraperForm({ onBack, onSubmit, scrapedData, url }: 
     if (coordinates) {
       data.lat = coordinates.lat;
       data.lng = coordinates.lng;
+      console.log('coordinates', data.lat, data.lng);
       setSelectedLocation([coordinates.lat, coordinates.lng]);
       delete data.coordinates;
     }  
@@ -43,6 +44,8 @@ export default function TripScraperForm({ onBack, onSubmit, scrapedData, url }: 
     }
     reset(); // Reset the form fields after submission
   };
+
+  console.log('coordinates', coordinates);
 
   console.log('selectedLocation', selectedLocation);
   
