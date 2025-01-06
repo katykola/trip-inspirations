@@ -44,6 +44,7 @@ export default function TemporaryPanel({ children, onToggle }: TemporaryPanelPro
         PaperProps={{
           sx: {
             position: 'absolute',
+            zIndex: 1000,
             width: drawerWidth,
             transition: 'transform 0.3s ease-in-out',
             transform: open ? 'translateX(0)' : `translateX(-${drawerWidth - 50}px)`,

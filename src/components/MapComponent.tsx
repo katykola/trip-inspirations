@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-import { MapContainer, TileLayer, Marker, Circle } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Circle, ZoomControl } from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-markercluster';
 import 'leaflet/dist/leaflet.css';
 import { useTrip } from '../hooks/useTrip';
@@ -32,7 +32,7 @@ export default function MapComponent() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { data: singleTrip, isLoading: singleTripLoading } = useTrip(id || '');
-  const { selectedLocation, currentLocation, mapRadius, zoom, setZoom } = useLocation();
+  const { selectedLocation, setSelectedLocation, currentLocation, mapRadius, zoom, setZoom } = useLocation();
   const [currentMapRadius] = useState(mapRadius);
   const { visibleTrips, isLoading: visibleTripsLoading } = useVisibleTrips();
 
@@ -41,36 +41,36 @@ export default function MapComponent() {
   const center: [number, number] = selectedLocation || currentLocation || [48.210033, 16.363449];
   const circleCenter = currentLocation || [48.210033, 16.363449];
 
+  function resetMap(zoom: number) {
+    setZoom(zoom);
+    if (currentLocation) {
+      setSelectedLocation(currentLocation);
+    }    
+    navigate('/');
+    setMapKey((prevKey) => prevKey + 1); 
+  }
+
   useEffect(() => {
     if(visibleTrips){
       setMapKey((prevKey) => prevKey + 1); 
     } 
-    console.log('mapKey:', mapKey);
   }, [visibleTrips]);
 
   useEffect(() => {
     if (currentMapRadius !== mapRadius && mapRadius === 5000) {
-      setZoom(12);
-      navigate('/'); // Navigate to the home page
-      setMapKey((prevKey) => prevKey + 1); 
+      resetMap(12);
     } else if (currentMapRadius !== mapRadius && mapRadius === 10000) {
-      setZoom(11);
-      setMapKey((prevKey) => prevKey + 1); 
+      resetMap(11);
     } else if (currentMapRadius !== mapRadius && mapRadius === 30000) {
-      setZoom(9);
-      setMapKey((prevKey) => prevKey + 1); 
+      resetMap(9);
     } else if (currentMapRadius !== mapRadius && mapRadius === 50000) {
-      setZoom(8);
-      setMapKey((prevKey) => prevKey + 1); 
+      resetMap(8);
     } else if (currentMapRadius !== mapRadius && mapRadius === 100000) {
-      setZoom(7);
-      setMapKey((prevKey) => prevKey + 1);
+      resetMap(7);
     } else if (currentMapRadius !== mapRadius && mapRadius === 300000) {
-      setZoom(6);
-      setMapKey((prevKey) => prevKey + 1); 
+      resetMap(6);
     } else if (currentMapRadius !== mapRadius && mapRadius === 500000) {
-      setZoom(5);
-      setMapKey((prevKey) => prevKey + 1); 
+      resetMap(5);
     }
   }, [mapRadius]);
 
@@ -89,10 +89,6 @@ export default function MapComponent() {
     html: '<div style="font-size: 20px; color: #333333">x</div>',
   });
 
-  console.log('mapRadius:', mapRadius);
-  console.log('currentMapRadius:', currentMapRadius);
-  console.log('zoom:', zoom);
-
 
   return (
     <MapContainer
@@ -100,13 +96,14 @@ export default function MapComponent() {
       center={center}
       zoom={zoom}
       scrollWheelZoom={true}
-
+      zoomControl={false} // Disable the default zoom control
       style={{ height: `calc(100vh - (${headerHeight} + ${menuBarHeight}))`, width: '100%' }}
         >
       <TileLayer
       url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       />
+      <ZoomControl position="topright" />
       <MarkerClusterGroup>
       {visibleTrips.map((trip: Trip) => (
         <Marker

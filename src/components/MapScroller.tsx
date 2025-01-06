@@ -10,7 +10,7 @@ interface MapScrollerProps {
 
 export default function MapScroller({ singleTripId, multipleTrips }: MapScrollerProps) {
   const map = useMap();
-  const { zoom, setZoom, mapRadius, setSelectedLocation } = useLocation();
+  const { setZoom, setSelectedLocation } = useLocation();
   
     useEffect(() => {
       if (singleTripId) {
@@ -36,10 +36,7 @@ export default function MapScroller({ singleTripId, multipleTrips }: MapScroller
         map.off('moveend', handleMoveEnd);
       };
     }, [map]);
-  
-    console.log('MapRadius:', mapRadius);
-    console.log('Zoom:', zoom);
-    
+
     return null;
     
   }
