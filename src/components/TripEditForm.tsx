@@ -45,22 +45,34 @@ export default function TripEditForm({ onSubmit }: TripScraperFormProps) {
     }, [trip]);
 
 
-    async function handleFormSubmit(data: Trip){
-        data.images = selectedImages;
-        if (coordinates) {
-            data.lat = coordinates.lat;
-            data.lng = coordinates.lng;
+    async function handleFormSubmit(data: Trip) {
+        if (!trip) {
+            console.error('Trip data is not available.');
+            return;
         }
+
+        // Merge the updated data with the existing trip data
+        const updatedTrip = {
+            ...trip, // Keep existing data
+            ...data, // Override with form data
+            images: selectedImages.length > 0 ? selectedImages : trip.images, // Use selected images if available
+            lat: coordinates ? coordinates.lat : trip.lat, // Update latitude if coordinates are provided
+            lng: coordinates ? coordinates.lng : trip.lng, // Update longitude if coordinates are provided
+        };
+    
         try {
+            // Update Firestore document
             const docRef = doc(db, 'trips', id || '');
-            await updateDoc(docRef, { ...data });
-            console.log('Document successfully updated!');
-          } catch (error) {
+            await updateDoc(docRef, updatedTrip);
+            console.log('Document successfully updated!', updatedTrip);
+    
+            // Navigate back to trip details page
+            navigate(`/trip/${id}`);
+        } catch (error) {
             console.error('Error updating document: ', error);
-          }
-        onSubmit(data, reset);
-        reset();
+        }
     }
+    
 
     function onBack(){
         navigate(`/trip/${id}`);
