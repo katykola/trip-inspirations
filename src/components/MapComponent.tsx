@@ -1,17 +1,16 @@
-import { useState, useMemo, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-import { MapContainer, TileLayer, Marker, Circle, useMapEvents } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Circle } from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-markercluster';
 import 'leaflet/dist/leaflet.css';
 import { useTrip } from '../hooks/useTrip';
+import { Trip } from '../types/types';
 import '../styles/MapWithCoordinates.css';
 import MapScroller from './MapScroller';
 import { useLocation } from '../context/LocationContext';
 import { useVisibleTrips } from '../context/VisibleTripsContext';
 import { headerHeight, menuBarHeight } from '../config/styling';
 import L from 'leaflet';
-import { useMap } from 'react-leaflet';
 
 // Fix for default icon paths
 import markerIcon from 'leaflet/dist/images/marker-icon.png';
@@ -32,30 +31,14 @@ export default function MapComponent() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { data: singleTrip, isLoading: singleTripLoading } = useTrip(id || '');
-  const { selectedLocation, setSelectedLocation, currentLocation, mapRadius } = useLocation();
+  const { selectedLocation, currentLocation, mapRadius } = useLocation();
   const { visibleTrips, isLoading: visibleTripsLoading } = useVisibleTrips();
-  const [mapCenter, setMapCenter] = useState<[number, number] | null>(null);
 
-  const zoom = useMemo(() => {
-    return selectedLocation
-      ? 14
-      : mapRadius === 5000
-      ? 12
-      : mapRadius === 10000
-      ? 11
-      : mapRadius === 30000
-      ? 10
-      : mapRadius === 50000
-      ? 9
-      : mapRadius === 100000
-      ? 8
-      : mapRadius === 300000
-      ? 6
-      : 5;
-  }, [mapRadius, selectedLocation]);
 
-  const center = mapCenter || selectedLocation || currentLocation || [48.210033, 16.363449];
+  const center = selectedLocation || currentLocation || [48.210033, 16.363449];
   const circleCenter = currentLocation || [48.210033, 16.363449];
+
+  const zoom = 14;
 
   if (singleTripLoading || visibleTripsLoading) {
     return <div>Loading...</div>;
@@ -71,68 +54,47 @@ export default function MapComponent() {
     html: '<div style="font-size: 20px; color: #333333">x</div>',
   });
 
-  const MapEvents = () => {
-    const map = useMap(); // Access the map instance
-  
-    useEffect(() => {
-      if (map) {
-        // Only update the zoom level if a new zoom value is calculated
-        map.setZoom(zoom);
-      }
-    }, [zoom, map]); // Dependencies ensure this runs when the zoom level changes
-  
-    useMapEvents({
-      moveend: (event) => {
-        const mapCenter = event.target.getCenter();
-        setMapCenter([mapCenter.lat, mapCenter.lng]); // Update the map center without affecting zoom
-      },
-    });
-  
-    return null;
-  };
-  
-
-  console.log('selectedLocation:', selectedLocation);
-  console.log('mapRadius:', mapRadius);
-  console.log('zoom:', zoom);
 
   return (
     <MapContainer
+
       center={center}
       zoom={zoom}
+      scrollWheelZoom={true}
+
       style={{ height: `calc(100vh - (${headerHeight} + ${menuBarHeight}))`, width: '100%' }}
-    >
+        >
       <TileLayer
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+      attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       />
       <MarkerClusterGroup>
-        {visibleTrips.map((trip) => (
-          <Marker
-            key={trip.id}
-            position={[trip.lat, trip.lng]}
-            eventHandlers={{
-              click: () => handleClick(trip.id),
-            }}
-          />
-        ))}
+      {visibleTrips.map((trip: Trip) => (
+        <Marker
+        key={trip.id}
+        position={[trip.lat, trip.lng] as L.LatLngExpression}
+        eventHandlers={{
+          click: () => handleClick(trip.id),
+        }}
+        />
+      ))}
       </MarkerClusterGroup>
       {center && (
-        <>
-          <Circle
-            center={circleCenter}
-            radius={mapRadius}
-            color="black"
-            fillColor="black"
-            fillOpacity={0.05} // More transparent fill
-            opacity={0.4} // More transparent border          
-            weight={1} // Thinner border
-          />
-          <Marker position={circleCenter} icon={customIcon} />
-        </>
+      <>
+        <Circle
+        center={circleCenter as L.LatLngExpression}
+        radius={mapRadius}
+        color="black"
+        fillColor="black"
+        fillOpacity={0.05} // More transparent fill
+        opacity={0.4} // More transparent border          
+        weight={1} // Thinner border
+        />
+        <Marker position={circleCenter as L.LatLngExpression} icon={customIcon} />
+      </>
       )}
       <MapScroller singleTripId={singleTrip ? singleTrip.id : ''} multipleTrips={visibleTrips || []} />
-      <MapEvents /> {/* This now safely includes all map-related hooks */}
+      {/* <MapEvents />  */}
     </MapContainer>
   );
 }

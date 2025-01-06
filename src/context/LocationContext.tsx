@@ -30,8 +30,9 @@ export const LocationProvider = ({ children }: { children: ReactNode }) => {
       }
     }, []);
 
+
   return (
-    <LocationContext.Provider value={{ selectedLocation, setSelectedLocation, currentLocation, setCurrentLocation, mapRadius, setMapRadius }}>
+    <LocationContext.Provider value={{ selectedLocation, setSelectedLocation, currentLocation, setCurrentLocation, mapRadius, setMapRadius  }}>
       {children}
     </LocationContext.Provider>
   );

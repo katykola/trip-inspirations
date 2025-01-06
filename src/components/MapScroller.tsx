@@ -2,7 +2,6 @@ import { useEffect } from 'react';
 import { useMap } from 'react-leaflet';
 import { Trip } from '../types/types';
 
-
 interface MapScrollerProps {
     singleTripId: string | null;
     multipleTrips: Trip[];
