@@ -32,19 +32,19 @@ export default function MapComponent() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { data: singleTrip, isLoading: singleTripLoading } = useTrip(id || '');
-  const { selectedLocation, setSelectedLocation, currentLocation, mapRadius, zoom, setZoom } = useLocation();
+  const { selectedLocation, setSelectedLocation, currentLocation, mapRadius, zoom, setZoom, searchedLocation } = useLocation();
   const [currentMapRadius] = useState(mapRadius);
   const { visibleTrips, isLoading: visibleTripsLoading } = useVisibleTrips();
 
   const [mapKey, setMapKey] = useState(0); // State variable to manage the key for MapContainer
 
   const center: [number, number] = selectedLocation || currentLocation || [48.210033, 16.363449];
-  const circleCenter = currentLocation || [48.210033, 16.363449];
+  const circleCenter = searchedLocation || currentLocation || [48.210033, 16.363449];
 
   function resetMap(zoom: number) {
     setZoom(zoom);
-    if (currentLocation) {
-      setSelectedLocation(currentLocation);
+    if (searchedLocation) {
+      setSelectedLocation(searchedLocation);
     }    
     navigate('/');
     setMapKey((prevKey) => prevKey + 1); 
@@ -55,6 +55,14 @@ export default function MapComponent() {
       setMapKey((prevKey) => prevKey + 1); 
     } 
   }, [visibleTrips]);
+
+  useEffect(() => {
+    if (searchedLocation) {
+      setSelectedLocation(searchedLocation);
+    }
+    setMapKey((prevKey) => prevKey + 1); 
+
+  }, [searchedLocation]);
 
   useEffect(() => {
     if (currentMapRadius !== mapRadius && mapRadius === 5000) {

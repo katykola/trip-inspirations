@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { TextField, Box } from '@mui/material';
-import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, useMapEvents, ZoomControl } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import { useFormContext } from 'react-hook-form';
 import '../styles/MapWithCoordinates.css'; // Import the custom CSS file
@@ -64,11 +64,17 @@ const MapWithCoordinates: React.FC<MapWithCoordinatesProps> = ({ coordinates, se
         helperText={helperText}
         sx={{ position: 'absolute', top: 16, left: 16, zIndex: 1000, width: 'calc(100% - 32px)', backgroundColor: 'white', borderRadius: 2 }}
       />
-      <MapContainer center={[48.80556, 16.6378]} zoom={13} style={{ height: '100%' }}>
+      <MapContainer 
+        center={[48.80556, 16.6378]} 
+        zoom={13} 
+        zoomControl={false} // Disable the default zoom control
+        style={{ height: '100%' }}
+      >
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         />
+        <ZoomControl position="bottomright" />
         <LocationMarker />
       </MapContainer>
     </Box>

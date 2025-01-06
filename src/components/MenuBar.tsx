@@ -5,7 +5,7 @@ import { useLocation } from '../context/LocationContext';
 import { menuBarHeight } from '../config/styling';
 
 export default function MenuBar() {
-  const { mapRadius, setMapRadius, selectedLocation, setSelectedLocation, currentLocation } = useLocation();
+  const { mapRadius, setMapRadius, currentLocation, setSearchedLocation } = useLocation();
   const [query, setQuery] = useState('');
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -43,7 +43,7 @@ export default function MenuBar() {
     const lat = parseFloat(location.lat);
     const lon = parseFloat(location.lon);
 
-    setSelectedLocation([lat, lon]);
+    setSearchedLocation([lat, lon]);
     setQuery(location.display_name);
     setShowSuggestions(false);
   };
@@ -54,8 +54,6 @@ export default function MenuBar() {
     setShowSuggestions(false);
     setSearched(true);
   };
-
-  console.log('Selected Location:', selectedLocation);
 
   return (
     <>
@@ -148,7 +146,7 @@ export default function MenuBar() {
                 }}
             >
               <ListItem disablePadding>
-                <ListItemButton onClick={() => { setShowSuggestions(false); setSearched(false); if (currentLocation) setSelectedLocation(currentLocation) }}>
+                <ListItemButton onClick={() => { setShowSuggestions(false); setSearched(false); if (currentLocation) setSearchedLocation(currentLocation) }}>
                   <ListItemText primary="Current Location" />
                 </ListItemButton>
               </ListItem>

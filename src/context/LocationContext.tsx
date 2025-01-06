@@ -9,6 +9,8 @@ interface LocationContextProps {
   setMapRadius: (radius: number) => void;
   zoom: number;
   setZoom: (zoom: number) => void;
+  searchedLocation: [number, number] | null;
+  setSearchedLocation: (location: [number, number]) => void;
 }
 
 const LocationContext = createContext<LocationContextProps | undefined>(undefined);
@@ -16,6 +18,7 @@ const LocationContext = createContext<LocationContextProps | undefined>(undefine
 export const LocationProvider = ({ children }: { children: ReactNode }) => {
   const [selectedLocation, setSelectedLocation] = useState<[number, number] | null>(null);
   const [currentLocation, setCurrentLocation] = useState<[number, number] | null>(null);
+  const [searchedLocation, setSearchedLocation] = useState<[number, number] | null>(null);
   const [mapRadius, setMapRadius] = useState(30000);
   const [zoom, setZoom] = useState(9);
 
@@ -33,9 +36,8 @@ export const LocationProvider = ({ children }: { children: ReactNode }) => {
       }
     }, []);
 
-
   return (
-    <LocationContext.Provider value={{ selectedLocation, setSelectedLocation, currentLocation, setCurrentLocation, mapRadius, setMapRadius, zoom, setZoom  }}>
+    <LocationContext.Provider value={{ selectedLocation, setSelectedLocation, currentLocation, setCurrentLocation, mapRadius, setMapRadius, zoom, setZoom, searchedLocation, setSearchedLocation }}>
       {children}
     </LocationContext.Provider>
   );
