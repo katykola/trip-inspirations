@@ -51,8 +51,7 @@ export default function TripDetailPage() {
       ) : (
         <>
         <Box>
-          <h1>Trip Detail Page</h1>
-          <p>Selected Trip ID: {id}</p>
+        <TripDetail id={id} />
         </Box>
         </>
       )}

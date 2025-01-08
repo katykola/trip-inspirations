@@ -1,12 +1,17 @@
 import { useState, useEffect } from 'react';
-import { Box, Stack, Typography, Button, CircularProgress, Link as LinkHref, Grid } from '@mui/material';
+import { Box, Stack, Typography, Button, CircularProgress, Link as LinkHref, useMediaQuery } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 import { db } from '../config/firebase-config';
 import { doc, getDoc, deleteDoc } from 'firebase/firestore';
 import { Trip } from '../types/types';
 import Nature from '../images/nature.jpg';
 import { useLocation } from '../context/LocationContext';
+import Slider from 'react-slick';
+import { smallScreenBreakpoint } from '../config/breakpoints'
+import { ChevronLeft, OpenInNew } from '@mui/icons-material';
 
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
  
 interface TripDetailProps {
   id: string;
@@ -14,10 +19,23 @@ interface TripDetailProps {
 
 export default function TripDetail({ id }: TripDetailProps) {
 
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    arrows: true,
+  };
+
+  const isMobile = useMediaQuery(smallScreenBreakpoint);
+
   const [trip, setTrip] = useState<Trip | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const { setSelectedLocation } = useLocation();
   const navigate = useNavigate();
+  const { page, setPage } = useLocation();
+
 
   useEffect(() => {
     const getTrip = async () => {
@@ -84,11 +102,56 @@ export default function TripDetail({ id }: TripDetailProps) {
     );
   }
 
+  const displayUrl = trip.url.replace(/^https?:\/\/(www\.)?/, '').split('/')[0];
+
+  console.log('page', page);
       
     return(
-        <Stack spacing={3} sx={{ p: 3 }}>
-        <Button onClick={onBack}>Back to List</Button>
-        <Box sx={{ width: '100%', overflow: 'hidden' }}>
+      <Stack spacing={3} sx={{ px: 3, py: 2 }}>
+      <Stack onClick={onBack} direction='row' sx={{ cursor: 'pointer' }}>
+        <ChevronLeft sx={{ color: 'grey', mr: 0.5, fontSize: '0.9rem', verticalAlign: 'bottom' }}/>
+        <Typography sx={{ color: 'grey', fontSize: '0.9rem' }}>Back to List</Typography>
+      </Stack>
+
+      {isMobile? 
+      
+      <Box sx={{ width: '100%', overflow: 'hidden' }}>
+        {trip.images && trip.images.length > 1 ? 
+          <Slider {...settings}>
+            {trip.images && trip.images.length > 1 ? (
+              trip.images.map((image, index) => (
+                <Box key={index} sx={{ width: '100%', overflow: 'hidden' }}>
+                  <img
+                    src={image}
+                    alt={`Trip Image ${index + 1}`}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                    />
+                </Box>
+              ))
+            ) : (
+              <Box sx={{ width: '100%', overflow: 'hidden' }}>
+                <img
+                  src={Nature}
+                  alt="Default Image"
+                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                />
+              </Box>
+            )}
+          </Slider>
+      :
+      <Box sx={{ width: '100%', overflow: 'hidden' }}>
+      <img
+        src={trip.images && trip.images.length > 0 ? trip.images[0] : Nature}
+        alt="Trip Image"
+        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+      />
+      </Box>
+      }
+
+    </Box> 
+    :
+    <>
+      <Box sx={{ width: '100%', overflow: 'hidden' }}>
         <img
           src={trip.images && trip.images.length > 0 ? trip.images[0] : Nature}
           alt="Trip Image"
@@ -108,16 +171,22 @@ export default function TripDetail({ id }: TripDetailProps) {
         )))
         : null
       }
+      </Stack> 
+    </>    
+    }
+
+      <Typography variant="h6" sx={{ fontWeight: 'bold', textAlign: 'left' }}>{trip.title}</Typography>
+      <Typography variant="body2" sx={{ textAlign: 'left' }}>{trip.description}</Typography>
+      <Stack sx={{ alignItems: 'end' }}>
+        <LinkHref variant="body2" href={trip.url} target="_blank" rel="noopener noreferrer" >
+            {displayUrl}
+          <OpenInNew sx={{ ml: 0.5, fontSize: '1rem' }}/>
+        </LinkHref>
+      </Stack>   
+      <Stack direction='row' sx={{ alignItems: 'center', justifyContent: 'space-between' }}>
+        <Link  to={`/trip/${id}/edit`}><Button variant='outlined'>Edit</Button></Link>
+        <Button variant='outlined' onClick={handleDelete}>Delete</Button>
       </Stack>
-      <Typography variant="body1">{trip.title}</Typography>
-        <Typography variant="body2">{trip.description}</Typography>
-        <LinkHref href={trip.url} target="_blank" rel="noopener noreferrer">
-          {trip.url}
-        </LinkHref>        
-        <Stack direction='row' sx={{ alignItems: 'center', justifyContent: 'space-between' }}>
-            <Link to={`/trip/${id}/edit`}><Button variant='contained'>Edit</Button></Link>
-            <Button variant='contained' onClick={handleDelete}>Delete</Button>
-        </Stack>
-        </Stack>
+      </Stack>
     )
 }

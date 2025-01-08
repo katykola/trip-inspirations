@@ -1,5 +1,5 @@
-import { useParams } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
+import { Box } from '@mui/material';
 import { MapContainer, TileLayer, Marker, Circle, ZoomControl } from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-markercluster';
 import 'leaflet/dist/leaflet.css';
@@ -99,6 +99,7 @@ export default function MapComponent() {
 
 
   return (
+    <>
     <MapContainer
       key={mapKey} // Use the key to force reload
       center={center}
@@ -142,5 +143,6 @@ export default function MapComponent() {
         multipleTrips={visibleTrips || []} 
       />
     </MapContainer>
+    </>
   );
 }

@@ -19,26 +19,19 @@ export default function TripTile({ id, trip }: TripTileProps) {
     <Box
       onClick={handleClick}
       sx={{
-        border: '1px solid #ccc',
+        position: 'relative',
         borderRadius: '5px',
         overflow: 'hidden',
         width: '100%',
-        maxWidth: '400px',
-        margin: '16px',
-        display: 'flex',
-        alignItems: 'center',
         cursor: 'pointer',
-        flexDirection: { xs: 'column', sm: 'row' }, // Responsive layout
         '&:hover': {
-          border: '1px solid grey',
-          boxShadow: '0 0 5px 0 rgba(0,0,0,0.2)',
+          boxShadow: '0 0 5px 0 rgba(0,0,0,0.6)',
         },
       }}
     >
       <Box
         sx={{
-          flex: { xs: '0 0 100%', sm: '0 0 40%' },
-          height: { xs: '150px', sm: '100px' },
+          height: { xs: '150px', sm: '220px' },
           overflow: 'hidden',
         }}
       >
@@ -50,13 +43,20 @@ export default function TripTile({ id, trip }: TripTileProps) {
 
       <Box
         sx={{
-          padding: '16px',
+          width: '100%',
+          position: 'absolute',
+          bottom: 0,
+          left: 0,
+          px: '1rem',
+          py: '0.5rem',
           textAlign: 'left',
-          flex: { xs: '0 0 100%', sm: '1' },
-          width: { xs: '100%', sm: 'auto' },
+          backgroundColor: 'black',
+          opacity: '0.6'
         }}
       >
-        <Typography variant="body1">{trip.title}</Typography>
+        <Typography sx={{ color: 'white', fontSize: '0.9rem'}}>
+          { trip.title.length > 55 ? `${trip.title.substring(0, 55)}...` : trip.title}
+        </Typography>
       </Box>
       
     </Box>

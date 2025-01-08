@@ -83,7 +83,7 @@ export default function SwipeablePanel({ children }: SwipeablePanelProps) {
           }}
         >
           <Puller />
-          <Typography sx={{ p: 2, mt: 1,  color: 'text.secondary', textAlign: 'center', fontWeight: 'bolder' }}>51 trips</Typography>
+          <Typography sx={{ p: 2, mt: 1,  color: 'text.secondary', textAlign: 'center', fontWeight: 'bolder' }}>Pull</Typography>
         </Box>
 
         {/* Drawer content */}

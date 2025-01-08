@@ -11,6 +11,8 @@ interface LocationContextProps {
   setZoom: (zoom: number) => void;
   searchedLocation: [number, number] | null;
   setSearchedLocation: (location: [number, number]) => void;
+  page: number,
+  setPage: (page: number) => void;
 }
 
 const LocationContext = createContext<LocationContextProps | undefined>(undefined);
@@ -21,25 +23,27 @@ export const LocationProvider = ({ children }: { children: ReactNode }) => {
   const [searchedLocation, setSearchedLocation] = useState<[number, number] | null>(null);
   const [mapRadius, setMapRadius] = useState(300000);
   const [zoom, setZoom] = useState(6);
-
+  const [page, setPage] = useState(1);
 
   //Get current location
-    useEffect(() => {
+  useEffect(() => {
     if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-              setCurrentLocation([position.coords.latitude, position.coords.longitude]);
-          },
-        (error) => {
-          console.error('Error getting current location:', error);
-        }
-      );
+       navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setCurrentLocation([position.coords.latitude, position.coords.longitude]);
+        },
+      (error) => {
+        console.error('Error getting current location:', error);
       }
-    }, []);
+    );
+    }
+  }, []);
+
+  console.log('page', page);
 
  
   return (
-    <LocationContext.Provider value={{ selectedLocation, setSelectedLocation, currentLocation, setCurrentLocation, mapRadius, setMapRadius, zoom, setZoom, searchedLocation, setSearchedLocation }}>
+    <LocationContext.Provider value={{ selectedLocation, setSelectedLocation, currentLocation, setCurrentLocation, mapRadius, setMapRadius, zoom, setZoom, searchedLocation, setSearchedLocation, page, setPage }}>
       {children}
     </LocationContext.Provider>
   );

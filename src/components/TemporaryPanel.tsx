@@ -1,73 +1,65 @@
-import React, { useState, useEffect } from 'react';
-import { Box, Drawer, Stack } from '@mui/material';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import React, { useState } from 'react';
+import { Box, Drawer } from '@mui/material';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-
-const drawerWidth = 400;
+import { menuBarHeight, drawerWidth } from '../config/styling'
 
 interface TemporaryPanelProps {
   children: React.ReactNode;
-  onToggle: (open: boolean) => void;
 }
 
-export default function TemporaryPanel({ children, onToggle }: TemporaryPanelProps) {
+export default function TemporaryPanel({ children }: TemporaryPanelProps) {
+  
   const [open, setOpen] = useState(true);
 
-  const toggleDrawer = (newOpen: boolean) => () => {
-    setOpen(newOpen);
+  const toggleDrawer = () => {
+    setOpen(!open);
   };
 
-  useEffect(() => {
-    onToggle(open);
-  }, [open, onToggle]);
-
   return (
-    <Box sx={{ position: 'relative', height: 'calc(100vh-4rem)', display: 'flex', alignItems: 'center' }}>
-      <Box
-        onClick={toggleDrawer(true)}
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          width: '30px',
-          height: '50px',
-          backgroundColor: 'green',
-          cursor: 'pointer',
-        }}
-      >
-        <ChevronRightIcon />
-      </Box>
 
+    <>
       <Drawer
         variant="persistent"
         open={open}
-        onClose={toggleDrawer(false)}
         PaperProps={{
           sx: {
             position: 'absolute',
             zIndex: 1000,
             width: drawerWidth,
-            transition: 'transform 0.3s ease-in-out',
-            transform: open ? 'translateX(0)' : `translateX(-${drawerWidth - 50}px)`,
+            transition: 'transform 5s ease-in-out',
+            transform: open ? 'translateX(0)' : `translateX(-${drawerWidth}px)`,
           },
         }}
-      >
-        <Stack direction="row">
-          {children}
-          <Box
-            onClick={toggleDrawer(false)}
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              width: '30px',
-              height: '50px',
-              backgroundColor: 'green',
-              cursor: 'pointer',
-            }}
-          >
-            <ChevronLeftIcon />
-          </Box>
-        </Stack>
+        >
+        {children}
       </Drawer>
-    </Box>
+
+      <Box
+          onClick={()=>toggleDrawer()}
+          sx={{
+            position: 'absolute',
+            left: drawerWidth,
+            top: `calc(50% - ${menuBarHeight})`,
+            display: 'flex',
+            alignItems: 'center',
+            width: '30px',
+            height: '50px',
+            border: '1px solid darkgrey',
+            borderLeft: 'none',
+            borderRadius: '0 5px 5px 0',
+            backgroundColor: 'grey.200',
+            zIndex: 2000,
+            cursor: 'pointer',
+            transform: open ? 'translateX(0)' : `translateX(-${drawerWidth}px)`,
+          }}
+        >
+          <ChevronLeftIcon 
+          sx={{
+            transform: open ? 'rotate(180deg)' : 'rotate(0deg)',
+          }}
+          />
+      </Box>
+
+    </>
   );
 }
