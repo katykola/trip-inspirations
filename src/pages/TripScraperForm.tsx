@@ -22,8 +22,7 @@ export default function TripScraperForm({ onBack, onSubmit, scrapedData, url }: 
   const { register, handleSubmit, formState: { errors }, reset } = methods;
   const { selectedImages, handleImageCheckboxChange } = useImageSelection();
   const [coordinates, setCoordinates] = useState<{ lat: number; lng: number } | null>(null);
-  const { selectedLocation, setSelectedLocation } = useLocation();
-
+  const { setSearchedLocation } = useLocation();
 
   const handleFormSubmit = async (data: any) => {
     data.images = selectedImages;
@@ -31,8 +30,7 @@ export default function TripScraperForm({ onBack, onSubmit, scrapedData, url }: 
     if (coordinates) {
       data.lat = coordinates.lat;
       data.lng = coordinates.lng;
-      console.log('coordinates', data.lat, data.lng);
-      setSelectedLocation([coordinates.lat, coordinates.lng]);
+      setSearchedLocation([coordinates.lat, coordinates.lng]);
       delete data.coordinates;
     }  
     const newTripId = await onSubmit(data, async () => {
@@ -45,10 +43,7 @@ export default function TripScraperForm({ onBack, onSubmit, scrapedData, url }: 
     reset(); // Reset the form fields after submission
   };
 
-  console.log('coordinates', coordinates);
 
-  console.log('selectedLocation', selectedLocation);
-  
   return (
     <FormProvider {...methods}>
       <form onSubmit={handleSubmit(handleFormSubmit)}>

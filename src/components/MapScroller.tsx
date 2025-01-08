@@ -12,18 +12,18 @@ export default function MapScroller({ singleTripId, multipleTrips }: MapScroller
   const map = useMap();
   const { setZoom, setSelectedLocation } = useLocation();
   
-    useEffect(() => {
-      if (singleTripId) {
-        const selectedTrip = multipleTrips.find((trip) => trip.id === singleTripId);
-        if (selectedTrip && selectedTrip.lat !== undefined && selectedTrip.lng !== undefined) {
-          map.flyTo([selectedTrip.lat, selectedTrip.lng], 14);
-        } else {
-          console.error('Selected trip not found:', singleTripId);
-        }
-      } 
+  useEffect(() => {
+    if (singleTripId) {
+      const selectedTrip = multipleTrips.find((trip) => trip.id === singleTripId);
+      if (selectedTrip && selectedTrip.lat !== undefined && selectedTrip.lng !== undefined) {
+        map.flyTo([selectedTrip.lat, selectedTrip.lng], 14);
+      } else {
+        console.error('Selected trip not found:', singleTripId);
+      }
+    } 
     }, [singleTripId, multipleTrips, map]);
-    
-    
+
+
     useEffect(() => {
       const handleMoveEnd = () => {
         setZoom(map.getZoom());
@@ -36,6 +36,7 @@ export default function MapScroller({ singleTripId, multipleTrips }: MapScroller
         map.off('moveend', handleMoveEnd);
       };
     }, [map]);
+
 
     return null;
     

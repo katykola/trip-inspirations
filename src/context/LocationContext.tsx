@@ -19,8 +19,9 @@ export const LocationProvider = ({ children }: { children: ReactNode }) => {
   const [selectedLocation, setSelectedLocation] = useState<[number, number] | null>(null);
   const [currentLocation, setCurrentLocation] = useState<[number, number] | null>(null);
   const [searchedLocation, setSearchedLocation] = useState<[number, number] | null>(null);
-  const [mapRadius, setMapRadius] = useState(30000);
-  const [zoom, setZoom] = useState(9);
+  const [mapRadius, setMapRadius] = useState(300000);
+  const [zoom, setZoom] = useState(6);
+
 
   //Get current location
     useEffect(() => {
@@ -36,6 +37,7 @@ export const LocationProvider = ({ children }: { children: ReactNode }) => {
       }
     }, []);
 
+ 
   return (
     <LocationContext.Provider value={{ selectedLocation, setSelectedLocation, currentLocation, setCurrentLocation, mapRadius, setMapRadius, zoom, setZoom, searchedLocation, setSearchedLocation }}>
       {children}

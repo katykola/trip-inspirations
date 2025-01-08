@@ -7,14 +7,15 @@ import { collection, addDoc } from 'firebase/firestore';
 import TripScraperForm from './TripScraperForm';
 import TripNewForm from './TripNewForm';
 import { fetchAndParse } from '../utils/scraper';
-
-
+import { useLocation } from '../context/LocationContext';
+ 
 export default function TripNew() {
   const [selectedOption, setSelectedOption] = useState('');
   const [showForm, setShowForm] = useState(false);
   const [scrapedData, setScrapedData] = useState<{ title: string; description: string; images: string[] } | null>(null);
   const [url, setUrl] = useState('');
   const navigate = useNavigate();
+  const { setSelectedLocation } = useLocation();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedOption((event.target as HTMLInputElement).value);
@@ -48,6 +49,8 @@ export default function TripNew() {
 
   const handleSubmit = async (data: any, reset: () => void) => {
     console.log('Form submitted:', data);
+    console.log('Data lat lng', [data.lat, data.lng]);
+    setSelectedLocation([data.lat, data.lng]);
     try {
       const docRef = await addDoc(collection(db, 'trips'), data);
       console.log('Document written with ID: ', docRef.id);

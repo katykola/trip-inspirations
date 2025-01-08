@@ -13,7 +13,7 @@ const VisibleTripsContext = createContext<VisibleTripsContextProps | undefined>(
 export const VisibleTripsProvider = ({ children }: { children: ReactNode }) => {
   const { currentLocation, searchedLocation, mapRadius } = useLocation();
   const { data: trips, error } = useTrips();
-  const [visibleTrips, setVisibleTrips] = useState<Trip[]>(trips || []);
+  const [visibleTrips, setVisibleTrips] = useState(trips || []);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const tripsLocation = searchedLocation || currentLocation || [48.210033, 16.363449];

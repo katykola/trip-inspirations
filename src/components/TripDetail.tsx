@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Box, Stack, Typography, Button, CircularProgress, Link as LinkHref } from '@mui/material';
+import { Box, Stack, Typography, Button, CircularProgress, Link as LinkHref, Grid } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 import { db } from '../config/firebase-config';
 import { doc, getDoc, deleteDoc } from 'firebase/firestore';
@@ -56,8 +56,8 @@ export default function TripDetail({ id }: TripDetailProps) {
     try {
       const docRef = doc(db, 'trips', id);
       await deleteDoc(docRef);
-      console.log('Document successfully deleted!');
-      navigate('/'); // Navigate back to the trips list after deletion
+      navigate('/'); 
+      window.location.reload(); // Reload the app
     } catch (error) {
       console.error('Error deleting document: ', error);
     }
@@ -108,7 +108,7 @@ export default function TripDetail({ id }: TripDetailProps) {
         )))
         : null
       }
-      </Stack>        
+      </Stack>
       <Typography variant="body1">{trip.title}</Typography>
         <Typography variant="body2">{trip.description}</Typography>
         <LinkHref href={trip.url} target="_blank" rel="noopener noreferrer">
