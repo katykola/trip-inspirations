@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Box, Drawer } from '@mui/material';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { menuBarHeight, drawerWidth } from '../config/styling'
 
 interface TemporaryPanelProps {
@@ -53,7 +53,7 @@ export default function TemporaryPanel({ children }: TemporaryPanelProps) {
             transform: open ? 'translateX(0)' : `translateX(-${drawerWidth}px)`,
           }}
         >
-          <ChevronLeftIcon 
+          <ChevronRightIcon 
           sx={{
             transform: open ? 'rotate(180deg)' : 'rotate(0deg)',
           }}
