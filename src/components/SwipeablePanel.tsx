@@ -2,9 +2,10 @@ import { useState, useEffect } from 'react';
 import { Global } from '@emotion/react';
 import { styled } from '@mui/material/styles';
 import { grey } from '@mui/material/colors';
-import Box from '@mui/material/Box';
+import { Box, Stack } from '@mui/material/';
 import Typography from '@mui/material/Typography';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
+import { useVisibleTrips } from '../context/VisibleTripsContext';
 
 const drawerBleeding = 54;
 
@@ -27,8 +28,9 @@ const Puller = styled('div')(({ theme }) => ({
 
 export default function SwipeablePanel({ children }: SwipeablePanelProps) {
 
-  const [open, setOpen] = useState(false);
+  const { visibleTrips } = useVisibleTrips();
 
+  const [open, setOpen] = useState(false);
   const toggleDrawer = (newOpen: boolean) => () => {
     setOpen(newOpen);
   };
@@ -50,7 +52,7 @@ export default function SwipeablePanel({ children }: SwipeablePanelProps) {
       <Global
         styles={{
           '.MuiDrawer-root > .MuiPaper-root': {
-            height: `calc(100% - ${drawerBleeding}px - 4rem)`,
+            height: `calc(100% - 5rem)`,
             overflow: 'visible',
           },
         }}
@@ -82,12 +84,14 @@ export default function SwipeablePanel({ children }: SwipeablePanelProps) {
             backgroundColor: 'white',
           }}
         >
-          <Puller />
-          <Typography sx={{ p: 2, mt: 1,  color: 'text.secondary', textAlign: 'center', fontWeight: 'bolder' }}>Pull</Typography>
+          <Stack sx={{ alignItems: 'center', justifyContent: 'center' }}>
+            <Puller sx={{ width: '50px' }}/>
+            <Typography sx={{ p: 2, mt: 1,  textAlign: 'center', fontWeight: 'bolder' }}>{visibleTrips.length} Trips</Typography>
+          </Stack>
         </Box>
 
         {/* Drawer content */}
-        <Box sx={{ px: 2, pb: 2, height: '100%', overflow: 'auto', width: '100%' }}>
+        <Box sx={{ px: '1rem', height: '100%', overflow: 'auto', width: '100%' }}>
           {children}
         </Box>
       </SwipeableDrawer>

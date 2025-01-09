@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Select, MenuItem, SelectChangeEvent, Stack, Box, TextField, Typography, InputAdornment, List, ListItem, ListItemButton, ListItemText, IconButton} from '@mui/material';
+import { Select, MenuItem, SelectChangeEvent, Stack, Box, TextField, Typography, InputAdornment, List, ListItem, ListItemButton, ListItemText, IconButton, useMediaQuery} from '@mui/material';
 import { Search, Adjust, Close } from '@mui/icons-material';
 import { useLocation } from '../context/LocationContext';
 import { menuBarHeight } from '../config/styling';
+import { smallScreenBreakpoint } from '../config/breakpoints'
 
 export default function MenuBar() {
   const { mapRadius, setMapRadius, currentLocation, setSearchedLocation } = useLocation();
@@ -10,6 +11,7 @@ export default function MenuBar() {
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [searched, setSearched] = useState(false);
+  const isMobile = useMediaQuery(smallScreenBreakpoint);
 
   const handleRadiusChange = (event: SelectChangeEvent<number>) => {
     setMapRadius(Number(event.target.value));
@@ -60,17 +62,20 @@ export default function MenuBar() {
       <Stack 
         direction='row' 
         sx={{
+          position: isMobile ? 'absolute' : 'inherit',
+          top: '3rem',
           height: menuBarHeight,
           width: '100%', 
-          gap: '1rem',
+          gap: isMobile ? '0.5rem' : '1rem',
           display: "flex",
           justifyContent:'start',
           alignItems: "center", 
-          px: '2rem',
-          borderBottom: '1px solid grey',
+          px: isMobile ? '1rem' : '2rem',
+          borderBottom: isMobile ? null : '1px solid grey',
+          zIndex: isMobile ? 4000 : 'inherit'
         }}
       >
-        <Typography >Search your trips:</Typography>
+      {isMobile ? null : <Typography >Search your trips:</Typography>}
 
         <Box sx={{ flexGrow: 1, maxWidth: '40rem'}}>
           <Box sx={{ position: 'relative' }}>

@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from 'react-router-dom';
-import { Box } from '@mui/material';
+import { Box, useMediaQuery } from '@mui/material';
 import { MapContainer, TileLayer, Marker, Circle, ZoomControl } from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-markercluster';
 import 'leaflet/dist/leaflet.css';
@@ -9,6 +9,9 @@ import '../styles/MapWithCoordinates.css';
 import MapScroller from './MapScroller';
 import { useLocation } from '../context/LocationContext';
 import { useVisibleTrips } from '../context/VisibleTripsContext';
+import { smallScreenBreakpoint } from '../config/breakpoints'
+
+
 import { headerHeight, menuBarHeight } from '../config/styling';
 import L from 'leaflet';
 
@@ -30,6 +33,8 @@ L.Icon.Default.mergeOptions({
 
 export default function MapComponent() {
   const { id } = useParams();
+  const isMobile = useMediaQuery(smallScreenBreakpoint);
+
   const navigate = useNavigate();
   const { data: singleTrip, isLoading: singleTripLoading } = useTrip(id || '');
   const { selectedLocation, setSelectedLocation, currentLocation, mapRadius, zoom, setZoom, searchedLocation } = useLocation();
@@ -106,8 +111,8 @@ export default function MapComponent() {
       zoom={zoom}
       scrollWheelZoom={true}
       zoomControl={false} // Disable the default zoom control
-      style={{ height: `calc(100vh - (${headerHeight} + ${menuBarHeight}))`, width: '100%' }}
-        >
+        style={{ height: isMobile ? '100vh' : `calc(100vh - (${headerHeight} + ${menuBarHeight}))`, width: '100%' }}
+      >
       <TileLayer
       url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

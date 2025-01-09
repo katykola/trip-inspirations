@@ -1,12 +1,15 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, Avatar, Menu, MenuItem, ListItemIcon, Divider, IconButton, Tooltip, Stack, Typography } from '@mui/material';
-import { PersonAdd, Settings, Logout } from '@mui/icons-material';
+import { Button, Avatar, Menu, MenuItem, ListItemIcon, Divider, IconButton, Tooltip, Stack, Typography, useMediaQuery } from '@mui/material';
+import { Settings, Logout } from '@mui/icons-material';
 import { headerHeight } from '../config/styling';
 import { Map } from '@mui/icons-material';
+import { smallScreenBreakpoint } from '../config/breakpoints';
 
 
 export default function Header() {
+
+  const isMobile = useMediaQuery(smallScreenBreakpoint);
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -29,8 +32,8 @@ export default function Header() {
 
 
   return (
-    <>
 
+    <>
       <Stack 
         direction='row'
         sx={{
@@ -38,9 +41,12 @@ export default function Header() {
             width: '100%',
             justifyContent: "space-between",
             alignItems: "center",
-            px: '2rem',
-            backgroundColor: 'white',
-            borderBottom: '1px solid lightgrey'
+            px: isMobile ? '1rem' : '2rem',
+            borderTop: '1px solid lightgrey',
+            borderBottom: '1px solid lightgrey',
+            backgroundColor: 'grey.50',
+            zIndex: 3000,
+            position: isMobile ? 'absolute' : 'inherit'
         }}
       >
 
@@ -49,20 +55,22 @@ export default function Header() {
             <Typography>Trip Snap</Typography>
           </Stack>
 
-          <Stack direction='row' sx={{gap: '1rem', alignItems: 'center'}}>
+          <Stack direction='row' sx={{alignItems: 'center'}}>
 
-            <Button onClick={handleNewTripClick} variant='contained'>+New Trip</Button>
+            <Button onClick={handleNewTripClick} variant='contained'>+ New Trip</Button>
             
             <Tooltip title="Account settings">
               <IconButton
                 onClick={handleClick}
                 size="small"
-                sx={{ ml: 2 }}
+                sx={{ ml: 1 }}
                 aria-controls={open ? 'account-menu' : undefined}
                 aria-haspopup="true"
                 aria-expanded={open ? 'true' : undefined}
                 >
-                <Avatar sx={{ width: 32, height: 32 }}>M</Avatar>
+              <Avatar sx={{ width: 32, height: 32 }}>
+                <Typography sx={{ fontSize: '1rem' }}>K</Typography>
+              </Avatar>              
               </IconButton>
             </Tooltip>
 
@@ -124,5 +132,5 @@ export default function Header() {
           </Menu>
       </Stack>
     </>
-  );
+  )
 }

@@ -34,8 +34,6 @@ export default function TripDetail({ id }: TripDetailProps) {
   const [loading, setLoading] = useState<boolean>(true);
   const { setSelectedLocation } = useLocation();
   const navigate = useNavigate();
-  const { page, setPage } = useLocation();
-
 
   useEffect(() => {
     const getTrip = async () => {
@@ -103,11 +101,9 @@ export default function TripDetail({ id }: TripDetailProps) {
   }
 
   const displayUrl = trip.url.replace(/^https?:\/\/(www\.)?/, '').split('/')[0];
-
-  console.log('page', page);
       
     return(
-      <Stack spacing={3} sx={{ px: 3, py: 2 }}>
+      <Stack spacing={3} sx={{ px: 3, py: 2, mt: isMobile ? '3rem' : 0 }}>
       <Stack onClick={onBack} direction='row' sx={{ cursor: 'pointer' }}>
         <ChevronLeft sx={{ color: 'grey', mr: 0.5, fontSize: '0.9rem', verticalAlign: 'bottom' }}/>
         <Typography sx={{ color: 'grey', fontSize: '0.9rem' }}>Back to List</Typography>

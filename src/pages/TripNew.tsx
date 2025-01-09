@@ -1,50 +1,33 @@
 import React, { useState } from 'react';
-import { Stack, Typography, RadioGroup, FormControlLabel, Radio, Button, TextField } from '@mui/material';
+import { Stack, Typography, Button, TextField } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { db } from '../config/firebase-config';
 import { collection, addDoc } from 'firebase/firestore';
 import TripScraperForm from './TripScraperForm';
-import TripNewForm from './TripNewForm';
 import { fetchAndParse } from '../utils/scraper';
 import { useLocation } from '../context/LocationContext';
- 
+
 export default function TripNew() {
-  const [selectedOption, setSelectedOption] = useState('');
-  const [showForm, setShowForm] = useState(false);
-  const [scrapedData, setScrapedData] = useState<{ title: string; description: string; images: string[] } | null>(null);
   const [url, setUrl] = useState('');
+  const [scrapedData, setScrapedData] = useState<{ title: string; description: string; images: string[] } | null>(null);
+  const [showForm, setShowForm] = useState(false);
   const navigate = useNavigate();
   const { setSelectedLocation } = useLocation();
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSelectedOption((event.target as HTMLInputElement).value);
-    console.log('Selected Option:', (event.target as HTMLInputElement).value);
-  };
 
   const handleUrlChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUrl(event.target.value);
   };
 
   const handleContinue = async () => {
-    console.log('Continue clicked, selectedOption:', selectedOption);
-    if (selectedOption === 'loadTripFromURL' && url) {
+    if (url) {
       const data = await fetchAndParse(url);
       if (data) {
         setScrapedData(data);
         setShowForm(true);
-        console.log('Show form set to true with scraped data:', data);  
-        navigate('/new?tab=save_from_url');
+        console.log('Scraped data:', data);
       }
-    } else if (selectedOption === 'makeNewTrip') {
-      setShowForm(true);
-      console.log('Show form set to true');
-      navigate('/new?tab=make_new');
     }
-  };
-
-  const handleBack = () => {
-    setShowForm(false);
   };
 
   const handleSubmit = async (data: any, reset: () => void) => {
@@ -62,43 +45,24 @@ export default function TripNew() {
   };
 
   return (
-    <Stack spacing={3} sx={{ p: 3, width: '100%' }}>
+    <Stack spacing={2} sx={{ p: 3, width: '100%' }}>
       {showForm ? (
-        selectedOption === 'loadTripFromURL' ? (
-          <TripScraperForm onBack={handleBack} onSubmit={handleSubmit} scrapedData={scrapedData} url={url} />
-        ) : (
-          <TripNewForm onBack={handleBack} onSubmit={handleSubmit} />
-        )
+        <TripScraperForm onBack={() => setShowForm(false)} onSubmit={handleSubmit} scrapedData={scrapedData} url={url} />
       ) : (
         <>
           <Typography variant="h4" sx={{ mb: 2 }}>New Trip</Typography>
-          <RadioGroup value={selectedOption} onChange={handleChange}>
-            <FormControlLabel
-              control={<Radio />}
-              label="Load trip from URL"
-              value="loadTripFromURL"
-              sx={{ color: selectedOption === 'makeNewTrip' ? 'grey.500' : 'inherit' }}
-            />
-            {selectedOption === 'loadTripFromURL' && (
-              <TextField
-                label="Link"
-                variant="outlined"
-                fullWidth
-                value={url}
-                onChange={handleUrlChange}
-                sx={{ mt: 2 }}
-              />
-            )}
-            <FormControlLabel
-              control={<Radio />}
-              label="Create your own trip"
-              value="makeNewTrip"
-              sx={{ color: selectedOption === 'loadTripFromURL' ? 'grey.500' : 'inherit' }}
-            />
-          </RadioGroup>
+          <Typography variant="subtitle1" sx={{ textAlign: 'left', mb: 1 }}>Load trip from URL:</Typography>
+          <TextField
+            label="Link"
+            variant="outlined"
+            fullWidth
+            value={url}
+            onChange={handleUrlChange}
+            sx={{ mt: 2 }}
+          />
           <Stack direction='row' sx={{ justifyContent: 'space-between' }}>
             <Link to="/"><Button variant='contained'>Back</Button></Link>
-            <Button onClick={handleContinue} variant='contained' disabled={!selectedOption || (selectedOption === 'loadTripFromURL' && !url)}>Continue</Button>
+            <Button onClick={handleContinue} variant='contained' disabled={!url}>Continue</Button>
           </Stack>
         </>
       )}
