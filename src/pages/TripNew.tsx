@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Stack, Typography, Button, TextField } from '@mui/material';
 import { Link } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
 import { db } from '../config/firebase-config';
 import { collection, addDoc } from 'firebase/firestore';
 import TripScraperForm from './TripScraperForm';
@@ -12,7 +11,6 @@ export default function TripNew() {
   const [url, setUrl] = useState('');
   const [scrapedData, setScrapedData] = useState<{ title: string; description: string; images: string[] } | null>(null);
   const [showForm, setShowForm] = useState(false);
-  const navigate = useNavigate();
   const { setSelectedLocation } = useLocation();
 
   const handleUrlChange = (event: React.ChangeEvent<HTMLInputElement>) => {

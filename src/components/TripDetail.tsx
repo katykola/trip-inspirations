@@ -7,7 +7,7 @@ import { Trip } from '../types/types';
 import Nature from '../images/nature.jpg';
 import { useLocation } from '../context/LocationContext';
 import Slider from 'react-slick';
-import { smallScreenBreakpoint } from '../config/breakpoints'
+import { smallScreenBreakpoint } from '../utils/breakpoints'
 import { ChevronLeft, OpenInNew } from '@mui/icons-material';
 
 import 'slick-carousel/slick/slick.css';

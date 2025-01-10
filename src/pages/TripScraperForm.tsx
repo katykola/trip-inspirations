@@ -2,11 +2,11 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm, FormProvider } from 'react-hook-form';
 import { useImageSelection } from '../hooks/useImageSelection';
-import { TextField, Button, Stack, Grid, Typography, TextareaAutosize } from '@mui/material';
+import { TextField, Button, Stack, Grid, Typography, TextareaAutosize, Checkbox, FormControlLabel } from '@mui/material';
 import MapWithCoordinates from '../components/MapWithCoordinates';
 import ImagesCheckboxComponent from '../components/ImagesChecboxComponent';
 import { useLocation } from '../context/LocationContext';
-
+import { useAuth } from '../context/AuthContext';
 
 interface TripScraperFormProps {
   onBack: () => void;
@@ -24,9 +24,19 @@ export default function TripScraperForm({ onBack, onSubmit, scrapedData, url }: 
   const [coordinates, setCoordinates] = useState<{ lat: number; lng: number } | null>(null);
   const { setSearchedLocation } = useLocation();
 
+  const [checked, setChecked] = useState(false);
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setChecked(event.target.checked);
+  };
+
+  const user = useAuth();
   const handleFormSubmit = async (data: any) => {
     data.images = selectedImages;
     data.url = url; // Add the URL to the submitted data
+    data.public = checked; // Add the public checkbox value to the submitted data
+    if (user !== null && user.user !== null) {
+      data.userId = user.user.uid;
+    }
     if (coordinates) {
       data.lat = coordinates.lat;
       data.lng = coordinates.lng;
@@ -85,14 +95,20 @@ export default function TripScraperForm({ onBack, onSubmit, scrapedData, url }: 
               error={!!errors.coordinates}
               helperText={errors.coordinates ? 'Please enter the address or select coordinates from the map.' : ''}
             />
-            <Stack direction='row' sx={{ justifyContent: 'space-between' }}>
-              <Button onClick={onBack} variant='contained'>Back</Button>
-              <Button type="submit" variant="contained" color="primary">
-                Save
-              </Button>
-            </Stack>
+            <FormControlLabel control={
+              <Checkbox 
+              checked={checked}
+              onChange={handleChange}
+              />} 
+              label="Set trip visibility to public" />
           </Grid>
         </Grid>
+        <Stack direction='row' sx={{ justifyContent: 'space-between' }}>
+          <Button onClick={onBack} variant='outlined'>Back</Button>
+          <Button type="submit" variant="contained" color="primary">
+            Save
+          </Button>
+        </Stack>
       </form>
     </FormProvider>
   );

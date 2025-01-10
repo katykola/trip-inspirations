@@ -2,7 +2,7 @@ import { Stack, Box } from '@mui/material';
 import TemporaryPanel from '../components/TemporaryPanel';
 import MapComponent from '../components/MapComponent';
 import MenuBar from '../components/MenuBar';
-import { drawerWidth } from '../config/styling';
+import { drawerWidth } from '../utils/styling';
 
 interface ScreenDesktopProps {
   children: React.ReactNode;

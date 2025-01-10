@@ -1,22 +1,29 @@
 import React, { useState } from 'react';
 import { Select, MenuItem, SelectChangeEvent, Stack, Box, TextField, Typography, InputAdornment, List, ListItem, ListItemButton, ListItemText, IconButton, useMediaQuery} from '@mui/material';
 import { Search, Adjust, Close } from '@mui/icons-material';
+import { useAuth } from '../context/AuthContext';
 import { useLocation } from '../context/LocationContext';
-import { menuBarHeight } from '../config/styling';
-import { smallScreenBreakpoint } from '../config/breakpoints'
+import { useVisibleTrips } from '../context/VisibleTripsContext';
+import { menuBarHeight } from '../utils/styling';
+import { smallScreenBreakpoint } from '../utils/breakpoints'
 
 export default function MenuBar() {
+
+  const { user } = useAuth();
+  const isMobile = useMediaQuery(smallScreenBreakpoint);
+
   const { mapRadius, setMapRadius, currentLocation, setSearchedLocation } = useLocation();
   const [query, setQuery] = useState('');
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [searched, setSearched] = useState(false);
-  const isMobile = useMediaQuery(smallScreenBreakpoint);
+  const isLoggedIn = user !== null;
 
+  
   const handleRadiusChange = (event: SelectChangeEvent<number>) => {
     setMapRadius(Number(event.target.value));
   };
-
+  
   const handleSearchChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
     console.log('Query:', value);
@@ -40,23 +47,31 @@ export default function MenuBar() {
       setShowSuggestions(false);
     }
   };
-
+  
   const handleSuggestionClick = (location: { lat: string; lon: string; display_name: string }) => {
     const lat = parseFloat(location.lat);
     const lon = parseFloat(location.lon);
-
+    
     setSearchedLocation([lat, lon]);
     setQuery(location.display_name);
     setShowSuggestions(false);
   };
-
+  
   const handleClearSearch = () => {
     setQuery('');
     setSuggestions([]);
     setShowSuggestions(false);
     setSearched(true);
   };
+  
+  const { filter, setFilter } = useVisibleTrips();
 
+  const handleFilterChange = (event: SelectChangeEvent<string>) => {
+    console.log('Filter:', event.target.value);
+    const filter = event.target.value;
+    setFilter(filter);
+  };
+  
   return (
     <>
       <Stack 
@@ -190,6 +205,31 @@ export default function MenuBar() {
           <MenuItem value={300000}>300 km radius</MenuItem>
           <MenuItem value={500000}>500 km radius</MenuItem>
         </Select>
+
+        { isLoggedIn ? 
+        
+        <Select
+          value={filter}
+          onChange={handleFilterChange}
+          sx={{
+            flex: '0 1 auto',
+            maxWidth: 'max-content',
+            backgroundColor: 'white',
+            maxHeight: '2.5rem', // Restricting height to 3rem
+            overflow: 'hidden', // Ensures no content spills out
+            '& .MuiSelect-select': {
+              lineHeight: '3rem', // Ensures proper alignment within the height limit
+            },
+          }} 
+        >
+          <MenuItem value={'private'}>Private</MenuItem>
+          <MenuItem value={'public'}>Public</MenuItem>
+          <MenuItem value={'all'}>All</MenuItem>
+        </Select>
+
+        : null
+        }
+
 
       </Stack>
     </>

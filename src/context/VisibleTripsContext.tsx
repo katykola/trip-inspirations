@@ -1,54 +1,71 @@
-import { createContext, useState, useEffect, useContext, ReactNode } from 'react';
+import { createContext, useState, useContext, ReactNode, useMemo } from 'react';
+import { useAuth } from './AuthContext';
 import { useLocation } from '../context/LocationContext';
 import { useTrips } from '../hooks/useTrips';
 import { Trip } from '../types/types';
 
 interface VisibleTripsContextProps {
   visibleTrips: Trip[];
+  setVisibleTrips: (trips: Trip[]) => void;
   isLoading: boolean;
+  filter: string;
+  setFilter: (filter: string) => void;
 }
 
 const VisibleTripsContext = createContext<VisibleTripsContextProps | undefined>(undefined);
 
 export const VisibleTripsProvider = ({ children }: { children: ReactNode }) => {
   const { currentLocation, searchedLocation, mapRadius } = useLocation();
-  const { data: trips, error } = useTrips();
-  const [visibleTrips, setVisibleTrips] = useState(trips || []);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const { data: trips, isLoading: tripsLoading } = useTrips();
+  const [filter, setFilter] = useState('all');
+  const user = useAuth();
+  const { filteredTrips } = useAuth();
+  const isLoggedIn = !!user?.user;
 
-  const tripsLocation = searchedLocation || currentLocation || [48.210033, 16.363449];
+  // Determine the base location
+  const tripsLocation = useMemo(
+    () => searchedLocation || currentLocation || [48.210033, 16.363449],
+    [searchedLocation, currentLocation]
+  );
 
-  // Function to calculate distance between two coordinates (Haversine formula)
+  // Haversine formula for distance calculation
   const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number): number => {
-    const R = 6371; // Radius of the Earth in kilometers
-    const dLat = (lat2 - lat1) * (Math.PI / 180);
-    const dLon = (lon2 - lon1) * (Math.PI / 180);
+    const R = 6371; // Radius of Earth in km
+    const dLat = ((lat2 - lat1) * Math.PI) / 180;
+    const dLon = ((lon2 - lon1) * Math.PI) / 180;
     const a =
-      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-      Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) *
-      Math.sin(dLon / 2) * Math.sin(dLon / 2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    const distance = R * c; // Distance in kilometers
-    return distance;
+      Math.sin(dLat / 2) ** 2 +
+      Math.cos((lat1 * Math.PI) / 180) *
+        Math.cos((lat2 * Math.PI) / 180) *
+        Math.sin(dLon / 2) ** 2;
+    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   };
 
-  // Filter visible trips based on current location
-  useEffect(() => {
-    setIsLoading(true);
-    if (tripsLocation && trips) {
-      const filteredTrips = trips.filter((trip) => {
-        const distance = calculateDistance(tripsLocation[0], tripsLocation[1], trip.lat, trip.lng);
-        return distance <= mapRadius / 1000;
-      });
-      setVisibleTrips(filteredTrips);
-    } else {
-      setVisibleTrips([]);
+  // Filter trips based on location and filter criteria
+  const visibleTrips = useMemo(() => {
+    if (!trips || !tripsLocation) return [];
+
+    const locationFiltered = filteredTrips.filter((trip) => {
+      const distance = calculateDistance(tripsLocation[0], tripsLocation[1], trip.lat, trip.lng);
+      return distance <= mapRadius / 1000; // Convert radius to km
+    });
+
+    if(!isLoggedIn) {
+      setFilter('public');
     }
-    setIsLoading(false);
-  }, [tripsLocation, trips, mapRadius]);
+
+    if (filter === 'private') {
+      return locationFiltered.filter((trip) => !trip.public);
+    } else if (filter === 'public') {
+      return locationFiltered.filter((trip) => trip.public);
+    }
+    return locationFiltered;
+  }, [filteredTrips, tripsLocation, mapRadius, filter, isLoggedIn]);
+
+  const isLoading = tripsLoading;
 
   return (
-    <VisibleTripsContext.Provider value={{ isLoading, visibleTrips }}>
+    <VisibleTripsContext.Provider value={{ visibleTrips, setVisibleTrips: () => {}, isLoading, filter, setFilter }}>
       {children}
     </VisibleTripsContext.Provider>
   );

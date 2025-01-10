@@ -3,7 +3,7 @@ import { Stack, Typography, Pagination, Grid, useMediaQuery } from '@mui/materia
 import TripTile from './TripTile';
 import { useVisibleTrips } from '../context/VisibleTripsContext';
 import { useLocation } from '../context/LocationContext';
-import { smallScreenBreakpoint } from '../config/breakpoints'
+import { smallScreenBreakpoint } from '../utils/breakpoints'
 
 
 export default function TripList() {
@@ -36,10 +36,10 @@ export default function TripList() {
         ))}
       </Stack>
       :
-      <Grid container spacing={2} sx={{ ml: -2 }}>
-        {paginatedTrips.map((trip) => (
-          <Grid item xs={6} sm={6} md={6} key={trip.id}>
-            <TripTile id={trip.id} trip={trip} />
+      <Grid container>
+        {paginatedTrips.map((trip, index) => (
+          <Grid item xs={6} sm={6} md={6} key={trip.id} sx={{paddingBottom: '0.5rem', paddingLeft: index % 2 === 1 ? '0.5rem' : 0}}>
+            <TripTile key={trip.id} id={trip.id} trip={trip} />
           </Grid>
         ))}
       </Grid>

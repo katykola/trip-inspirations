@@ -2,14 +2,20 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, Avatar, Menu, MenuItem, ListItemIcon, Divider, IconButton, Tooltip, Stack, Typography, useMediaQuery } from '@mui/material';
 import { Settings, Logout } from '@mui/icons-material';
-import { headerHeight } from '../config/styling';
+import { headerHeight } from '../utils/styling';
 import { Map } from '@mui/icons-material';
-import { smallScreenBreakpoint } from '../config/breakpoints';
+import { smallScreenBreakpoint } from '../utils/breakpoints';
+import { useAuth } from '../context/AuthContext';
+import { useLocation } from '../context/LocationContext';
 
 
 export default function Header() {
 
   const isMobile = useMediaQuery(smallScreenBreakpoint);
+  const { user, logout } = useAuth();
+  const userLoggedId = user !== null;
+
+  const {setSearchedLocation} = useLocation();
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -30,6 +36,24 @@ export default function Header() {
     navigate('/new');
   };
 
+  const handleLoginClick = () => {
+    navigate('/login');
+  }
+
+  const handleSigninClick = () => {
+    navigate('/signup');
+  }
+
+  const handleLogOutClick = () => {
+    logout();
+    // setSearchedLocation([48.210033, 16.363449]);
+    navigate('/logout')
+    // alert("Logout successful!");
+  }
+
+  const handleAlertNew = () => {
+    alert("Do you want to add a new trip? Sign up.");
+  }
 
   return (
 
@@ -55,6 +79,10 @@ export default function Header() {
             <Typography>Trip Snap</Typography>
           </Stack>
 
+          { userLoggedId ? 
+
+
+          <>
           <Stack direction='row' sx={{alignItems: 'center'}}>
 
             <Button onClick={handleNewTripClick} variant='contained'>+ New Trip</Button>
@@ -123,13 +151,24 @@ export default function Header() {
               </ListItemIcon>
               Settings
             </MenuItem>
-            <MenuItem onClick={handleClose}>
+            <MenuItem onClick={handleLogOutClick}>
               <ListItemIcon>
                 <Logout fontSize="small" />
               </ListItemIcon>
               Logout
             </MenuItem>
           </Menu>
+          </>
+          :
+          <Stack direction='row' spacing={2} sx={{alignItems: 'center'}}>
+            <Button onClick={handleAlertNew} variant='contained'>+ New Trip</Button>
+            <Button onClick={handleSigninClick} variant='outlined'>Sign Up</Button>
+            <Button onClick={handleLoginClick} variant='outlined'>Log In</Button>
+          </Stack>
+
+          }
+
+
       </Stack>
     </>
   )

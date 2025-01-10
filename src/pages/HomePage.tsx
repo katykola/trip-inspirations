@@ -1,5 +1,5 @@
 import { useMediaQuery } from '@mui/material';
-import { smallScreenBreakpoint } from '../config/breakpoints';
+import { smallScreenBreakpoint } from '../utils/breakpoints';
 import ScreenDesktop from '../screens/ScreenDesktop';
 import SwipeablePanel from '../components/SwipeablePanel';
 import MapComponent from '../components/MapComponent';

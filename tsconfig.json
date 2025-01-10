@@ -22,5 +22,5 @@
     "removeComments": true,
     "sourceMap": true
   },
-  "include": ["src", "proxy.js"]
+  "include": ["src", "proxy.js", "scripts/update-trips-public.js"]
 }

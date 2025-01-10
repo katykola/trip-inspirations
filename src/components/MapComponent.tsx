@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from 'react-router-dom';
-import { Box, useMediaQuery } from '@mui/material';
+import { useMediaQuery } from '@mui/material';
 import { MapContainer, TileLayer, Marker, Circle, ZoomControl } from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-markercluster';
 import 'leaflet/dist/leaflet.css';
@@ -9,10 +9,9 @@ import '../styles/MapWithCoordinates.css';
 import MapScroller from './MapScroller';
 import { useLocation } from '../context/LocationContext';
 import { useVisibleTrips } from '../context/VisibleTripsContext';
-import { smallScreenBreakpoint } from '../config/breakpoints'
+import { smallScreenBreakpoint } from '../utils/breakpoints';
 
-
-import { headerHeight, menuBarHeight } from '../config/styling';
+import { headerHeight, menuBarHeight } from '../utils/styling';
 import L from 'leaflet';
 
 // Fix for default icon paths
@@ -34,15 +33,15 @@ L.Icon.Default.mergeOptions({
 export default function MapComponent() {
   const { id } = useParams();
   const isMobile = useMediaQuery(smallScreenBreakpoint);
-
+  
   const navigate = useNavigate();
   const { data: singleTrip, isLoading: singleTripLoading } = useTrip(id || '');
   const { selectedLocation, setSelectedLocation, currentLocation, mapRadius, zoom, setZoom, searchedLocation } = useLocation();
   const [currentMapRadius] = useState(mapRadius);
   const { visibleTrips, isLoading: visibleTripsLoading } = useVisibleTrips();
-
+  
   const [mapKey, setMapKey] = useState(0); // State variable to manage the key for MapContainer
-
+  
   const center: [number, number] = selectedLocation || currentLocation || [48.210033, 16.363449];
   const circleCenter = searchedLocation || currentLocation || [48.210033, 16.363449];
 
@@ -84,7 +83,7 @@ export default function MapComponent() {
       resetMap(6);
     } else if (currentMapRadius !== mapRadius && mapRadius === 500000) {
       resetMap(5);
-    }
+    } 
   }, [mapRadius]);
 
   
@@ -111,7 +110,10 @@ export default function MapComponent() {
       zoom={zoom}
       scrollWheelZoom={true}
       zoomControl={false} // Disable the default zoom control
-        style={{ height: isMobile ? '100vh' : `calc(100vh - (${headerHeight} + ${menuBarHeight}))`, width: '100%' }}
+        style={{ 
+        height: isMobile ? '100vh' : `calc(100vh - (${headerHeight} + ${menuBarHeight}))`, 
+        width: '100%', 
+      }}
       >
       <TileLayer
       url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

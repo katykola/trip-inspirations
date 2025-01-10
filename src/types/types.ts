@@ -10,6 +10,8 @@ interface Trip {
         lat: number;
         lng: number;
     };
+    public: boolean;
+    userId: string
   }
 
 export type { Trip };

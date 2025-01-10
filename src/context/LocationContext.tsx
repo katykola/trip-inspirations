@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { useAuth } from './AuthContext';
 
 interface LocationContextProps {
   selectedLocation: [number, number] | null;
@@ -25,6 +26,10 @@ export const LocationProvider = ({ children }: { children: ReactNode }) => {
   const [zoom, setZoom] = useState(6);
   const [page, setPage] = useState(1);
 
+  const user = useAuth();
+  const isLoggedIn = !!user?.user;
+  
+
   //Get current location
   useEffect(() => {
     if (navigator.geolocation) {
@@ -39,8 +44,11 @@ export const LocationProvider = ({ children }: { children: ReactNode }) => {
     }
   }, []);
 
-  console.log('page', page);
-
+  useEffect(()=>{
+    setSelectedLocation(null);
+    setMapRadius(300000);
+    setZoom(6);
+  }, [isLoggedIn])
  
   return (
     <LocationContext.Provider value={{ selectedLocation, setSelectedLocation, currentLocation, setCurrentLocation, mapRadius, setMapRadius, zoom, setZoom, searchedLocation, setSearchedLocation, page, setPage }}>
