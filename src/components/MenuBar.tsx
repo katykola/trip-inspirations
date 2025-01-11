@@ -26,7 +26,6 @@ export default function MenuBar() {
   
   const handleSearchChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
-    console.log('Query:', value);
     setQuery(value);
 
     if (value.length > 2) {
@@ -67,7 +66,6 @@ export default function MenuBar() {
   const { filter, setFilter } = useVisibleTrips();
 
   const handleFilterChange = (event: SelectChangeEvent<string>) => {
-    console.log('Filter:', event.target.value);
     const filter = event.target.value;
     setFilter(filter);
   };

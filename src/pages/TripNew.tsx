@@ -21,9 +21,12 @@ export default function TripNew() {
     if (url) {
       const data = await fetchAndParse(url);
       if (data) {
-        setScrapedData(data);
-        setShowForm(true);
-        console.log('Scraped data:', data);
+        if(data.images && data.images.length > 6) {
+          data.images = data.images.slice(0, 6);
+        }
+      setScrapedData(data);
+      setShowForm(true);
+      console.log('Scraped data:', data);
       }
     }
   };
@@ -67,3 +70,4 @@ export default function TripNew() {
     </Stack>
   );
 }
+

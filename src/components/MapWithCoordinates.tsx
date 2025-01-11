@@ -34,8 +34,6 @@ L.Icon.Default.prototype.options.shadowUrl =
 interface MapWithCoordinatesProps {
   coordinates: { lat: number; lng: number } | null;
   setCoordinates: (coordinates: { lat: number; lng: number }) => void;
-  error: boolean;
-  helperText: string;
 }
 
 const MapWithCoordinates: React.FC<MapWithCoordinatesProps> = ({
@@ -117,6 +115,7 @@ const MapWithCoordinates: React.FC<MapWithCoordinatesProps> = ({
   };
 
   return (
+    <>
     <Box sx={{ position: 'relative', height: '400px' }}>
       {/* Search Box */}
       <Box
@@ -211,6 +210,7 @@ const MapWithCoordinates: React.FC<MapWithCoordinatesProps> = ({
         <MapUpdater coordinates={coordinates} />
       </MapContainer>
     </Box>
+    </>
   );
 };
 
