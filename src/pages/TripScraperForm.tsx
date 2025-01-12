@@ -10,6 +10,7 @@ import MapWithCoordinates from '../components/MapWithCoordinates';
 import ImagesCheckboxComponent from '../components/ImagesChecboxComponent';
 import { useLocation } from '../context/LocationContext';
 import { useAuth } from '../context/AuthContext';
+import { useTrips } from '../hooks/useTrips'
 
 
 interface TripScraperFormProps {
@@ -33,6 +34,8 @@ export default function TripScraperForm({ onBack, onSubmit, scrapedData, url }: 
   const { selectedImages, handleImageCheckboxChange } = useImageSelection();
   const [coordinates, setCoordinates] = useState<{ lat: number; lng: number } | null>(null);
   const { setSearchedLocation } = useLocation();
+
+  const { data: trips } = useTrips();
   const [checked, setChecked] = useState(false);
 
   // Handle checkbox change for public visibility
@@ -56,7 +59,6 @@ export default function TripScraperForm({ onBack, onSubmit, scrapedData, url }: 
   const handleFormSubmit = async (data: any) => {
     data.images = selectedImages;
     data.url = url; // Add the URL to the submitted data
-    data.public = checked; // Add the public checkbox value to the submitted data
     if (user !== null && user.user !== null) {
       data.userId = user.user.uid;
     } 
@@ -66,6 +68,18 @@ export default function TripScraperForm({ onBack, onSubmit, scrapedData, url }: 
       setSearchedLocation([coordinates.lat, coordinates.lng]);
       delete data.coordinates;
     } 
+    console.log(url);
+    if (trips && url){
+      const matchingTrips = trips.filter(trip => trip.url === url);
+      if (matchingTrips.length > 0) {
+        console.log('tripSaved');
+        setChecked(false);
+      } else {
+        setChecked(true);
+        console.log('No matching trips found');
+      }
+    }
+    data.public = checked; // Add the public checkbox value to the submitted data
     const newTripId = await onSubmit(data, async () => {
       reset();
       return undefined;
@@ -142,10 +156,14 @@ export default function TripScraperForm({ onBack, onSubmit, scrapedData, url }: 
               coordinates={coordinates}
               setCoordinates={setCoordinates}
             />
-            <FormControlLabel
-              control={<Checkbox checked={checked} onChange={handleChange} />}
-              label="Set trip visibility to public"
-            />
+
+            <Stack>
+              <FormControlLabel
+                control={<Checkbox checked={checked} onChange={handleChange} />}
+                label="Set trip visibility to public"
+              />
+            </Stack>
+            
           </Grid>
         </Grid>
         <Stack direction="row" sx={{ justifyContent: 'space-between', mt: 2 }}>

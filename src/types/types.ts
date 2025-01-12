@@ -11,7 +11,8 @@ interface Trip {
         lng: number;
     };
     public: boolean;
-    userId: string
+    userId: string;
+    tags: string[];
   }
 
 export type { Trip };
