@@ -63,6 +63,7 @@ const MapWithCoordinates: React.FC<MapWithCoordinatesProps> = ({
           )}&format=json&addressdetails=1&limit=5`
         );
         const data = await response.json();
+        console.log(data);
         setSuggestions(data);
         setShowSuggestions(true);
       } catch (error) {

@@ -6,6 +6,12 @@ import { collection, addDoc } from 'firebase/firestore';
 import TripScraperForm from './TripScraperForm';
 import { fetchAndParse } from '../utils/scraper';
 import { useLocation } from '../context/LocationContext';
+import { z } from 'zod';
+
+// Define the Zod schema for form validation
+const schema = z.object({
+  url: z.string().url('Invalid URL'),
+});
 
 export default function TripNew() {
   const [url, setUrl] = useState('');
