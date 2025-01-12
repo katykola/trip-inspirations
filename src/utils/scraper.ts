@@ -37,6 +37,7 @@ async function fetchAndParse(url: string): Promise<ScrapedData | undefined> {
     return { title, description, images };
   } catch (error) {
     console.error('Error fetching and parsing HTML:', error);
+    throw new Error('Error fetching and parsing HTML. Try again.');
   }
 }
 

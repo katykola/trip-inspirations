@@ -110,7 +110,7 @@ const MapWithCoordinates: React.FC<MapWithCoordinatesProps> = ({
   const MapUpdater = ({ coordinates }: { coordinates: { lat: number; lng: number } | null }) => {
     const map = useMap();
     if (coordinates) {
-      map.setView([coordinates.lat, coordinates.lng], 13); // Update map center
+      map.setView([coordinates.lat, coordinates.lng], 11); // Update map center
     }
     return null;
   };

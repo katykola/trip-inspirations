@@ -13,8 +13,6 @@ export default function MapScroller({ singleTripId }: MapScrollerProps) {
   const map = useMap();
   const trips = useTrips();
   const { setZoom, setSelectedLocation } = useLocation();
-
-  console.log('singleTripId', singleTripId);
   
   useEffect(() => {
     if (singleTripId && trips) {

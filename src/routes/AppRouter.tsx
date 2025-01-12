@@ -1,7 +1,5 @@
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import { CssBaseline, Box } from '@mui/material';
-import { collection, addDoc } from 'firebase/firestore';
-import { db } from '../config/firebase-config';
 import SignUpPage from '../pages/SignUpPage';
 import LoginPage from '../pages/LoginPage';
 import Header from '../components/Header';
@@ -20,17 +18,6 @@ export default function AppRouter() {
   const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
     const authContext = useAuth();
     return authContext && authContext.user ? children : <Navigate to="/login" />;
-  };
-  
-  const handleSubmit = async (data: any, reset: () => void) => {
-    console.log('handleSubmit:', data);
-    try {
-      const docRef = await addDoc(collection(db, 'trips'), data);
-      console.log('Document written with ID: ', docRef.id);
-      reset();
-    } catch (e) {
-      console.error('Error adding document: ', e);
-    }
   };
 
   return (
@@ -84,7 +71,7 @@ export default function AppRouter() {
                   />
                   <Route
                     path="/trip/:id/edit"
-                    element={<TripEditForm onSubmit={handleSubmit}/>}
+                    element={<TripEditForm/>}
                   />
                 </Routes>
             </Box>

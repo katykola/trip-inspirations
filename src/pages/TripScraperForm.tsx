@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import schemaNew from '../utils/schemaNew';
 import { z } from 'zod';
 import { useImageSelection } from '../hooks/useImageSelection';
 import { TextField, Button, Stack, Grid, Typography, TextareaAutosize, Checkbox, FormControlLabel, Box } from '@mui/material';
@@ -10,23 +11,6 @@ import ImagesCheckboxComponent from '../components/ImagesChecboxComponent';
 import { useLocation } from '../context/LocationContext';
 import { useAuth } from '../context/AuthContext';
 
-// Define the Zod schema for form validation
-const schema = z.object({
-  title: z.string().min(1, 'Title is required'),
-  description: z.string().max(2000, 'Description must be less than 2000 characters'),
-  images: z
-    .array(z.string(), { required_error: 'At least one image must be selected' })
-    .min(1, 'At least one image must be selected'),
-  public: z.boolean().optional(),
-  userId: z.string().optional(),
-  coordinates: z
-    .object({
-      lat: z.number({ invalid_type_error: 'Latitude is required' }),
-      lng: z.number({ invalid_type_error: 'Longitude is required' }),
-    }),
-  lat: z.number().optional(),
-  lng: z.number().optional(),
-});
 
 interface TripScraperFormProps {
   onBack: () => void;
@@ -37,8 +21,8 @@ interface TripScraperFormProps {
 
 export default function TripScraperForm({ onBack, onSubmit, scrapedData, url }: TripScraperFormProps) {
   const navigate = useNavigate();
-  const methods = useForm<z.infer<typeof schema>>({
-    resolver: zodResolver(schema),
+  const methods = useForm<z.infer<typeof schemaNew>>({
+    resolver: zodResolver(schemaNew),
     defaultValues: {
       images: [], // Default value for images
       coordinates: undefined, // Default to undefined
@@ -153,7 +137,7 @@ export default function TripScraperForm({ onBack, onSubmit, scrapedData, url }: 
             </Stack>
           </Grid>
           <Grid item xs={12} md={6}>
-            {errors.images && !coordinates && <Typography color="error" sx={{ textAlign: 'left', fontSize: '0.8rem', ml: '14px' }}>Enter address or select coordinates</Typography>}
+
             <MapWithCoordinates
               coordinates={coordinates}
               setCoordinates={setCoordinates}

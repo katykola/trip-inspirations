@@ -2,30 +2,27 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useForm, FormProvider } from 'react-hook-form';
 import { useImageSelection } from '../hooks/useImageSelection';
+import schemaEdit from '../utils/schemaEdit';
 import { zodResolver } from '@hookform/resolvers/zod';
-import tripNewSchema from '../utils/schemas';
-import { Typography, TextField, Stack, Button, Grid } from '@mui/material';
 import { useTrip } from '../hooks/useTrip';
 import { Trip } from '../types/types';
-import ImagesCheckboxComponent from './ImagesChecboxComponent';
-import MapWithCoordinates from './MapWithCoordinates';
 import { db } from '../config/firebase-config';
 import { doc, updateDoc } from 'firebase/firestore';
+import { Typography, TextField, Stack, Button, Grid } from '@mui/material';
+import ImagesCheckboxComponent from './ImagesChecboxComponent';
+import MapWithCoordinates from './MapWithCoordinates';
 
-interface TripScraperFormProps {
-    onSubmit: (data: any, reset: () => void) => void;
-  }
-
-export default function TripEditForm({ onSubmit }: TripScraperFormProps) {
+export default function TripEditForm() {
 
     const navigate = useNavigate();
     const { id } = useParams<{ id: string }>();    
     const { data: trip, isLoading } = useTrip(id || '');
-    const { selectedImages, handleImageCheckboxChange } = useImageSelection();
-    const [coordinates, setCoordinates] = useState<{ lat: number; lng: number } | null>(null);
+    const [coordinates, setCoordinates] = useState<{ lat: number; lng: number } | null>(null);    
+    const { selectedImages, handleImageCheckboxChange } = useImageSelection(trip?.images || []); // Initialize with trip.images
+
 
     const methods = useForm<Trip>({
-        resolver: zodResolver(tripNewSchema)
+        resolver: zodResolver(schemaEdit)
     });
     
     const { register, handleSubmit, formState: { errors }, reset } = methods;
@@ -41,16 +38,21 @@ export default function TripEditForm({ onSubmit }: TripScraperFormProps) {
                 lng: trip.lng
             });
             setCoordinates({ lat: trip.lat, lng: trip.lng });
-        }
+        };
     }, [trip]);
 
-
-    async function handleFormSubmit(data: Trip) {
+    async function handleFormSubmit(data: any) {
+        
         if (!trip) {
             console.error('Trip data is not available.');
             return;
         }
-
+        
+        if(!coordinates){
+            console.error('Coordinates are not available');
+            return;
+        }
+        
         // Merge the updated data with the existing trip data
         const updatedTrip = {
             ...trip, // Keep existing data
@@ -59,12 +61,13 @@ export default function TripEditForm({ onSubmit }: TripScraperFormProps) {
             lat: coordinates ? coordinates.lat : trip.lat, // Update latitude if coordinates are provided
             lng: coordinates ? coordinates.lng : trip.lng, // Update longitude if coordinates are provided
         };
-    
+
+        
         try {
+            console.log('updated trip', updatedTrip);
             // Update Firestore document
             const docRef = doc(db, 'trips', id || '');
             await updateDoc(docRef, updatedTrip);
-            console.log('Document successfully updated!', updatedTrip);
     
             // Navigate back to trip details page
             navigate(`/trip/${id}`);
@@ -72,7 +75,6 @@ export default function TripEditForm({ onSubmit }: TripScraperFormProps) {
             console.error('Error updating document: ', error);
         }
     }
-    
 
     function onBack(){
         navigate(`/trip/${id}`);
@@ -94,7 +96,7 @@ export default function TripEditForm({ onSubmit }: TripScraperFormProps) {
 
 
     return(
-        <>
+    <Stack spacing={2} sx={{ p: 3, width: '100%' }}>
         <Typography variant="h4">Edit Trip</Typography>
         <FormProvider {...methods}>
             <form onSubmit={handleSubmit(handleFormSubmit)}>
@@ -134,22 +136,19 @@ export default function TripEditForm({ onSubmit }: TripScraperFormProps) {
                     </Stack>
                 </Grid>
                 <Grid item xs={12} md={6}>
+                {errors.coordinates && !coordinates && <Typography color="error" sx={{ textAlign: 'left', fontSize: '0.8rem', ml: '14px' }}>Enter address or select coordinates</Typography>}
                     <MapWithCoordinates
                     coordinates={coordinates}
                     setCoordinates={setCoordinates}
-                    error={!!errors.coordinates}
-                    helperText={errors.coordinates ? 'Please enter the address or select coordinates from the map.' : ''}
                     />
-                    <Stack direction='row' sx={{ justifyContent: 'space-between' }}>
-                    <Button onClick={onBack} variant='contained'>Back</Button>
-                    <Button type="submit" variant="contained" color="primary">
-                        Save
-                    </Button>
-                    </Stack>
                </Grid>
               </Grid>
+            <Stack direction='row' sx={{ justifyContent: 'space-between' }}>
+                <Button onClick={onBack} variant='outlined'>Back</Button>
+                <Button type="submit" variant="contained" color="primary">Save</Button>
+            </Stack>
             </form>
         </FormProvider>
-        </>
+    </Stack>
     )
 }
