@@ -1,3 +1,4 @@
+import { forwardRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Box, Typography } from '@mui/material';
 import { Trip } from '../types/types';
@@ -8,7 +9,7 @@ interface TripTileProps {
   trip: Trip;
 }
 
-export default function TripTile({ id, trip }: TripTileProps) {
+const TripTile = forwardRef<HTMLDivElement, TripTileProps>(({ id, trip }, ref) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
@@ -17,6 +18,7 @@ export default function TripTile({ id, trip }: TripTileProps) {
 
   return (
     <Box
+      ref={ref}
       onClick={handleClick}
       sx={{
         position: 'relative',
@@ -51,14 +53,15 @@ export default function TripTile({ id, trip }: TripTileProps) {
           py: '0.5rem',
           textAlign: 'left',
           backgroundColor: 'black',
-          opacity: '0.6'
+          opacity: '0.6',
         }}
       >
-        <Typography sx={{ color: 'white', fontSize: '0.9rem'}}>
-          { trip.title.length > 55 ? `${trip.title.substring(0, 55)}...` : trip.title}
+        <Typography sx={{ color: 'white', fontSize: '0.9rem' }}>
+          {trip.title.length > 55 ? `${trip.title.substring(0, 55)}...` : trip.title}
         </Typography>
       </Box>
-      
     </Box>
   );
-}
+});
+
+export default TripTile;

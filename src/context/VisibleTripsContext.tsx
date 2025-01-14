@@ -10,6 +10,8 @@ interface VisibleTripsContextProps {
   isLoading: boolean;
   filter: string;
   setFilter: (filter: string) => void;
+  selectedTripId: string | null;
+  setSelectedTripId: (id: string | null) => void;
 }
 
 const VisibleTripsContext = createContext<VisibleTripsContextProps | undefined>(undefined);
@@ -21,6 +23,7 @@ export const VisibleTripsProvider = ({ children }: { children: ReactNode }) => {
   const user = useAuth();
   const { filteredTrips } = useAuth();
   const isLoggedIn = !!user?.user;
+  const [selectedTripId, setSelectedTripId] = useState<string | null>(null);
 
   // Determine the base location
   const tripsLocation = useMemo(
@@ -65,7 +68,7 @@ export const VisibleTripsProvider = ({ children }: { children: ReactNode }) => {
   const isLoading = tripsLoading;
 
   return (
-    <VisibleTripsContext.Provider value={{ visibleTrips, setVisibleTrips: () => {}, isLoading, filter, setFilter }}>
+    <VisibleTripsContext.Provider value={{ visibleTrips, setVisibleTrips: () => {}, isLoading, filter, setFilter, selectedTripId, setSelectedTripId }}>
       {children}
     </VisibleTripsContext.Provider>
   );

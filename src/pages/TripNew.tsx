@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Stack, Typography, Button, TextField } from '@mui/material';
+import { Stack, Typography, Button, TextField, useMediaQuery } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { db } from '../config/firebase-config';
 import { collection, addDoc } from 'firebase/firestore';
@@ -7,6 +7,7 @@ import TripScraperForm from './TripScraperForm';
 import { fetchAndParse } from '../utils/scraper';
 import { useLocation } from '../context/LocationContext';
 import { z } from 'zod';
+import { smallScreenBreakpoint } from '../utils/breakpoints'
 
 
 const schema = z.object({
@@ -14,6 +15,8 @@ const schema = z.object({
 })
 
 export default function TripNew() {
+  const isMobile = useMediaQuery(smallScreenBreakpoint);
+
   const [url, setUrl] = useState('');
   const [error, setError] = useState<string | null>(null); // To display URL validation errors
   const [scrapedData, setScrapedData] = useState<{ title: string; description: string; images: string[] } | null>(null);
@@ -85,7 +88,7 @@ export default function TripNew() {
   };
 
   return (
-    <Stack spacing={2} sx={{ p: 3, width: '100%' }}>
+    <Stack spacing={2} sx={{ p: 3, width: '100%', mt: isMobile ? '3rem' : 0  }}>
       {showForm ? (
         <TripScraperForm onBack={() => setShowForm(false)} onSubmit={handleSubmit} scrapedData={scrapedData} url={url} />
       ) : (

@@ -6,6 +6,7 @@ import { doc, getDoc, deleteDoc } from 'firebase/firestore';
 import { Trip } from '../types/types';
 import Nature from '../images/nature.jpg';
 import { useLocation } from '../context/LocationContext';
+import { useVisibleTrips } from '../context/VisibleTripsContext';
 import Slider from 'react-slick';
 import { smallScreenBreakpoint } from '../utils/breakpoints'
 import { ChevronLeft, OpenInNew } from '@mui/icons-material';
@@ -34,6 +35,7 @@ export default function TripDetail({ id }: TripDetailProps) {
   const [loading, setLoading] = useState<boolean>(true);
   const { setSelectedLocation } = useLocation();
   const navigate = useNavigate();
+  const { setSelectedTripId } = useVisibleTrips();
 
   useEffect(() => {
     const getTrip = async () => {
@@ -60,7 +62,8 @@ export default function TripDetail({ id }: TripDetailProps) {
 
   useEffect(() => {
     if(trip){
-      setSelectedLocation([trip?.lat, trip?.lng])
+      setSelectedLocation([trip?.lat, trip?.lng]);
+      setSelectedTripId(trip.id);
     }
   }, [trip]);
 

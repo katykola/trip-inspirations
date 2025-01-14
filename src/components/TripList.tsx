@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { Stack, Typography, Pagination, Grid, useMediaQuery } from '@mui/material';
 import TripTile from './TripTile';
 import { useVisibleTrips } from '../context/VisibleTripsContext';
@@ -10,7 +10,7 @@ export default function TripList() {
 
   const isMobile = useMediaQuery(smallScreenBreakpoint);
 
-  const { visibleTrips } = useVisibleTrips();
+  const { visibleTrips, selectedTripId } = useVisibleTrips();
   const { page, setPage } = useLocation();
   const tripsPerPage = 20;
 
@@ -21,25 +21,46 @@ export default function TripList() {
   const startIndex = (page - 1) * tripsPerPage;
   const endIndex = startIndex + tripsPerPage;
   const paginatedTrips = visibleTrips.slice(startIndex, endIndex);
+  const tripTileRef = useRef<HTMLDivElement>(null);
+  const topRef = useRef<HTMLDivElement>(null);
 
-  useEffect(()=> {
-    setPage(1);
-  }, [visibleTrips])
+  useEffect(() => {
+    if (topRef.current) {
+      topRef.current.scrollIntoView({ behavior: 'instant' });
+    }
+  }, [page]);
+
+  useEffect(() => {
+    if (tripTileRef.current) {
+      tripTileRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [selectedTripId]);
+
     
   return (
-    <Stack spacing={2} sx={{ px: isMobile ? 0 :'2rem', py: '1rem' }}>
+    <Stack ref={topRef} spacing={2} sx={{ px: isMobile ? 0 :'2rem', py: '1rem', position: 'sticky', top: 0 }}>
       {isMobile ? null : <Typography sx={{ color: 'grey', textAlign: 'left' }}>{(startIndex+1)} - {endIndex} out of {visibleTrips.length} Trips</Typography>}
       {isMobile ? 
       <Stack spacing={1}>
       {paginatedTrips.map((trip) => (
-            <TripTile id={trip.id} trip={trip} />
+            <TripTile 
+            ref={trip.id === selectedTripId ? tripTileRef : null} 
+            key={trip.id} 
+            id={trip.id} 
+            trip={trip} 
+            />
         ))}
       </Stack>
       :
-      <Grid container>
+      <Grid ref={topRef} container>
         {paginatedTrips.map((trip, index) => (
           <Grid item xs={6} sm={6} md={6} key={trip.id} sx={{paddingBottom: '0.5rem', paddingLeft: index % 2 === 1 ? '0.5rem' : 0}}>
-            <TripTile key={trip.id} id={trip.id} trip={trip} />
+            <TripTile 
+            ref={trip.id === selectedTripId ? tripTileRef : null} 
+            key={trip.id} 
+            id={trip.id} 
+            trip={trip}
+            />
           </Grid>
         ))}
       </Grid>

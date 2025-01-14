@@ -49,6 +49,7 @@ export const LocationProvider = ({ children }: { children: ReactNode }) => {
     setMapRadius(300000);
     setZoom(6);
   }, [isLoggedIn])
+
  
   return (
     <LocationContext.Provider value={{ selectedLocation, setSelectedLocation, currentLocation, setCurrentLocation, mapRadius, setMapRadius, zoom, setZoom, searchedLocation, setSearchedLocation, page, setPage }}>

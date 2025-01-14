@@ -88,8 +88,12 @@ export default function MenuBar() {
           zIndex: isMobile ? 4000 : 'inherit'
         }}
       >
-      {isMobile ? null : <Typography >Search your trips:</Typography>}
 
+      {isMobile ? 
+      null 
+      : 
+      <>
+      <Typography >Search your trips:</Typography>
         <Box sx={{ flexGrow: 1, maxWidth: '40rem'}}>
           <Box sx={{ position: 'relative' }}>
           <TextField
@@ -175,8 +179,10 @@ export default function MenuBar() {
             )}
           </Box>
         </Box>
+      </>
+      }
 
-        <Select
+      <Select
           value={mapRadius}
           onChange={handleRadiusChange}
           sx={{
@@ -202,10 +208,9 @@ export default function MenuBar() {
           <MenuItem value={100000}>100 km radius</MenuItem>
           <MenuItem value={300000}>300 km radius</MenuItem>
           <MenuItem value={500000}>500 km radius</MenuItem>
-        </Select>
+      </Select>
 
-        { isLoggedIn ? 
-        
+      { isLoggedIn ? 
         <Select
           value={filter}
           onChange={handleFilterChange}
@@ -222,11 +227,11 @@ export default function MenuBar() {
         >
           <MenuItem value={'private'}>Private</MenuItem>
           <MenuItem value={'public'}>Public</MenuItem>
-          <MenuItem value={'all'}>All</MenuItem>
+          <MenuItem value={'all'}>All trips</MenuItem>
         </Select>
-
-        : null
-        }
+        : 
+        null
+      }
 
 
       </Stack>

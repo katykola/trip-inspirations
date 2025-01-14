@@ -1,16 +1,15 @@
-import React, { useState } from 'react';
 import { Box, Drawer } from '@mui/material';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { menuBarHeight, drawerWidth } from '../utils/styling'
 
 interface TemporaryPanelProps {
   children: React.ReactNode;
+  open: boolean;
+  setOpen: (open: boolean) => void;
 }
 
-export default function TemporaryPanel({ children }: TemporaryPanelProps) {
+export default function TemporaryPanel({ children, open, setOpen }: TemporaryPanelProps) {
   
-  const [open, setOpen] = useState(true);
-
   const toggleDrawer = () => {
     setOpen(!open);
   };
@@ -60,6 +59,9 @@ export default function TemporaryPanel({ children }: TemporaryPanelProps) {
           }}
           />
       </Box>
+      
+
+
 
     </>
   );

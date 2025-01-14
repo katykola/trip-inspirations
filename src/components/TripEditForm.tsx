@@ -8,13 +8,16 @@ import { useTrip } from '../hooks/useTrip';
 import { Trip } from '../types/types';
 import { db } from '../config/firebase-config';
 import { doc, updateDoc } from 'firebase/firestore';
-import { Typography, TextField, Stack, Button, Grid, FormControlLabel, Checkbox } from '@mui/material';
+import { Typography, TextField, Stack, Button, Grid, FormControlLabel, Checkbox, useMediaQuery } from '@mui/material';
 import ImagesCheckboxComponent from './ImagesChecboxComponent';
 import MapWithCoordinates from './MapWithCoordinates';
-import { useTrips } from '../hooks/useTrips'
+import { smallScreenBreakpoint } from '../utils/breakpoints'
+
 
 
 export default function TripEditForm() {
+
+    const isMobile = useMediaQuery(smallScreenBreakpoint);
 
     const navigate = useNavigate();
     const { id } = useParams<{ id: string }>();    
@@ -22,7 +25,6 @@ export default function TripEditForm() {
     const [coordinates, setCoordinates] = useState<{ lat: number; lng: number } | null>(null);    
     const { selectedImages, handleImageCheckboxChange } = useImageSelection(trip?.images || []); // Initialize with trip.images
 
-    const { data: trips } = useTrips();
     const [checked, setChecked] = useState(false);
 
     // Handle checkbox change for public visibility
@@ -107,7 +109,7 @@ export default function TripEditForm() {
     }
 
     return(
-    <Stack spacing={2} sx={{ p: 3, width: '100%' }}>
+    <Stack spacing={2} sx={{ p: 3, width: '100%', mt: isMobile ? '3rem' : 0 }}>
         <Typography variant="h4">Edit Trip</Typography>
         <FormProvider {...methods}>
             <form onSubmit={handleSubmit(handleFormSubmit)}>

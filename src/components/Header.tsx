@@ -6,7 +6,6 @@ import { headerHeight } from '../utils/styling';
 import { Map } from '@mui/icons-material';
 import { smallScreenBreakpoint } from '../utils/breakpoints';
 import { useAuth } from '../context/AuthContext';
-import { useLocation } from '../context/LocationContext';
 
 
 export default function Header() {
@@ -14,8 +13,6 @@ export default function Header() {
   const isMobile = useMediaQuery(smallScreenBreakpoint);
   const { user, logout } = useAuth();
   const userLoggedId = user !== null;
-
-  const {setSearchedLocation} = useLocation();
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);

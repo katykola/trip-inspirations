@@ -1,6 +1,7 @@
+import { useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useMediaQuery } from '@mui/material';
-import { MapContainer, TileLayer, Marker, Circle, ZoomControl } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Circle, ZoomControl, useMapEvents } from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-markercluster';
 import 'leaflet/dist/leaflet.css';
 import { useTrip } from '../hooks/useTrip';
@@ -30,17 +31,26 @@ L.Icon.Default.mergeOptions({
   shadowUrl: markerShadow,
 });
 
-export default function MapComponent() {
+
+interface MapComponentProps {
+  areaSearched: boolean;
+  setAreaSearched: (areaSearched: boolean) => void;
+  setShowAreaButton: (showAreaButton: boolean) => void;
+}
+
+export default function MapComponent({areaSearched, setAreaSearched, setShowAreaButton}:MapComponentProps) {
   const { id } = useParams();
   const isMobile = useMediaQuery(smallScreenBreakpoint);
   
   const navigate = useNavigate();
   const { data: singleTrip, isLoading: singleTripLoading } = useTrip(id || '');
-  const { selectedLocation, setSelectedLocation, currentLocation, mapRadius, zoom, setZoom, searchedLocation } = useLocation();
+  const { selectedLocation, setSelectedLocation, currentLocation, mapRadius, zoom, setZoom, searchedLocation, setSearchedLocation } = useLocation();
   const [currentMapRadius] = useState(mapRadius);
   const { visibleTrips, isLoading: visibleTripsLoading } = useVisibleTrips();
   
   const [mapKey, setMapKey] = useState(0); // State variable to manage the key for MapContainer
+
+  const [areaCenter, setAreaCenter] = useState<[number, number] | null>(null);
   
   const center: [number, number] = selectedLocation || currentLocation || [48.210033, 16.363449];
   const circleCenter = searchedLocation || currentLocation || [48.210033, 16.363449];
@@ -53,6 +63,30 @@ export default function MapComponent() {
     navigate('/');
     setMapKey((prevKey) => prevKey + 1); 
   }
+
+  const mapRef = useRef<L.Map>(null);
+
+  const MapEvents = () => {
+    useMapEvents({
+      moveend: () => {
+        if (mapRef.current) {
+          const newCenter = mapRef.current.getCenter();
+          setShowAreaButton(true);
+          setAreaCenter([newCenter.lat, newCenter.lng]);
+        }
+      },
+    });
+    return null;
+  };
+
+  useEffect(() => {
+    if(areaCenter && areaSearched === true){
+      setSearchedLocation(areaCenter);
+      setMapKey((prevKey) => prevKey + 1); 
+      setShowAreaButton(false);
+      setAreaSearched(false);
+    }
+  }, [areaSearched]);
 
   useEffect(() => {
     if(visibleTrips){
@@ -101,55 +135,57 @@ export default function MapComponent() {
     html: '<div style="font-size: 20px; color: #333333">x</div>',
   });
 
-
   return (
     <>
-    <MapContainer
-      key={mapKey} // Use the key to force reload
-      center={center}
-      zoom={zoom}
-      scrollWheelZoom={true}
-      zoomControl={false} // Disable the default zoom control
-        style={{ 
-        height: isMobile ? '100vh' : `calc(100vh - (${headerHeight} + ${menuBarHeight}))`, 
-        width: '100%', 
-      }}
-      >
-      <TileLayer
-      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-      />
-      <ZoomControl position="topright" />
-      <MarkerClusterGroup>
-      {visibleTrips.map((trip: Trip) => (
-        <Marker
-        key={trip.id}
-        position={[trip.lat, trip.lng] as L.LatLngExpression}
-        eventHandlers={{
-          click: () => handleClick(trip.id),
+
+      <MapContainer
+       ref={mapRef}
+        key={mapKey} // Use the key to force reload
+        center={center}
+        zoom={zoom}
+        scrollWheelZoom={true}
+        zoomControl={false} // Disable the default zoom control
+          style={{
+          height: isMobile ? '100vh' : `calc(100vh - (${headerHeight} + ${menuBarHeight}))`,
+          width: '100%',
         }}
+        >
+        <TileLayer
+        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         />
-      ))}
-      </MarkerClusterGroup>
-      {center && (
-      <>
-        <Circle
-        center={circleCenter as L.LatLngExpression}
-        radius={mapRadius}
-        color="black"
-        fillColor="black"
-        fillOpacity={0.05} // More transparent fill
-        opacity={0.4} // More transparent border          
-        weight={1} // Thinner border
+        { !isMobile && <ZoomControl position="topright" />}
+        <MarkerClusterGroup>
+        {visibleTrips.map((trip: Trip) => (
+          <Marker
+          key={trip.id}
+          position={[trip.lat, trip.lng] as L.LatLngExpression}
+          eventHandlers={{
+            click: () => handleClick(trip.id),
+          }}
+          />
+        ))}
+        </MarkerClusterGroup>
+        {center && (
+        <>
+          <Circle
+          center={circleCenter as L.LatLngExpression}
+          radius={mapRadius}
+          color="black"
+          fillColor="black"
+          fillOpacity={0.05} // More transparent fill
+          opacity={0.4} // More transparent border
+          weight={1} // Thinner border
+          />
+          <Marker position={circleCenter as L.LatLngExpression} icon={customIcon} />
+        </>
+        )}
+        <MapScroller
+          singleTripId={singleTrip ? singleTrip.id : ''}
+          multipleTrips={visibleTrips || []}
         />
-        <Marker position={circleCenter as L.LatLngExpression} icon={customIcon} />
-      </>
-      )}
-      <MapScroller 
-        singleTripId={singleTrip ? singleTrip.id : ''} 
-        multipleTrips={visibleTrips || []} 
-      />
-    </MapContainer>
+        <MapEvents />
+      </MapContainer>
     </>
   );
 }
