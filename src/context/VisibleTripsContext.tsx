@@ -14,6 +14,10 @@ interface VisibleTripsContextProps {
   setSelectedTripId: (id: string | null) => void;
   panelOpen: boolean;
   setPanelOpen: (open: boolean) => void;
+  showAreaButton: boolean;
+  setShowAreaButton: (showAreaButton: boolean) => void;
+  areaSearched: boolean;
+  setAreaSearched: (areaSearched: boolean) => void;
 }
 
 const VisibleTripsContext = createContext<VisibleTripsContextProps | undefined>(undefined);
@@ -27,6 +31,9 @@ export const VisibleTripsProvider = ({ children }: { children: ReactNode }) => {
   const isLoggedIn = !!user?.user;
   const [selectedTripId, setSelectedTripId] = useState<string | null>(null);
   const [panelOpen, setPanelOpen] = useState(true);
+  const [showAreaButton, setShowAreaButton] = useState(false);
+  const [areaSearched, setAreaSearched] = useState(false);
+  
 
   // Determine the base location
   const tripsLocation = useMemo(
@@ -71,7 +78,7 @@ export const VisibleTripsProvider = ({ children }: { children: ReactNode }) => {
   const isLoading = tripsLoading;
 
   return (
-    <VisibleTripsContext.Provider value={{ visibleTrips, setVisibleTrips: () => {}, isLoading, filter, setFilter, selectedTripId, setSelectedTripId, panelOpen, setPanelOpen }}>
+    <VisibleTripsContext.Provider value={{ visibleTrips, setVisibleTrips: () => {}, isLoading, filter, setFilter, selectedTripId, setSelectedTripId, panelOpen, setPanelOpen, showAreaButton, setShowAreaButton, areaSearched, setAreaSearched }}>
       {children}
     </VisibleTripsContext.Provider>
   );

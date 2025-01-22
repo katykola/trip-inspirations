@@ -19,7 +19,7 @@ export default function TripNew() {
   const isMobile = useMediaQuery(smallScreenBreakpoint);
 
   const [url, setUrl] = useState('');
-  const [error, setError] = useState<string | null>(null); // To display URL validation errors
+  const [error, setError] = useState<string | null>(null);
   const [scrapedData, setScrapedData] = useState<{ title: string; description: string; images: string[] } | null>(null);
   const [showForm, setShowForm] = useState(false);
   const { setSelectedLocation } = useLocation();
@@ -28,7 +28,6 @@ export default function TripNew() {
     const newUrl = event.target.value;
     setUrl(newUrl);
 
-    // Validate the URL and clear the error if the URL is valid or empty
     try {
       if (newUrl === '') {
         setError(null);
@@ -83,7 +82,7 @@ export default function TripNew() {
       const docRef = await addDoc(collection(db, 'trips'), data);
       console.log('Document written with ID: ', docRef.id);
       reset();
-      return docRef.id; // Return the new trip ID
+      return docRef.id; 
     } catch (e) {
       console.error('Error adding document: ', e);
     }

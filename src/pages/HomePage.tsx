@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useMediaQuery, Box, Stack, Button } from '@mui/material';
 import { smallScreenBreakpoint } from '../utils/breakpoints';
 import ScreenDesktop from '../screens/ScreenDesktop';
@@ -12,10 +11,7 @@ import { useVisibleTrips } from '../context/VisibleTripsContext';
 export default function HomePage() {
 
   const isMobile = useMediaQuery(smallScreenBreakpoint);
-
-  const [showAreaButton, setShowAreaButton] = useState(false);
-  const [areaSearched, setAreaSearched] = useState(false);
-  const { setPanelOpen } = useVisibleTrips();
+  const { setPanelOpen, showAreaButton, setShowAreaButton, areaSearched, setAreaSearched } = useVisibleTrips();
   
   const handleAreaButton = () => {
     setAreaSearched(true);
@@ -26,7 +22,7 @@ export default function HomePage() {
   return (
     <>
     {!isMobile ? (
-      <ScreenDesktop showAreaButton={showAreaButton} setShowAreaButton={setShowAreaButton} areaSearched={areaSearched} setAreaSearched={setAreaSearched} handleAreaButton={handleAreaButton}>
+      <ScreenDesktop >
           <TripList />
       </ScreenDesktop>
      ) : (

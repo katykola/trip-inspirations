@@ -7,7 +7,6 @@ import TripDetail from '../components/TripDetail';
 import ScreenDesktop from '../screens/ScreenDesktop';
 
 
-
 export default function TripDetailPage() {
 
   const isMobile = useMediaQuery(smallScreenBreakpoint);
@@ -43,11 +42,9 @@ export default function TripDetailPage() {
   return (
     <>
       {!isMobile ? (
-        <>
         <ScreenDesktop  >
           <TripDetail id={id} />
         </ScreenDesktop>
-        </>
       ) : (
         <>
         <Box>

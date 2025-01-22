@@ -8,20 +8,19 @@ import { useVisibleTrips } from '../context/VisibleTripsContext';
 
 interface ScreenDesktopProps {
   children: React.ReactNode;
-  showAreaButton: boolean;
-  setShowAreaButton: (showAreaButton: boolean) => void;
-  areaSearched: boolean;
-  setAreaSearched: (areaSearched: boolean) => void;
-  handleAreaButton: () => void;
 }
 
 export default function ScreenDesktop({
-  children, showAreaButton, setShowAreaButton, areaSearched, setAreaSearched, handleAreaButton
+  children
 }: ScreenDesktopProps) {
 
-  const { panelOpen } = useVisibleTrips();
+  const { panelOpen, setPanelOpen, showAreaButton, setShowAreaButton, areaSearched, setAreaSearched } = useVisibleTrips();
+  const handleAreaButton = () => {
+    setAreaSearched(true);
+    setShowAreaButton(false);
+    setPanelOpen(true);
+  };
 
- 
   return (
   <>
   <MenuBar/>
