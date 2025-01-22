@@ -6,13 +6,12 @@ interface Trip {
     lat: number;
     lng: number;
     images: string[];
-    coordinates: {
+    coordinates?: {
         lat: number;
         lng: number;
     };
     public: boolean;
     userId: string;
-    tags: string[];
   }
 
 export type { Trip };

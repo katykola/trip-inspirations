@@ -12,6 +12,8 @@ interface VisibleTripsContextProps {
   setFilter: (filter: string) => void;
   selectedTripId: string | null;
   setSelectedTripId: (id: string | null) => void;
+  panelOpen: boolean;
+  setPanelOpen: (open: boolean) => void;
 }
 
 const VisibleTripsContext = createContext<VisibleTripsContextProps | undefined>(undefined);
@@ -24,6 +26,7 @@ export const VisibleTripsProvider = ({ children }: { children: ReactNode }) => {
   const { filteredTrips } = useAuth();
   const isLoggedIn = !!user?.user;
   const [selectedTripId, setSelectedTripId] = useState<string | null>(null);
+  const [panelOpen, setPanelOpen] = useState(true);
 
   // Determine the base location
   const tripsLocation = useMemo(
@@ -68,7 +71,7 @@ export const VisibleTripsProvider = ({ children }: { children: ReactNode }) => {
   const isLoading = tripsLoading;
 
   return (
-    <VisibleTripsContext.Provider value={{ visibleTrips, setVisibleTrips: () => {}, isLoading, filter, setFilter, selectedTripId, setSelectedTripId }}>
+    <VisibleTripsContext.Provider value={{ visibleTrips, setVisibleTrips: () => {}, isLoading, filter, setFilter, selectedTripId, setSelectedTripId, panelOpen, setPanelOpen }}>
       {children}
     </VisibleTripsContext.Provider>
   );

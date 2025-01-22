@@ -1,17 +1,18 @@
 import { Box, Drawer } from '@mui/material';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { menuBarHeight, drawerWidth } from '../utils/styling'
+import { useVisibleTrips } from '../context/VisibleTripsContext';
 
 interface TemporaryPanelProps {
   children: React.ReactNode;
-  open: boolean;
-  setOpen: (open: boolean) => void;
 }
 
-export default function TemporaryPanel({ children, open, setOpen }: TemporaryPanelProps) {
+export default function TemporaryPanel({ children }: TemporaryPanelProps) {
+
+  const { panelOpen, setPanelOpen } = useVisibleTrips();
   
   const toggleDrawer = () => {
-    setOpen(!open);
+    setPanelOpen(!panelOpen);
   };
 
   return (
@@ -19,7 +20,7 @@ export default function TemporaryPanel({ children, open, setOpen }: TemporaryPan
     <>
       <Drawer
         variant="persistent"
-        open={open}
+        open={panelOpen}
         PaperProps={{
           sx: {
             position: 'absolute',
@@ -27,7 +28,7 @@ export default function TemporaryPanel({ children, open, setOpen }: TemporaryPan
             width: drawerWidth,
             backgroundColor: 'grey.100',
             transition: 'transform 5s ease-in-out',
-            transform: open ? 'translateX(0)' : `translateX(-${drawerWidth}px)`,
+            transform: panelOpen ? 'translateX(0)' : `translateX(-${drawerWidth}px)`,
           },
         }}
         >
@@ -50,12 +51,12 @@ export default function TemporaryPanel({ children, open, setOpen }: TemporaryPan
             backgroundColor: 'grey.200',
             zIndex: 2000,
             cursor: 'pointer',
-            transform: open ? 'translateX(0)' : `translateX(-${drawerWidth}px)`,
+            transform: panelOpen ? 'translateX(0)' : `translateX(-${drawerWidth}px)`,
           }}
         >
           <ChevronRightIcon 
           sx={{
-            transform: open ? 'rotate(180deg)' : 'rotate(0deg)',
+            transform: panelOpen ? 'rotate(180deg)' : 'rotate(0deg)',
           }}
           />
       </Box>

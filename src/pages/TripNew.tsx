@@ -8,6 +8,7 @@ import { fetchAndParse } from '../utils/scraper';
 import { useLocation } from '../context/LocationContext';
 import { z } from 'zod';
 import { smallScreenBreakpoint } from '../utils/breakpoints'
+import { Trip } from '../types/types';
 
 
 const schema = z.object({
@@ -50,7 +51,6 @@ export default function TripNew() {
       setError(null);
 
       if (data && data.images.length > 0) {
-        console.log(data.images.length);
         if (data.images && data.images.length > 6) {
           data.images = data.images.slice(0, 6);
         }
@@ -73,10 +73,12 @@ export default function TripNew() {
     }
   };
 
-  const handleSubmit = async (data: any, reset: () => void) => {
+  const handleSubmit = async (data: Trip, reset: () => void) => {
     console.log('Form submitted:', data);
     console.log('Data lat lng', [data.lat, data.lng]);
-    setSelectedLocation([data.lat, data.lng]);
+    if(data.lat === 0 && data.lng === 0){
+      setSelectedLocation([data.lat, data.lng]);
+    }
     try {
       const docRef = await addDoc(collection(db, 'trips'), data);
       console.log('Document written with ID: ', docRef.id);
@@ -86,6 +88,8 @@ export default function TripNew() {
       console.error('Error adding document: ', e);
     }
   };
+
+  console.log('url', url);
 
   return (
     <Stack spacing={2} sx={{ p: 3, width: '100%', mt: isMobile ? '3rem' : 0  }}>

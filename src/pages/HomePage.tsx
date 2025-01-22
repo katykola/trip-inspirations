@@ -6,26 +6,27 @@ import SwipeablePanel from '../components/SwipeablePanel';
 import MapComponent from '../components/MapComponent';
 import TripList from '../components/TripList';
 import MenuBar from '../components/MenuBar';
+import { useVisibleTrips } from '../context/VisibleTripsContext';
 
 
 export default function HomePage() {
 
   const isMobile = useMediaQuery(smallScreenBreakpoint);
 
-  const [open, setOpen] = useState(true);
   const [showAreaButton, setShowAreaButton] = useState(false);
   const [areaSearched, setAreaSearched] = useState(false);
+  const { setPanelOpen } = useVisibleTrips();
   
   const handleAreaButton = () => {
     setAreaSearched(true);
     setShowAreaButton(false);
-    setOpen(true);
+    setPanelOpen(true);
   };
   
   return (
     <>
     {!isMobile ? (
-      <ScreenDesktop open={open} setOpen={setOpen} showAreaButton={showAreaButton} setShowAreaButton={setShowAreaButton} areaSearched={areaSearched} setAreaSearched={setAreaSearched} handleAreaButton={handleAreaButton}>
+      <ScreenDesktop showAreaButton={showAreaButton} setShowAreaButton={setShowAreaButton} areaSearched={areaSearched} setAreaSearched={setAreaSearched} handleAreaButton={handleAreaButton}>
           <TripList />
       </ScreenDesktop>
      ) : (

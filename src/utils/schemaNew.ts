@@ -12,9 +12,10 @@ const schemaNew = z.object({
     .object({
       lat: z.number({ invalid_type_error: 'Latitude is required' }),
       lng: z.number({ invalid_type_error: 'Longitude is required' }),
-    }),
+    }).optional(),
   lat: z.number().optional(),
   lng: z.number().optional(),
+  url: z.string(),
 });
 
 

@@ -36,6 +36,13 @@ interface MapWithCoordinatesProps {
   setCoordinates: (coordinates: { lat: number; lng: number }) => void;
 }
 
+interface Suggestion {
+  place_id: string;
+  display_name: string;
+  lat: string;
+  lon: string;
+}
+
 const MapWithCoordinates: React.FC<MapWithCoordinatesProps> = ({
   coordinates,
   setCoordinates,
@@ -173,7 +180,7 @@ const MapWithCoordinates: React.FC<MapWithCoordinatesProps> = ({
               boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)',
             }}
           >
-            {suggestions.map((suggestion: any) => (
+            {suggestions.map((suggestion: Suggestion) => (
               <ListItem key={suggestion.place_id} disablePadding>
                 <ListItemButton
                   onClick={() => handleSuggestionClick(suggestion)}

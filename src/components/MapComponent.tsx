@@ -11,7 +11,6 @@ import MapScroller from './MapScroller';
 import { useLocation } from '../context/LocationContext';
 import { useVisibleTrips } from '../context/VisibleTripsContext';
 import { smallScreenBreakpoint } from '../utils/breakpoints';
-
 import { headerHeight, menuBarHeight } from '../utils/styling';
 import L from 'leaflet';
 

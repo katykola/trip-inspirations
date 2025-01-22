@@ -10,21 +10,29 @@ import MapWithCoordinates from '../components/MapWithCoordinates';
 import ImagesCheckboxComponent from '../components/ImagesChecboxComponent';
 import { useLocation } from '../context/LocationContext';
 import { useAuth } from '../context/AuthContext';
-import { useTrips } from '../hooks/useTrips'
+import { useTrips } from '../hooks/useTrips';
+import { Trip } from '../types/types';
+
 
 
 interface TripScraperFormProps {
   onBack: () => void;
   scrapedData: { title: string; description: string; images: string[] } | null;
   url: string;
-  onSubmit: (data: any, reset: () => Promise<string | undefined>) => Promise<string | undefined>;
+  onSubmit: (data: Trip, reset: () => Promise<string | undefined>) => Promise<string | undefined>;
 }
 
 export default function TripScraperForm({ onBack, onSubmit, scrapedData, url }: TripScraperFormProps) {
+
+  console.log('url', url, typeof url);
+
   const navigate = useNavigate();
   const methods = useForm<z.infer<typeof schemaNew>>({
     resolver: zodResolver(schemaNew),
     defaultValues: {
+      title: scrapedData?.title || '', // Ensure a valid fallback value
+      description: scrapedData?.description || '',
+      url: url,
       images: [], // Default value for images
       coordinates: undefined, // Default to undefined
     },
@@ -38,27 +46,35 @@ export default function TripScraperForm({ onBack, onSubmit, scrapedData, url }: 
   const { data: trips } = useTrips();
   const [checked, setChecked] = useState(false);
 
-  // Handle checkbox change for public visibility
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setChecked(event.target.checked);
   };
 
-  // Update image selection and trigger validation
   const handleImageSelectionChange = (image: string) => {
     const updatedImages = selectedImages.includes(image)
       ? selectedImages.filter((selectedImage) => selectedImage !== image)
       : [...selectedImages, image];
 
-    handleImageCheckboxChange(image); // Update the state in useImageSelection
-    setValue('images', updatedImages); // Update the form state
-    trigger('images'); // Trigger validation for the 'images' field
+    handleImageCheckboxChange(image); 
+    setValue('images', updatedImages); 
+    trigger('images'); 
   };
 
   const user = useAuth();
 
-  const handleFormSubmit = async (data: any) => {
+  const handleFormSubmit = async (data: z.infer<typeof schemaNew>) => {
+    console.log('handleSubmit');
+    console.log('url', url);
+    if (!url) {
+      console.log('url is required')
+      return;
+    }
+    if (Object.keys(errors).length > 0) {
+      console.error('Validation errors:', errors);
+    }
+    console.log('Form submitted with:', data); // Check if this logs data
     data.images = selectedImages;
-    data.url = url; // Add the URL to the submitted data
+    data.url = url;
     if (user !== null && user.user !== null) {
       data.userId = user.user.uid;
     } 
@@ -67,8 +83,19 @@ export default function TripScraperForm({ onBack, onSubmit, scrapedData, url }: 
       data.lng = coordinates.lng;
       setSearchedLocation([coordinates.lat, coordinates.lng]);
       delete data.coordinates;
-    } 
-    console.log(url);
+    } else {
+      data.lat = data.lat ?? 0; // Ensure lat is always a number
+      data.lng = data.lng ?? 0; // Ensure lng is always a number
+    }
+    if (!data.images || data.images.length === 0) {
+      console.error('No images selected');
+      return;
+    }
+    
+    if (!coordinates) {
+      console.error('Coordinates are required');
+      return;
+    }
     if (trips && url){
       const matchingTrips = trips.filter(trip => trip.url === url);
       if (matchingTrips.length > 0) {
@@ -80,19 +107,23 @@ export default function TripScraperForm({ onBack, onSubmit, scrapedData, url }: 
       }
     }
     data.public = checked; // Add the public checkbox value to the submitted data
-    const newTripId = await onSubmit(data, async () => {
+    console.log('Form submitted:', data);
+    const newTripId = await onSubmit(data as Trip, async () => {
       reset();
       return undefined;
     });
     if (newTripId) {
+      console.log('Navigating to:', `/trip/${newTripId}`);
       navigate(`/trip/${newTripId}`); // Navigate to the new trip's detail page
     }
     reset(); // Reset the form fields after submission
   };
 
+  console.log('Form errors:', errors);
+
   return (
     <FormProvider {...methods}>
-      <form onSubmit={(handleSubmit(handleFormSubmit))}>
+      <form onSubmit={handleSubmit(handleFormSubmit)}>
         <Grid container spacing={3}>
           <Grid item xs={12} md={6}>
             <Stack spacing={3}>

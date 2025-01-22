@@ -7,6 +7,13 @@ import { useVisibleTrips } from '../context/VisibleTripsContext';
 import { menuBarHeight } from '../utils/styling';
 import { smallScreenBreakpoint } from '../utils/breakpoints'
 
+interface Suggestion {
+  place_id: string;
+  display_name: string;
+  lat: string;
+  lon: string;
+}
+
 export default function MenuBar() {
 
   const { user } = useAuth();
@@ -142,7 +149,7 @@ export default function MenuBar() {
                 boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)',
               }}
             >
-              {suggestions.map((suggestion: any) => (
+              {suggestions.map((suggestion: Suggestion) => (
                 <ListItem key={suggestion.place_id} disablePadding>
                   <ListItemButton onClick={() => handleSuggestionClick(suggestion)}>
                     <ListItemText primary={suggestion.display_name} />

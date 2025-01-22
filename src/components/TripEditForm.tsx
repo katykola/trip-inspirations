@@ -14,7 +14,6 @@ import MapWithCoordinates from './MapWithCoordinates';
 import { smallScreenBreakpoint } from '../utils/breakpoints'
 
 
-
 export default function TripEditForm() {
 
     const isMobile = useMediaQuery(smallScreenBreakpoint);
@@ -54,7 +53,7 @@ export default function TripEditForm() {
         };
     }, [trip]);
 
-    async function handleFormSubmit(data: any) {
+    async function handleFormSubmit(data: Trip) {
         
         if (!trip) {
             console.error('Trip data is not available.');
