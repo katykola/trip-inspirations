@@ -9,10 +9,17 @@ import { useLocation } from '../context/LocationContext';
 import { z } from 'zod';
 import { smallScreenBreakpoint } from '../utils/breakpoints'
 import { Trip } from '../types/types';
+import { menuBarHeight } from '../utils/styling';
+import BackgroundImage from '../components/BackgroundImage';
 
 
 const schema = z.object({
-  url: z.string().url('Url invalid. Check if your link contains https://').max(300, 'Description must be less than 2000 characters'),
+  url: z.string()
+  .url('Url invalid. Check if your link contains https://')
+  .max(300, 'Description must be less than 2000 characters')
+  .refine((url) => !url.includes('mapy.cz') && !url.includes('maps.google.com')  && !url.includes('pinterest')  && !url.includes('booking')  && !url.includes('airbnb'), {
+    message: "Sorry, I can't catch data from here. TripSnap works only for travel blogs.",
+  }),
 })
 
 export default function TripNew() {
@@ -88,29 +95,48 @@ export default function TripNew() {
     }
   };
 
-  console.log('url', url);
-
   return (
-    <Stack spacing={2} sx={{ p: 3, width: '100%', mt: isMobile ? '3rem' : 0  }}>
+    <Stack
+    sx={{
+      position: "relative",
+      minHeight: `calc(100vh - ${menuBarHeight})`,
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      backgroundColor: "grey.50",
+    }}
+  >
       {showForm ? (
         <TripScraperForm onBack={() => setShowForm(false)} onSubmit={handleSubmit} scrapedData={scrapedData} url={url} />
       ) : (
         <>
-          <Typography variant="h4" sx={{ mb: 2 }}>New Trip</Typography>
-          <Typography variant="subtitle1" sx={{ textAlign: 'left', mb: 1 }}>Load trip from URL:</Typography>
-          <TextField
-            label="Link"
-            variant="outlined"
-            fullWidth
-            value={url}
-            onChange={handleUrlChange}
-            sx={{ mt: 2 }}
-            error={!!error} // Highlight field if there's an error
-            helperText={error || ''} // Show error message below the field
-          />
-          <Stack direction='row' sx={{ justifyContent: 'space-between' }}>
-            <Link to="/"><Button variant='outlined'>Back</Button></Link>
-            <Button onClick={handleContinue} variant='contained' disabled={!url}>Continue</Button>
+        <BackgroundImage />
+          <Stack 
+          spacing={3} 
+          sx={{ 
+              maxWidth: '600px', 
+              zIndex: 1, 
+              mx: 'auto', 
+              backgroundColor: "grey.50",
+              p: 4, 
+              borderRadius: 2, 
+              boxShadow: "0 0 10px rgba(0,0,0,0.1)",
+            }}>
+            <Typography variant="h5" sx={{ textAlign: 'left', mb: 1 }}>Paste the URL adress of the blog post here:</Typography>
+            <TextField
+              label="Link"
+              variant="outlined"
+              fullWidth
+              value={url}
+              onChange={handleUrlChange}
+              sx={{ mt: 2 }}
+              error={!!error} // Highlight field if there's an error
+              helperText={error || ''} // Show error message below the field
+            />
+            <Stack direction='row' sx={{ justifyContent: 'space-between' }}>
+              <Link to="/"><Button variant='outlined'>Back</Button></Link>
+              <Button onClick={handleContinue} variant='contained' disabled={!url}>Continue</Button>
+            </Stack>
           </Stack>
         </>
       )}

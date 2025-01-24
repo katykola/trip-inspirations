@@ -3,7 +3,7 @@ import { Box, Stack, Typography, Button, CircularProgress, Link as LinkHref, use
 import { Link, useNavigate } from 'react-router-dom';
 import { db } from '../config/firebase-config';
 import { doc, getDoc, deleteDoc } from 'firebase/firestore';
-import { Trip } from '../types/types';
+import { Trip, Collection } from '../types/types';
 import Nature from '../images/nature.jpg';
 import { useLocation } from '../context/LocationContext';
 import { useVisibleTrips } from '../context/VisibleTripsContext';
@@ -33,6 +33,7 @@ export default function TripDetail({ id }: TripDetailProps) {
 
   const [trip, setTrip] = useState<Trip | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [collectionName, setCollectionName] = useState<string | null>(null);
   const { setSelectedLocation } = useLocation();
   const navigate = useNavigate();
   const { setSelectedTripId } = useVisibleTrips();
@@ -43,10 +44,22 @@ export default function TripDetail({ id }: TripDetailProps) {
         const docRef = doc(db, 'trips', id);
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
-          setTrip({
-            id: docSnap.id,
-            ...docSnap.data(),
-          } as Trip);  
+          const tripData = docSnap.data() as Trip;
+          setTrip(tripData); 
+
+        // Fetch the collection name by its ID
+          if (tripData.collections && tripData.collections.length > 0) {
+            const collectionId = tripData.collections[0]; // Assuming the trip belongs to one collection
+            const collectionRef = doc(db, 'collections', collectionId);
+            const collectionSnap = await getDoc(collectionRef);
+              if (collectionSnap.exists()) {
+                const collectionData = collectionSnap.data() as Collection;
+                setCollectionName(collectionData.title);
+              } else {
+            console.error('No such collection!');
+          }
+      }
+
         } else {
           console.error('No such document!');
         }
@@ -68,14 +81,14 @@ export default function TripDetail({ id }: TripDetailProps) {
   }, [trip]);
 
   function onBack() {
-    navigate('/');
+    navigate('/map');
   }
 
   const handleDelete = async () => {
     try {
       const docRef = doc(db, 'trips', id);
       await deleteDoc(docRef);
-      navigate('/'); 
+      navigate('/map'); 
       window.location.reload(); // Reload the app
     } catch (error) {
       console.error('Error deleting document: ', error);
@@ -181,7 +194,8 @@ export default function TripDetail({ id }: TripDetailProps) {
             {displayUrl}
           <OpenInNew sx={{ ml: 0.5, fontSize: '1rem' }}/>
         </LinkHref>
-      </Stack>   
+      </Stack>
+      {collectionName && <Typography variant="body2" sx={{ textAlign: 'left' }}>Collection: {collectionName}</Typography>}
       <Stack direction='row' sx={{ alignItems: 'center', justifyContent: 'space-between' }}>
         <Link  to={`/trip/${id}/edit`}><Button variant='outlined'>Edit</Button></Link>
         <Button variant='outlined' onClick={handleDelete}>Delete</Button>

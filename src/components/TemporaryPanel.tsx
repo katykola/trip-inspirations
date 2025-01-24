@@ -26,7 +26,7 @@ export default function TemporaryPanel({ children }: TemporaryPanelProps) {
             position: 'absolute',
             zIndex: 1000,
             width: drawerWidth,
-            backgroundColor: 'grey.100',
+            backgroundColor: 'white',
             transition: 'transform 5s ease-in-out',
             transform: panelOpen ? 'translateX(0)' : `translateX(-${drawerWidth}px)`,
           },

@@ -4,13 +4,15 @@ import SignUpPage from '../pages/SignUpPage';
 import LoginPage from '../pages/LoginPage';
 import Header from '../components/Header';
 import HomePage from '../pages/HomePage';
-import LogOutPage from '../pages/LogOutPage';
+import MapPage from '../pages/MapPage';
+import CollectionsPage from '../pages/CollectionsPage';
 import TripNew from '../pages/TripNew';
 import TripDetailPage from '../pages/TripDetailPage';
 import TripEditForm from '../components/TripEditForm';
 import { AuthProvider, useAuth } from '../context/AuthContext';
 import { LocationProvider } from '../context/LocationContext';
 import { VisibleTripsProvider } from '../context/VisibleTripsContext';
+import { CollectionProvider } from '../context/CollectionContext';
 
 
 export default function AppRouter() {
@@ -24,6 +26,7 @@ export default function AppRouter() {
     <AuthProvider>
       <LocationProvider>
         <VisibleTripsProvider>
+          <CollectionProvider>
         <Router>
           <CssBaseline />
           <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
@@ -47,22 +50,10 @@ export default function AppRouter() {
                     }
                   />
                   <Route
-                    path="/logout"
+                    path="/map"
                     element={
-                      <LogOutPage/>
+                      <MapPage/>
                     }
-                  />
-                  <Route
-                    path="/user/:userId/home"
-                    element={
-                    <ProtectedRoute>
-                      <HomePage/>
-                    </ProtectedRoute>
-                    }
-                  />
-                  <Route
-                    path="/new"
-                    element={<TripNew />}
                   />
                   <Route
                     path="/trip/:id"
@@ -70,13 +61,50 @@ export default function AppRouter() {
                     }
                   />
                   <Route
+                    path="/user/:userId/home"
+                    element={
+                      <ProtectedRoute>
+                      <MapPage/>
+                    </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/collections"
+                    element={
+                      <ProtectedRoute>
+                      <CollectionsPage/>
+                    </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/user/:userId/profile"
+                    element={
+                      <ProtectedRoute>
+                      <MapPage/>
+                    </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/new"
+                    element={
+                    <ProtectedRoute>
+                      <TripNew />
+                    </ProtectedRoute>
+                  } 
+                  />
+                  <Route
                     path="/trip/:id/edit"
-                    element={<TripEditForm/>}
+                    element={
+                    <ProtectedRoute>
+                      <TripEditForm/>
+                    </ProtectedRoute>
+                  }
                   />
                 </Routes>
             </Box>
           </Box>
         </Router>
+        </CollectionProvider>
       </VisibleTripsProvider>
       </LocationProvider>
     </AuthProvider>

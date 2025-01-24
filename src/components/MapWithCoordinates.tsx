@@ -143,11 +143,11 @@ const MapWithCoordinates: React.FC<MapWithCoordinatesProps> = ({
           onChange={handleSearchChange}
           sx={{
             width: '100%',
+            backgroundColor: 'white',
             maxHeight: '2.5rem',
             '& .MuiOutlinedInput-root': {
               height: '2.5rem',
             },
-            backgroundColor: 'grey.200',
           }}
           InputProps={{
             startAdornment: (

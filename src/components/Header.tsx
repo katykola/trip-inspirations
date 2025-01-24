@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, Avatar, Menu, MenuItem, ListItemIcon, Divider, IconButton, Tooltip, Stack, Typography, useMediaQuery } from '@mui/material';
-import { Settings, Logout } from '@mui/icons-material';
+import { Logout } from '@mui/icons-material';
 import { headerHeight } from '../utils/styling';
 import { Map } from '@mui/icons-material';
 import { smallScreenBreakpoint } from '../utils/breakpoints';
 import { useAuth } from '../context/AuthContext';
+import {useLocation } from '../context/LocationContext';
 
 
 export default function Header() {
@@ -13,6 +14,8 @@ export default function Header() {
   const isMobile = useMediaQuery(smallScreenBreakpoint);
   const { user, logout } = useAuth();
   const userLoggedId = user !== null;
+
+  const { currentLocation, setSearchedLocation } = useLocation();
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -29,6 +32,14 @@ export default function Header() {
     navigate('/');
   };
 
+  const handleMapPageClick = () => {
+    navigate('/map');
+  };
+
+  const handleCollectionsPageClick = () => {
+    navigate('/collections');
+  };
+
   const handleNewTripClick = () => {
     navigate('/new');
   };
@@ -42,14 +53,9 @@ export default function Header() {
   }
 
   const handleLogOutClick = () => {
+    setSearchedLocation(currentLocation || [48.210033, 16.363449]);
+    navigate('/');
     logout();
-    // setSearchedLocation([48.210033, 16.363449]);
-    navigate('/logout')
-    // alert("Logout successful!");
-  }
-
-  const handleAlertNew = () => {
-    alert("Do you want to add a new trip? Sign up.");
   }
 
   return (
@@ -63,17 +69,19 @@ export default function Header() {
             justifyContent: "space-between",
             alignItems: "center",
             px: isMobile ? '1rem' : '2rem',
-            borderTop: '1px solid lightgrey',
-            borderBottom: '1px solid lightgrey',
-            backgroundColor: 'grey.50',
+            backgroundColor: '#F2EEE8',
             zIndex: 3000,
             position: isMobile ? 'absolute' : 'inherit'
         }}
       >
 
-          <Stack direction='row' alignItems='center' onClick={handleHomePageClick} sx={{color:'black', cursor: 'pointer'}}>
-            <Map sx={{ mr: 1 }} />
-            <Typography>Trip Snap</Typography>
+          <Stack direction='row' spacing={2} alignItems='center' sx={{color:'black', cursor: 'pointer'}}>
+            <Stack direction='row' onClick={ userLoggedId ? handleCollectionsPageClick : handleHomePageClick}>
+              <Map sx={{ mr: 1 }} />
+              <Typography>Trip Snap</Typography>
+            </Stack>
+            { userLoggedId && <Typography onClick={handleCollectionsPageClick}>Collections</Typography> }
+            { userLoggedId && <Typography onClick={handleMapPageClick}>Map</Typography> }
           </Stack>
 
           { userLoggedId ? 
@@ -142,12 +150,6 @@ export default function Header() {
               <Avatar /> Profile
             </MenuItem>
             <Divider />
-            <MenuItem onClick={handleClose}>
-              <ListItemIcon>
-                <Settings fontSize="small" />
-              </ListItemIcon>
-              Settings
-            </MenuItem>
             <MenuItem onClick={handleLogOutClick}>
               <ListItemIcon>
                 <Logout fontSize="small" />
@@ -158,13 +160,11 @@ export default function Header() {
           </>
           :
           <Stack direction='row' spacing={2} sx={{alignItems: 'center'}}>
-            <Button onClick={handleAlertNew} variant='contained'>+ New Trip</Button>
+            <Typography onClick={handleLoginClick} sx={{ cursor: 'pointer' }} >Log In</Typography>
+            
             <Button onClick={handleSigninClick} variant='outlined'>Sign Up</Button>
-            <Button onClick={handleLoginClick} variant='outlined'>Log In</Button>
           </Stack>
-
           }
-
 
       </Stack>
     </>

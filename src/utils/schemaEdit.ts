@@ -6,10 +6,10 @@ const schemaEdit = z.object({
   images: z
     .array(z.string(), { required_error: 'At least one image must be selected' })
     .min(1, 'At least one image must be selected'),
-  public: z.boolean().optional(),
   userId: z.string().optional(),
   lat: z.number().optional(),
   lng: z.number().optional(),
+  collections: z.array(z.string()).optional(),
 });
 
 

@@ -8,6 +8,7 @@ import { useVisibleTrips } from '../context/VisibleTripsContext';
 
 interface ScreenDesktopProps {
   children: React.ReactNode;
+
 }
 
 export default function ScreenDesktop({
@@ -20,6 +21,7 @@ export default function ScreenDesktop({
     setShowAreaButton(false);
     setPanelOpen(true);
   };
+
 
   return (
   <>

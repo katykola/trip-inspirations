@@ -10,8 +10,15 @@ interface Trip {
         lat: number;
         lng: number;
     };
-    public: boolean;
     userId: string;
+    collections: string[];
   }
 
-export type { Trip };
+interface Collection {
+  id: string;
+  title: string;
+  trips: string[];
+  userId: string;
+}
+
+export type { Trip, Collection };

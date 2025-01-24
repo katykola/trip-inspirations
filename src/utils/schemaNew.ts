@@ -6,7 +6,6 @@ const schemaNew = z.object({
   images: z
     .array(z.string(), { required_error: 'At least one image must be selected' })
     .min(1, 'At least one image must be selected'),
-  public: z.boolean().optional(),
   userId: z.string().optional(),
   coordinates: z
     .object({
@@ -16,6 +15,7 @@ const schemaNew = z.object({
   lat: z.number().optional(),
   lng: z.number().optional(),
   url: z.string(),
+  collections: z.array(z.string()).optional(),
 });
 
 

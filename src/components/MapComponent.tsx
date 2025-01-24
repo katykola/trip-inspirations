@@ -59,7 +59,7 @@ export default function MapComponent({areaSearched, setAreaSearched, setShowArea
     if (searchedLocation) {
       setSelectedLocation(searchedLocation);
     }    
-    navigate('/');
+    navigate('/map');
     setMapKey((prevKey) => prevKey + 1); 
   }
 

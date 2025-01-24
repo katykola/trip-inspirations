@@ -2,7 +2,8 @@ import { useState } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../config/firebase-config";
 import { TextField, Button, Typography, Stack } from "@mui/material";
-
+import { menuBarHeight } from "../utils/styling";
+import BackgroundImage from "../components/BackgroundImage";
 
 const Signup = () => {
   const [email, setEmail] = useState("");
@@ -23,25 +24,49 @@ const Signup = () => {
   };
 
   return (
-    <Stack spacing={2} sx={{ alignItems: 'center' }}>
-        <Typography variant="h4">Sign Up</Typography>
-        <form onSubmit={handleSignup}>
-          <Stack spacing={2}>
-              <TextField
-                type="email"
-                placeholder="Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-              <TextField
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-              <Button type="submit">Signup</Button>
-          </Stack>
-        </form>
+    <Stack
+    sx={{
+      position: "relative",
+      minHeight: `calc(100vh - ${menuBarHeight})`,
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      backgroundColor: "grey.50",
+    }}
+    >
+      <BackgroundImage />
+      <Stack
+      spacing={2}
+      sx={{
+        maxWidth: "400px",
+        width: "100%",
+        zIndex: 1,
+        p: "2rem",
+        textAlign: "center",
+        borderRadius: "10px",
+        boxShadow: "0 0 10px rgba(0,0,0,0.1)",
+        backgroundColor: "grey.50",
+      }}
+      >
+          <Typography variant="h4">Sign Up</Typography>
+          <form onSubmit={handleSignup}>
+            <Stack spacing={2}>
+                <TextField
+                  type="email"
+                  placeholder="Email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+                <TextField
+                  type="password"
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+                <Button type="submit" variant="contained">Signup</Button>
+            </Stack>
+          </form>
+      </Stack>
     </Stack>
   );
 };

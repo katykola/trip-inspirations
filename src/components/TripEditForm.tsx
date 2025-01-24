@@ -8,10 +8,11 @@ import { useTrip } from '../hooks/useTrip';
 import { Trip } from '../types/types';
 import { db } from '../config/firebase-config';
 import { doc, updateDoc } from 'firebase/firestore';
-import { Typography, TextField, Stack, Button, Grid, FormControlLabel, Checkbox, useMediaQuery } from '@mui/material';
+import { Typography, TextField, Stack, Button, Grid, useMediaQuery } from '@mui/material';
 import ImagesCheckboxComponent from './ImagesChecboxComponent';
 import MapWithCoordinates from './MapWithCoordinates';
 import { smallScreenBreakpoint } from '../utils/breakpoints'
+import AddToCollection from './AddToCollection';
 
 
 export default function TripEditForm() {
@@ -23,15 +24,10 @@ export default function TripEditForm() {
     const { data: trip, isLoading } = useTrip(id || '');
     const [coordinates, setCoordinates] = useState<{ lat: number; lng: number } | null>(null);    
     const { selectedImages, handleImageCheckboxChange } = useImageSelection(trip?.images || []); // Initialize with trip.images
+    const [ collectionId, setCollectionId ] = useState<string | null>(null);
 
-    const [checked, setChecked] = useState(false);
 
-    // Handle checkbox change for public visibility
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setChecked(event.target.checked);
-  };
-
-    const methods = useForm<Trip>({
+   const methods = useForm<Trip>({
         resolver: zodResolver(schemaEdit)
     });
     
@@ -46,10 +42,9 @@ export default function TripEditForm() {
                 images: trip.images,
                 lat: trip.lat,
                 lng: trip.lng,
-                public: trip.public,
             });
             setCoordinates({ lat: trip.lat, lng: trip.lng });
-            setChecked(trip.public);
+            // setCollectionId(trip.collections[0]);
         };
     }, [trip]);
 
@@ -72,7 +67,7 @@ export default function TripEditForm() {
             images: selectedImages.length > 0 ? selectedImages : trip.images, // Use selected images if available
             lat: coordinates ? coordinates.lat : trip.lat, // Update latitude if coordinates are provided
             lng: coordinates ? coordinates.lng : trip.lng, // Update longitude if coordinates are provided
-            public: checked, // Add the public checkbox value to the submitted data
+            collections: collectionId ? [collectionId] : trip.collections // Update collection if selected
         };
 
         
@@ -107,9 +102,12 @@ export default function TripEditForm() {
         return <Typography variant="body1">Loading...</Typography>
     }
 
+    const getCollectionId = (collectionId: string) => {
+        setCollectionId(collectionId);
+    };
+
     return(
     <Stack spacing={2} sx={{ p: 3, width: '100%', mt: isMobile ? '3rem' : 0 }}>
-        <Typography variant="h4">Edit Trip</Typography>
         <FormProvider {...methods}>
             <form onSubmit={handleSubmit(handleFormSubmit)}>
               <Grid container spacing={3}>
@@ -153,12 +151,7 @@ export default function TripEditForm() {
                     coordinates={coordinates}
                     setCoordinates={setCoordinates} 
                     />
-              <Stack direction="row" spacing={1}>
-                <FormControlLabel
-                    control={<Checkbox checked={checked} onChange={handleChange} />}
-                    label="Set trip visibility to public"
-                />
-              </Stack>
+                <AddToCollection getCollectionId={getCollectionId} initialCollectionId={collectionId}/>
                </Grid>
               </Grid>
             <Stack direction='row' sx={{ justifyContent: 'space-between' }}>

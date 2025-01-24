@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import { Select, MenuItem, SelectChangeEvent, Stack, Box, TextField, Typography, InputAdornment, List, ListItem, ListItemButton, ListItemText, IconButton, useMediaQuery} from '@mui/material';
 import { Search, Adjust, Close } from '@mui/icons-material';
-import { useAuth } from '../context/AuthContext';
 import { useLocation } from '../context/LocationContext';
-import { useVisibleTrips } from '../context/VisibleTripsContext';
 import { menuBarHeight } from '../utils/styling';
 import { smallScreenBreakpoint } from '../utils/breakpoints'
 
@@ -16,7 +14,6 @@ interface Suggestion {
 
 export default function MenuBar() {
 
-  const { user } = useAuth();
   const isMobile = useMediaQuery(smallScreenBreakpoint);
 
   const { mapRadius, setMapRadius, currentLocation, setSearchedLocation } = useLocation();
@@ -24,7 +21,6 @@ export default function MenuBar() {
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [searched, setSearched] = useState(false);
-  const isLoggedIn = user !== null;
 
   
   const handleRadiusChange = (event: SelectChangeEvent<number>) => {
@@ -70,12 +66,6 @@ export default function MenuBar() {
     setSearched(true);
   };
   
-  const { filter, setFilter } = useVisibleTrips();
-
-  const handleFilterChange = (event: SelectChangeEvent<string>) => {
-    const filter = event.target.value;
-    setFilter(filter);
-  };
   
   return (
     <>
@@ -91,8 +81,10 @@ export default function MenuBar() {
           justifyContent:'start',
           alignItems: "center", 
           px: isMobile ? '1rem' : '2rem',
-          borderBottom: isMobile ? null : '1px solid grey',
-          zIndex: isMobile ? 4000 : 'inherit'
+          borderTop: isMobile ? null : '1px solid rgb(210, 210, 210)',
+          borderBottom: isMobile ? null : '1px solid rgb(179, 179, 179)',
+          zIndex: isMobile ? 4000 : 'inherit',
+          backgroundColor: '#F2EEE8',
         }}
       >
 
@@ -116,7 +108,7 @@ export default function MenuBar() {
               '& .MuiInputAdornment-root': {
                 height: '2.5rem',
               },
-              backgroundColor: 'grey.200',
+              backgroundColor: 'white',
             }}
             InputProps={{
               startAdornment: (
@@ -216,30 +208,6 @@ export default function MenuBar() {
           <MenuItem value={300000}>300 km radius</MenuItem>
           <MenuItem value={500000}>500 km radius</MenuItem>
       </Select>
-
-      { isLoggedIn ? 
-        <Select
-          value={filter}
-          onChange={handleFilterChange}
-          sx={{
-            flex: '0 1 auto',
-            maxWidth: 'max-content',
-            backgroundColor: 'white',
-            maxHeight: '2.5rem', // Restricting height to 3rem
-            overflow: 'hidden', // Ensures no content spills out
-            '& .MuiSelect-select': {
-              lineHeight: '3rem', // Ensures proper alignment within the height limit
-            },
-          }} 
-        >
-          <MenuItem value={'private'}>Private</MenuItem>
-          <MenuItem value={'public'}>Public</MenuItem>
-          <MenuItem value={'all'}>All trips</MenuItem>
-        </Select>
-        : 
-        null
-      }
-
 
       </Stack>
     </>

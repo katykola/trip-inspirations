@@ -19,5 +19,5 @@
     "noUncheckedSideEffectImports": true
 
   },
-  "include": ["src", "proxy.js", "scripts/update-trips-public.js"]
+  "include": ["src", "proxy.js"]
 }

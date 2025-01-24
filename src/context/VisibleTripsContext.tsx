@@ -8,8 +8,6 @@ interface VisibleTripsContextProps {
   visibleTrips: Trip[];
   setVisibleTrips: (trips: Trip[]) => void;
   isLoading: boolean;
-  filter: string;
-  setFilter: (filter: string) => void;
   selectedTripId: string | null;
   setSelectedTripId: (id: string | null) => void;
   panelOpen: boolean;
@@ -25,9 +23,7 @@ const VisibleTripsContext = createContext<VisibleTripsContextProps | undefined>(
 export const VisibleTripsProvider = ({ children }: { children: ReactNode }) => {
   const { currentLocation, searchedLocation, mapRadius } = useLocation();
   const { data: trips, isLoading: tripsLoading } = useTrips();
-  const [filter, setFilter] = useState('all');
   const user = useAuth();
-  const { filteredTrips } = useAuth();
   const isLoggedIn = !!user?.user;
   const [selectedTripId, setSelectedTripId] = useState<string | null>(null);
   const [panelOpen, setPanelOpen] = useState(true);
@@ -58,27 +54,18 @@ export const VisibleTripsProvider = ({ children }: { children: ReactNode }) => {
   const visibleTrips = useMemo(() => {
     if (!trips || !tripsLocation) return [];
 
-    const locationFiltered = filteredTrips.filter((trip) => {
+    const locationFiltered = trips.filter((trip) => {
       const distance = calculateDistance(tripsLocation[0], tripsLocation[1], trip.lat, trip.lng);
       return distance <= mapRadius / 1000; // Convert radius to km
     });
 
-    if(!isLoggedIn) {
-      setFilter('public');
-    }
-
-    if (filter === 'private') {
-      return locationFiltered.filter((trip) => !trip.public);
-    } else if (filter === 'public') {
-      return locationFiltered.filter((trip) => trip.public);
-    }
     return locationFiltered;
-  }, [filteredTrips, tripsLocation, mapRadius, filter, isLoggedIn]);
+  }, [tripsLocation, mapRadius, isLoggedIn]);
 
   const isLoading = tripsLoading;
 
   return (
-    <VisibleTripsContext.Provider value={{ visibleTrips, setVisibleTrips: () => {}, isLoading, filter, setFilter, selectedTripId, setSelectedTripId, panelOpen, setPanelOpen, showAreaButton, setShowAreaButton, areaSearched, setAreaSearched }}>
+    <VisibleTripsContext.Provider value={{ visibleTrips, setVisibleTrips: () => {}, isLoading, selectedTripId, setSelectedTripId, panelOpen, setPanelOpen, showAreaButton, setShowAreaButton, areaSearched, setAreaSearched }}>
       {children}
     </VisibleTripsContext.Provider>
   );
