@@ -13,6 +13,7 @@ interface AddToCollectionProps {
 }
 
 export default function AddToCollection({ getCollectionId, initialCollectionId }: AddToCollectionProps) {
+
   const [open, setOpen] = useState(false);
   const [selectedCollection, setSelectedCollection] = useState('');
   const [newCollectionTitle, setNewCollectionTitle] = useState('');
@@ -40,6 +41,7 @@ export default function AddToCollection({ getCollectionId, initialCollectionId }
   const handleSelectChange = (event: SelectChangeEvent<string>) => {
     setSelectedCollection(event.target.value as string);
     getCollectionId(event.target.value as string);
+    setOpen(false);
   };
 
   const handleNewCollectionTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {

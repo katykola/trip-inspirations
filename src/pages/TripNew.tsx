@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Stack, Typography, Button, TextField, useMediaQuery } from '@mui/material';
+import { Stack, Typography, Button, TextField } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { db } from '../config/firebase-config';
 import { collection, addDoc } from 'firebase/firestore';
@@ -7,7 +7,7 @@ import TripScraperForm from './TripScraperForm';
 import { fetchAndParse } from '../utils/scraper';
 import { useLocation } from '../context/LocationContext';
 import { z } from 'zod';
-import { smallScreenBreakpoint } from '../utils/breakpoints'
+// import { smallScreenBreakpoint } from '../utils/breakpoints'
 import { Trip } from '../types/types';
 import { menuBarHeight } from '../utils/styling';
 import BackgroundImage from '../components/BackgroundImage';
@@ -23,7 +23,7 @@ const schema = z.object({
 })
 
 export default function TripNew() {
-  const isMobile = useMediaQuery(smallScreenBreakpoint);
+  // const isMobile = useMediaQuery(smallScreenBreakpoint);
 
   const [url, setUrl] = useState('');
   const [error, setError] = useState<string | null>(null);

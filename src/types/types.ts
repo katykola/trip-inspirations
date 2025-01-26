@@ -11,7 +11,7 @@ interface Trip {
         lng: number;
     };
     userId: string;
-    collections: string[];
+    collection: string;
   }
 
 interface Collection {
@@ -19,6 +19,7 @@ interface Collection {
   title: string;
   trips: string[];
   userId: string;
+  images?: string[];	
 }
 
 export type { Trip, Collection };

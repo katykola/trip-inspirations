@@ -48,8 +48,8 @@ export default function TripDetail({ id }: TripDetailProps) {
           setTrip(tripData); 
 
         // Fetch the collection name by its ID
-          if (tripData.collections && tripData.collections.length > 0) {
-            const collectionId = tripData.collections[0]; // Assuming the trip belongs to one collection
+          if (tripData.collection) {
+            const collectionId = tripData.collection; 
             const collectionRef = doc(db, 'collections', collectionId);
             const collectionSnap = await getDoc(collectionRef);
               if (collectionSnap.exists()) {

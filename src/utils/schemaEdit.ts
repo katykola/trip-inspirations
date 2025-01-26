@@ -9,7 +9,7 @@ const schemaEdit = z.object({
   userId: z.string().optional(),
   lat: z.number().optional(),
   lng: z.number().optional(),
-  collections: z.array(z.string()).optional(),
+  collection: z.string().optional(),
 });
 
 

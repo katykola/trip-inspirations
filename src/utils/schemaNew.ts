@@ -15,7 +15,7 @@ const schemaNew = z.object({
   lat: z.number().optional(),
   lng: z.number().optional(),
   url: z.string(),
-  collections: z.array(z.string()).optional(),
+  collection: z.string().optional(),
 });
 
 

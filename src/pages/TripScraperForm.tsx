@@ -92,7 +92,7 @@ export default function TripScraperForm({ onBack, onSubmit, scrapedData, url }: 
       return;
     }
     if(collectionId) {
-      data.collections = [collectionId];
+      data.collection = collectionId;
     }
     
     if (!coordinates) {

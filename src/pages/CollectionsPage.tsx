@@ -4,9 +4,10 @@ import { menuBarHeight } from '../utils/styling';
 import CollectionTile from '../components/CollectionTile';
 import { collection, getDocs, query, where, limit } from 'firebase/firestore';
 import { db } from '../config/firebase-config';
+import { Collection } from '../types/types';
 
 export default function CollectionsPage() {
-  const [collections, setCollections] = useState<any[]>([]);
+  const [collections, setCollections] = useState<Collection[]>([]);
 
   useEffect(() => {
     const fetchCollections = async () => {
@@ -14,16 +15,15 @@ export default function CollectionsPage() {
         const querySnapshot = await getDocs(collection(db, 'collections'));
         const collectionsData = await Promise.all(
           querySnapshot.docs.map(async (doc) => {
-            const collectionData = { id: doc.id, ...doc.data() };
+            const collectionData = doc.data() as Collection;
             const tripsQuery = query(
               collection(db, 'trips'),
-              where('collections', 'array-contains', doc.id),
+              where('collection', '==', doc.id),
               limit(3)
             );
             const tripsSnapshot = await getDocs(tripsQuery);
             const tripImages = tripsSnapshot.docs.map(tripDoc => tripDoc.data().images[0]).filter(Boolean);
-            console.log(tripImages);
-            return { ...collectionData, images: tripImages };
+            return { ...collectionData, id: doc.id, images: tripImages };
           })
         );
         setCollections(collectionsData);
@@ -31,9 +31,10 @@ export default function CollectionsPage() {
         console.error('Error fetching collections:', error);
       }
     };
-
     fetchCollections();
   }, []);
+
+  console.log('collections:', collections, typeof collections);
 
   return (
     <Stack

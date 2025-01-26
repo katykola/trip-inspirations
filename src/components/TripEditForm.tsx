@@ -44,7 +44,7 @@ export default function TripEditForm() {
                 lng: trip.lng,
             });
             setCoordinates({ lat: trip.lat, lng: trip.lng });
-            // setCollectionId(trip.collections[0]);
+            setCollectionId(trip.collection);
         };
     }, [trip]);
 
@@ -67,12 +67,11 @@ export default function TripEditForm() {
             images: selectedImages.length > 0 ? selectedImages : trip.images, // Use selected images if available
             lat: coordinates ? coordinates.lat : trip.lat, // Update latitude if coordinates are provided
             lng: coordinates ? coordinates.lng : trip.lng, // Update longitude if coordinates are provided
-            collections: collectionId ? [collectionId] : trip.collections // Update collection if selected
+            collection: collectionId ? collectionId : trip.collection // Update collection if selected
         };
 
         
         try {
-            console.log('updated trip', updatedTrip);
             // Update Firestore document
             const docRef = doc(db, 'trips', id || '');
             await updateDoc(docRef, updatedTrip);

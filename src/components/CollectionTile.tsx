@@ -2,7 +2,7 @@ import { Box, Typography, Button } from '@mui/material';
 
 interface CollectionTileProps {
     name: string;
-    images: string[];
+    images: string[] | undefined;
 }
 
 export default function CollectionTile({ name, images }: CollectionTileProps) {
@@ -34,7 +34,7 @@ export default function CollectionTile({ name, images }: CollectionTileProps) {
                 height: '100px',
             }}
         >
-            {images.map((image, index) => (
+            {images? images.map((image, index) => (
                 <Box
                     key={index}
                     sx={{
@@ -55,7 +55,7 @@ export default function CollectionTile({ name, images }: CollectionTileProps) {
                         }}
                     />
                 </Box>
-            ))}
+            )) : null}
         </Box>
         {/* Title */}
         <Typography
