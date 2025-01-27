@@ -84,12 +84,13 @@ export default function Header() {
       >
         <Stack direction="row" spacing={2} alignItems='flex-end'  sx={{ color: 'black', cursor: 'pointer' }}>
           <Stack direction="row" alignItems="center" onClick={userLoggedId ? handleCollectionsPageClick : handleHomePageClick}>
-            <Map sx={{ mr: 0.5 }} />
+            <Map sx={{ mr: 0.5, color: theme.palette.secondary.main  }} />
             <Typography
               sx={{
                 fontFamily: '"Barlow", serif',
                 fontWeight: 'bolder',
                 fontSize: '1.2rem',
+                color: theme.palette.secondary.main,
               }}
             >
               Trip Snap

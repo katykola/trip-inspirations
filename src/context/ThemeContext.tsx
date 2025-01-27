@@ -46,9 +46,10 @@ const theme = createTheme({
     MuiButton: {
       styleOverrides: {
         root: {
-          borderRadius: '8px',
+          borderRadius: '15px',
           textTransform: 'none',
           fontFamily: '"Work Sans", serif',
+          boxShadow: 'none',
         },
         containedPrimary: {
           backgroundColor: '#008080',
