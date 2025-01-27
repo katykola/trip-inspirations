@@ -195,6 +195,11 @@ export default function TripDetail({ id }: TripDetailProps) {
     </>    
     }
 
+      {collectionName && 
+      <Stack direction='row' sx={{ justifyContent: 'end' }}>
+        <Typography variant="body2" sx={{ textAlign: 'left', backgroundColor:'#FF6F61', p: 1, borderRadius: 2, color: 'white' }}>{collectionName}</Typography>
+      </Stack>
+      }
       <Typography variant="h6" sx={{ fontWeight: 'bold', textAlign: 'left' }}>{trip.title}</Typography>
       <Typography variant="body2" sx={{ textAlign: 'left' }}>{trip.description}</Typography>
       <Stack sx={{ alignItems: 'end' }}>
@@ -203,7 +208,6 @@ export default function TripDetail({ id }: TripDetailProps) {
           <OpenInNew sx={{ ml: 0.5, fontSize: '1rem' }}/>
         </LinkHref>
       </Stack>
-      {collectionName && <Typography variant="body2" sx={{ textAlign: 'left' }}>Collection: {collectionName}</Typography>}
       <Stack direction='row' sx={{ alignItems: 'center', justifyContent: 'space-between' }}>
         <Link  to={`/trip/${id}/edit`}><Button variant='outlined'>Edit</Button></Link>
         <Button variant='outlined' onClick={handleDelete}>Delete</Button>

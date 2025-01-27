@@ -81,7 +81,7 @@ export default function TripList() {
       {selectedCollection ? 
       <Stack >
         <Stack direction='row' justifyContent='space-between'>
-          <Stack onClick={onBack} direction='row' sx={{ cursor: 'pointer' }}>
+          <Stack onClick={onBack} direction='row' alignItems='center' sx={{ cursor: 'pointer' }}>
             <ChevronLeft sx={{ color: 'grey', mr: 0.5, fontSize: '0.9rem', verticalAlign: 'bottom' }}/>
             <Typography sx={{ color: 'grey', fontSize: '0.9rem' }}>Back to collections</Typography>
           </Stack>

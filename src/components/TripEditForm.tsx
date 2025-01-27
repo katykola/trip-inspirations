@@ -116,6 +116,9 @@ export default function TripEditForm() {
                             label='Title'
                             variant='outlined'
                             fullWidth
+                            sx={{
+                                backgroundColor: 'white'
+                            }}
                             {...register('title')}
                             error={!!errors.title}
                             helperText={errors.title ? 'Title is required.' : ''}
@@ -125,6 +128,9 @@ export default function TripEditForm() {
                             label='Description'
                             variant='outlined'
                             fullWidth
+                            sx={{
+                                backgroundColor: 'white'
+                            }}
                             multiline
                             rows={6}
                             {...register('description')}
@@ -134,6 +140,9 @@ export default function TripEditForm() {
                             label='Link'
                             variant='outlined'
                             fullWidth
+                            sx={{
+                                backgroundColor: 'white'
+                            }}
                             {...register('url')}
                         >
                         </TextField>

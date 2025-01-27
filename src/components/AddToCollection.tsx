@@ -72,7 +72,7 @@ export default function AddToCollection({ getCollectionId, initialCollectionId }
 
   return (
     <>
-      <Button variant='contained' onClick={handleOpen} startIcon={selectedCollection || newCollectionTitle ? <BookmarkIcon /> : <BookmarkBorderIcon />}>
+      <Button variant='outlined' color='secondary' onClick={handleOpen} startIcon={selectedCollection || newCollectionTitle ? <BookmarkIcon /> : <BookmarkBorderIcon />}>
         {selectedCollectionTitle.trim() ? (
           <Typography>{selectedCollectionTitle}</Typography>
         ) : (

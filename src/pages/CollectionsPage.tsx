@@ -51,14 +51,15 @@ export default function CollectionsPage() {
         backgroundColor: '#F2EEE8',
         height: `calc(100vh - ${menuBarHeight})`,
         padding: '2rem',
-        overflowX: 'hidden', // Prevent horizontal overflow
+        overflowX: 'hidden', 
       }}
     >
       <Stack
         direction="row"
-        spacing={2}
+        // spacing={2}
         sx={{
-          overflowX: 'auto', // Enable horizontal scrolling if content overflows
+          flexWrap: 'wrap', // Allow items to wrap to the next row     
+          alignItems: 'flex-start', // Align items to the start of the row     
           paddingBottom: '1rem',
           '&::-webkit-scrollbar': {
             height: '8px',

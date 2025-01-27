@@ -10,6 +10,7 @@ import CollectionDetailPage from '../pages/CollectionDetailPage';
 import TripNew from '../pages/TripNew';
 import TripDetailPage from '../pages/TripDetailPage';
 import TripEditForm from '../components/TripEditForm';
+import { ThemeProvider } from '../context/ThemeContext';
 import { AuthProvider, useAuth } from '../context/AuthContext';
 import { LocationProvider } from '../context/LocationContext';
 import { VisibleTripsProvider } from '../context/VisibleTripsContext';
@@ -26,8 +27,9 @@ export default function AppRouter() {
   return (
     <AuthProvider>
       <LocationProvider>
-          <CollectionProvider>
+        <CollectionProvider>
         <VisibleTripsProvider>
+          <ThemeProvider>
         <Router>
           <CssBaseline />
           <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
@@ -97,6 +99,7 @@ export default function AppRouter() {
             </Box>
           </Box>
         </Router>
+        </ThemeProvider>
       </VisibleTripsProvider>
         </CollectionProvider>
       </LocationProvider>
