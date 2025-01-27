@@ -6,6 +6,7 @@ import Header from '../components/Header';
 import HomePage from '../pages/HomePage';
 import MapPage from '../pages/MapPage';
 import CollectionsPage from '../pages/CollectionsPage';
+import CollectionDetailPage from '../pages/CollectionDetailPage';
 import TripNew from '../pages/TripNew';
 import TripDetailPage from '../pages/TripDetailPage';
 import TripEditForm from '../components/TripEditForm';
@@ -25,8 +26,8 @@ export default function AppRouter() {
   return (
     <AuthProvider>
       <LocationProvider>
-        <VisibleTripsProvider>
           <CollectionProvider>
+        <VisibleTripsProvider>
         <Router>
           <CssBaseline />
           <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
@@ -45,27 +46,19 @@ export default function AppRouter() {
                   />
                   <Route
                     path="/"
-                    element={
-                      <HomePage/>
-                    }
+                    element={<HomePage/>}
                   />
                   <Route
                     path="/map"
                     element={
+                      <ProtectedRoute>
                       <MapPage/>
+                    </ProtectedRoute>
                     }
                   />
                   <Route
                     path="/trip/:id"
                     element={<TripDetailPage/>
-                    }
-                  />
-                  <Route
-                    path="/user/:userId/home"
-                    element={
-                      <ProtectedRoute>
-                      <MapPage/>
-                    </ProtectedRoute>
                     }
                   />
                   <Route
@@ -77,10 +70,10 @@ export default function AppRouter() {
                     }
                   />
                   <Route
-                    path="/user/:userId/profile"
+                    path="/collection/:id"
                     element={
                       <ProtectedRoute>
-                      <MapPage/>
+                      <CollectionDetailPage/>
                     </ProtectedRoute>
                     }
                   />
@@ -104,8 +97,8 @@ export default function AppRouter() {
             </Box>
           </Box>
         </Router>
-        </CollectionProvider>
       </VisibleTripsProvider>
+        </CollectionProvider>
       </LocationProvider>
     </AuthProvider>
   );

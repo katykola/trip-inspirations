@@ -14,7 +14,6 @@ import { smallScreenBreakpoint } from '../utils/breakpoints';
 import { headerHeight, menuBarHeight } from '../utils/styling';
 import L from 'leaflet';
 
-// Fix for default icon paths
 import markerIcon from 'leaflet/dist/images/marker-icon.png';
 import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
@@ -44,7 +43,6 @@ export default function MapComponent({areaSearched, setAreaSearched, setShowArea
   const navigate = useNavigate();
   const { data: singleTrip, isLoading: singleTripLoading } = useTrip(id || '');
   const { selectedLocation, setSelectedLocation, currentLocation, mapRadius, zoom, setZoom, searchedLocation, setSearchedLocation } = useLocation();
-  const [currentMapRadius] = useState(mapRadius);
   const { visibleTrips, isLoading: visibleTripsLoading } = useVisibleTrips();
   
   const [mapKey, setMapKey] = useState(0); // State variable to manage the key for MapContainer
@@ -59,7 +57,6 @@ export default function MapComponent({areaSearched, setAreaSearched, setShowArea
     if (searchedLocation) {
       setSelectedLocation(searchedLocation);
     }    
-    navigate('/map');
     setMapKey((prevKey) => prevKey + 1); 
   }
 
@@ -68,7 +65,7 @@ export default function MapComponent({areaSearched, setAreaSearched, setShowArea
   const MapEvents = () => {
     useMapEvents({
       moveend: () => {
-        if (mapRef.current) {
+        if (mapRef.current && !id) {
           const newCenter = mapRef.current.getCenter();
           setShowAreaButton(true);
           setAreaCenter([newCenter.lat, newCenter.lng]);
@@ -85,7 +82,8 @@ export default function MapComponent({areaSearched, setAreaSearched, setShowArea
       setShowAreaButton(false);
       setAreaSearched(false);
     }
-  }, [areaSearched]);
+  }, [areaSearched, areaCenter, setAreaSearched, setShowAreaButton, setSearchedLocation]);
+
 
   useEffect(() => {
     if(visibleTrips){
@@ -98,26 +96,26 @@ export default function MapComponent({areaSearched, setAreaSearched, setShowArea
       setSelectedLocation(searchedLocation);
     }
     setMapKey((prevKey) => prevKey + 1); 
-
-  }, [searchedLocation]);
+  }, [searchedLocation, setSelectedLocation]);
 
   useEffect(() => {
-    if (currentMapRadius !== mapRadius && mapRadius === 5000) {
+    if (mapRadius === 7000) {
       resetMap(12);
-    } else if (currentMapRadius !== mapRadius && mapRadius === 10000) {
+    } else if (mapRadius === 15000) {
       resetMap(11);
-    } else if (currentMapRadius !== mapRadius && mapRadius === 30000) {
+    } else if (mapRadius === 30000) {
+      resetMap(10);
+    } else if (mapRadius === 60000) {
       resetMap(9);
-    } else if (currentMapRadius !== mapRadius && mapRadius === 50000) {
+    } else if (mapRadius === 120000) {
       resetMap(8);
-    } else if (currentMapRadius !== mapRadius && mapRadius === 100000) {
+    } else if (mapRadius === 240000) {
       resetMap(7);
-    } else if (currentMapRadius !== mapRadius && mapRadius === 300000) {
+    } else if (mapRadius === 480000) {
       resetMap(6);
-    } else if (currentMapRadius !== mapRadius && mapRadius === 500000) {
-      resetMap(5);
     } 
   }, [mapRadius]);
+  
 
   
   if (singleTripLoading || visibleTripsLoading) {
@@ -128,7 +126,6 @@ export default function MapComponent({areaSearched, setAreaSearched, setShowArea
     navigate(`/trip/${id}`); // Navigate to trip detail page
   };
 
-  // Custom icon for the center marker
   const customIcon = L.divIcon({
     className: 'custom-center-icon',
     html: '<div style="font-size: 20px; color: #333333">x</div>',
@@ -136,7 +133,6 @@ export default function MapComponent({areaSearched, setAreaSearched, setShowArea
 
   return (
     <>
-
       <MapContainer
        ref={mapRef}
         key={mapKey} // Use the key to force reload
@@ -181,7 +177,7 @@ export default function MapComponent({areaSearched, setAreaSearched, setShowArea
         )}
         <MapScroller
           singleTripId={singleTrip ? singleTrip.id : ''}
-          multipleTrips={visibleTrips || []}
+          setShowAreaButton={setShowAreaButton}
         />
         <MapEvents />
       </MapContainer>

@@ -26,6 +26,9 @@ interface TripScraperFormProps {
 
 export default function TripScraperForm({ onBack, onSubmit, scrapedData, url }: TripScraperFormProps) {
 
+  const { user } = useAuth();
+  const userId = user?.uid || '';
+
   const navigate = useNavigate();
   const methods = useForm<z.infer<typeof schemaNew>>({
     resolver: zodResolver(schemaNew),
@@ -44,7 +47,7 @@ export default function TripScraperForm({ onBack, onSubmit, scrapedData, url }: 
   const { setSearchedLocation } = useLocation();
   const [ collectionId, setCollectionId ] = useState<string | null>(null);
 
-  const { data: trips } = useTrips();
+  const { data: trips } = useTrips(userId);
 
   const handleImageSelectionChange = (image: string) => {
     const updatedImages = selectedImages.includes(image)
@@ -55,8 +58,6 @@ export default function TripScraperForm({ onBack, onSubmit, scrapedData, url }: 
     setValue('images', updatedImages); 
     trigger('images'); 
   };
-
-  const user = useAuth();
 
   const getCollectionId = (collectionId: string) => {
     setCollectionId(collectionId);
@@ -75,8 +76,8 @@ export default function TripScraperForm({ onBack, onSubmit, scrapedData, url }: 
     console.log('Form submitted with:', data); // Check if this logs data
     data.images = selectedImages;
     data.url = url;
-    if (user !== null && user.user !== null) {
-      data.userId = user.user.uid;
+    if (user !== null) {
+      data.userId = userId;
     } 
     if (coordinates) {
       data.lat = coordinates.lat;
@@ -174,7 +175,7 @@ export default function TripScraperForm({ onBack, onSubmit, scrapedData, url }: 
                     </Typography>
                   )}
                   {scrapedData?.images && scrapedData.images.length > 0 && (
-                    <Grid container spacing={2} sx={{ ml: -2 }}>
+                    <Grid container spacing={2} >
                       {scrapedData.images.slice(0, 6).map((image, index) => (
                         <ImagesCheckboxComponent
                           key={index}

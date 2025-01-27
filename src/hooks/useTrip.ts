@@ -12,7 +12,6 @@ const fetchTrip = async (id: string): Promise<Trip | null> => {
   if (docSnap.exists()) {
     return { id: docSnap.id, ...docSnap.data() } as Trip;
   } else {
-    console.error('No such document!');
     return null;
   }
 };

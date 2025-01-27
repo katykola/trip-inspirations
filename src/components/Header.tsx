@@ -7,6 +7,7 @@ import { Map } from '@mui/icons-material';
 import { smallScreenBreakpoint } from '../utils/breakpoints';
 import { useAuth } from '../context/AuthContext';
 import {useLocation } from '../context/LocationContext';
+import { useCollection } from '../context/CollectionContext';
 
 
 export default function Header() {
@@ -19,6 +20,7 @@ export default function Header() {
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+  const { setSelectedCollection } = useCollection();
   const navigate = useNavigate();
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -33,10 +35,12 @@ export default function Header() {
   };
 
   const handleMapPageClick = () => {
+    setSelectedCollection(null);
     navigate('/map');
   };
 
   const handleCollectionsPageClick = () => {
+    setSelectedCollection(null);
     navigate('/collections');
   };
 

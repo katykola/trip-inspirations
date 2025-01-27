@@ -11,12 +11,11 @@ import { useVisibleTrips } from '../context/VisibleTripsContext';
 export default function MapPage() {
 
   const isMobile = useMediaQuery(smallScreenBreakpoint);
-  const { setPanelOpen, showAreaButton, setShowAreaButton, areaSearched, setAreaSearched } = useVisibleTrips();
+  const { showAreaButton, setShowAreaButton, areaSearched, setAreaSearched } = useVisibleTrips();
   
   const handleAreaButton = () => {
     setAreaSearched(true);
     setShowAreaButton(false);
-    setPanelOpen(true);
   };
   
   return (

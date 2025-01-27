@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Stack, Typography, Button, TextField } from '@mui/material';
+import { Stack, Typography, Button, TextField, Box } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { db } from '../config/firebase-config';
 import { collection, addDoc } from 'firebase/firestore';
@@ -100,16 +100,12 @@ export default function TripNew() {
     sx={{
       position: "relative",
       minHeight: `calc(100vh - ${menuBarHeight})`,
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-      backgroundColor: "grey.50",
     }}
   >
       {showForm ? (
         <TripScraperForm onBack={() => setShowForm(false)} onSubmit={handleSubmit} scrapedData={scrapedData} url={url} />
       ) : (
-        <>
+        <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', minHeight: `calc(100vh - ${menuBarHeight})`, }}>
         <BackgroundImage />
           <Stack 
           spacing={3} 
@@ -138,7 +134,7 @@ export default function TripNew() {
               <Button onClick={handleContinue} variant='contained' disabled={!url}>Continue</Button>
             </Stack>
           </Stack>
-        </>
+        </Box>
       )}
     </Stack>
   );

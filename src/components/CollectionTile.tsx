@@ -1,13 +1,32 @@
-import { Box, Typography, Button } from '@mui/material';
+import { Box, Typography } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import { useCollection } from "../context/CollectionContext";
+import { useVisibleTrips } from '../context/VisibleTripsContext';
+
 
 interface CollectionTileProps {
+    id: string;
     name: string;
     images: string[] | undefined;
 }
 
-export default function CollectionTile({ name, images }: CollectionTileProps) {
+export default function CollectionTile({ id, name, images }: CollectionTileProps) {
+
+    const navigate = useNavigate();
+
+    const { setSelectedTripId } = useVisibleTrips();
+    const { setSelectedCollection, setCollectionName } = useCollection();
+
+    const handleClick = () => {
+        setSelectedCollection(id);
+        setCollectionName(name);
+        setSelectedTripId('');
+        navigate(`/collection/${id}`);
+    };
+    
     return (
         <Box
+        onClick={handleClick}
         sx={{
             flex: '0 0 auto', // Prevent boxes from shrinking
             width: '300px', // Fixed width to fit in the container
@@ -57,7 +76,6 @@ export default function CollectionTile({ name, images }: CollectionTileProps) {
                 </Box>
             )) : null}
         </Box>
-        {/* Title */}
         <Typography
             variant="h5"
             sx={{
@@ -68,7 +86,6 @@ export default function CollectionTile({ name, images }: CollectionTileProps) {
         >
             {name}
         </Typography>
-        <Button variant='outlined'>Delete</Button>
     </Box>
     );
 }

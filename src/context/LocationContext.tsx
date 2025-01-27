@@ -22,15 +22,11 @@ export const LocationProvider = ({ children }: { children: ReactNode }) => {
   const [selectedLocation, setSelectedLocation] = useState<[number, number] | null>(null);
   const [currentLocation, setCurrentLocation] = useState<[number, number] | null>(null);
   const [searchedLocation, setSearchedLocation] = useState<[number, number] | null>(null);
-  const [mapRadius, setMapRadius] = useState(300000);
-  const [zoom, setZoom] = useState(6);
+  const [mapRadius, setMapRadius] = useState(30000);
+  const [zoom, setZoom] = useState(9);
   const [page, setPage] = useState(1);
-
-  const user = useAuth();
-  const isLoggedIn = !!user?.user;
+  const { user } = useAuth();
   
-
-  //Get current location
   useEffect(() => {
     if (navigator.geolocation) {
        navigator.geolocation.getCurrentPosition(
@@ -44,13 +40,18 @@ export const LocationProvider = ({ children }: { children: ReactNode }) => {
     }
   }, []);
 
-  useEffect(()=>{
-    setSelectedLocation(null);
-    setMapRadius(300000);
-    setZoom(6);
-  }, [isLoggedIn])
+  useEffect(() => {
+    if (!user) {
+      setCurrentLocation(null);
+      setSelectedLocation(null);
+      setSearchedLocation(null);
+      setMapRadius(30000);
+      setZoom(9);
+    }
+  }, [user]);
 
- 
+
+
   return (
     <LocationContext.Provider value={{ selectedLocation, setSelectedLocation, currentLocation, setCurrentLocation, mapRadius, setMapRadius, zoom, setZoom, searchedLocation, setSearchedLocation, page, setPage }}>
       {children}

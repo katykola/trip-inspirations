@@ -1,35 +1,37 @@
-import { createContext, useState, useContext, ReactNode, useMemo } from 'react';
-import { useAuth } from './AuthContext';
+import React, { createContext, useState, useMemo, ReactNode } from 'react';
+import { useAuth } from '../context/AuthContext';
 import { useLocation } from '../context/LocationContext';
+import { useCollection } from './CollectionContext';
 import { useTrips } from '../hooks/useTrips';
 import { Trip } from '../types/types';
 
 interface VisibleTripsContextProps {
-  visibleTrips: Trip[];
-  setVisibleTrips: (trips: Trip[]) => void;
-  isLoading: boolean;
   selectedTripId: string | null;
   setSelectedTripId: (id: string | null) => void;
-  panelOpen: boolean;
-  setPanelOpen: (open: boolean) => void;
   showAreaButton: boolean;
   setShowAreaButton: (showAreaButton: boolean) => void;
   areaSearched: boolean;
   setAreaSearched: (areaSearched: boolean) => void;
+  visibleTrips: Trip[];
+  isLoading: boolean;
+  tripDetailOpen: boolean;
+  setTripDetailOpen: (tripDetailOpen: boolean) => void;
 }
 
 const VisibleTripsContext = createContext<VisibleTripsContextProps | undefined>(undefined);
 
 export const VisibleTripsProvider = ({ children }: { children: ReactNode }) => {
   const { currentLocation, searchedLocation, mapRadius } = useLocation();
-  const { data: trips, isLoading: tripsLoading } = useTrips();
-  const user = useAuth();
-  const isLoggedIn = !!user?.user;
+  const { user } = useAuth();
   const [selectedTripId, setSelectedTripId] = useState<string | null>(null);
-  const [panelOpen, setPanelOpen] = useState(true);
   const [showAreaButton, setShowAreaButton] = useState(false);
   const [areaSearched, setAreaSearched] = useState(false);
+  const { selectedCollection } = useCollection();
+  const [tripDetailOpen, setTripDetailOpen] = useState(false);
   
+  const userId = user?.uid;
+  const { data: trips, isLoading: tripsLoading } = useTrips(userId);
+
 
   // Determine the base location
   const tripsLocation = useMemo(
@@ -50,9 +52,13 @@ export const VisibleTripsProvider = ({ children }: { children: ReactNode }) => {
     return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   };
 
-  // Filter trips based on location and filter criteria
+  // Filter trips based on location
   const visibleTrips = useMemo(() => {
     if (!trips || !tripsLocation) return [];
+
+    if(selectedCollection) {
+      return trips.filter((trip) => trip.collection === selectedCollection);
+    }
 
     const locationFiltered = trips.filter((trip) => {
       const distance = calculateDistance(tripsLocation[0], tripsLocation[1], trip.lat, trip.lng);
@@ -60,20 +66,34 @@ export const VisibleTripsProvider = ({ children }: { children: ReactNode }) => {
     });
 
     return locationFiltered;
-  }, [tripsLocation, mapRadius, isLoggedIn]);
+  }, [selectedCollection, trips, tripsLocation, mapRadius]);
 
   const isLoading = tripsLoading;
 
+
   return (
-    <VisibleTripsContext.Provider value={{ visibleTrips, setVisibleTrips: () => {}, isLoading, selectedTripId, setSelectedTripId, panelOpen, setPanelOpen, showAreaButton, setShowAreaButton, areaSearched, setAreaSearched }}>
+    <VisibleTripsContext.Provider
+      value={{
+        selectedTripId,
+        setSelectedTripId,
+        showAreaButton,
+        setShowAreaButton,
+        areaSearched,
+        setAreaSearched,
+        visibleTrips,
+        isLoading,
+        tripDetailOpen,
+        setTripDetailOpen
+      }}
+    >
       {children}
     </VisibleTripsContext.Provider>
   );
 };
 
 export const useVisibleTrips = () => {
-  const context = useContext(VisibleTripsContext);
-  if (!context) {
+  const context = React.useContext(VisibleTripsContext);
+  if (context === undefined) {
     throw new Error('useVisibleTrips must be used within a VisibleTripsProvider');
   }
   return context;

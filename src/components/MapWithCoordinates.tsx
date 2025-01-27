@@ -198,7 +198,7 @@ const MapWithCoordinates: React.FC<MapWithCoordinatesProps> = ({
         center={center}
         zoom={13}
         zoomControl={false}
-        style={{ height: '100%' }}
+        style={{ height: '100%', width: '100%' }}
       >
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

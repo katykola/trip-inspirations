@@ -10,7 +10,7 @@ import { useVisibleTrips } from '../context/VisibleTripsContext';
 import Slider from 'react-slick';
 import { smallScreenBreakpoint } from '../utils/breakpoints'
 import { ChevronLeft, OpenInNew } from '@mui/icons-material';
-
+import { useCollection } from '../context/CollectionContext';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
  
@@ -36,7 +36,8 @@ export default function TripDetail({ id }: TripDetailProps) {
   const [collectionName, setCollectionName] = useState<string | null>(null);
   const { setSelectedLocation } = useLocation();
   const navigate = useNavigate();
-  const { setSelectedTripId } = useVisibleTrips();
+  const { setSelectedTripId, setTripDetailOpen } = useVisibleTrips();
+  const { selectedCollection } = useCollection();
 
   useEffect(() => {
     const getTrip = async () => {
@@ -59,7 +60,6 @@ export default function TripDetail({ id }: TripDetailProps) {
             console.error('No such collection!');
           }
       }
-
         } else {
           console.error('No such document!');
         }
@@ -81,6 +81,10 @@ export default function TripDetail({ id }: TripDetailProps) {
   }, [trip]);
 
   function onBack() {
+    if(selectedCollection){
+      setSelectedTripId(null);
+    }
+    setTripDetailOpen(false);
     navigate('/map');
   }
 
@@ -104,6 +108,7 @@ export default function TripDetail({ id }: TripDetailProps) {
   }
 
   if (!trip) {
+    {console.log('trip not found')};
     return (
       <Box sx={{ p: 3 }}>
         <Typography variant="h6" color="error">
@@ -117,6 +122,9 @@ export default function TripDetail({ id }: TripDetailProps) {
   }
 
   const displayUrl = trip.url.replace(/^https?:\/\/(www\.)?/, '').split('/')[0];
+
+  console.log('trip', trip);
+
       
     return(
       <Stack spacing={3} sx={{ px: 3, py: 2, mt: isMobile ? '3rem' : 0 }}>

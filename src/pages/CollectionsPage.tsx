@@ -1,40 +1,49 @@
 import { useState, useEffect } from 'react';
 import { Stack } from '@mui/material';
+import { useAuth } from '../context/AuthContext';
 import { menuBarHeight } from '../utils/styling';
 import CollectionTile from '../components/CollectionTile';
-import { collection, getDocs, query, where, limit } from 'firebase/firestore';
+import { collection as firestoreCollection, getDocs, query, where, limit } from 'firebase/firestore';
 import { db } from '../config/firebase-config';
+import { useCollections } from '../hooks/useCollections';
 import { Collection } from '../types/types';
 
 export default function CollectionsPage() {
-  const [collections, setCollections] = useState<Collection[]>([]);
+
+  const { user } = useAuth();
+  const userId = user?.uid || '';
+  const { data: collections = [], isLoading, error } = useCollections(userId);
+  const [collectionsWithImages, setCollectionsWithImages] = useState<Collection[]>([]);
 
   useEffect(() => {
-    const fetchCollections = async () => {
-      try {
-        const querySnapshot = await getDocs(collection(db, 'collections'));
-        const collectionsData = await Promise.all(
-          querySnapshot.docs.map(async (doc) => {
-            const collectionData = doc.data() as Collection;
-            const tripsQuery = query(
-              collection(db, 'trips'),
-              where('collection', '==', doc.id),
-              limit(3)
-            );
-            const tripsSnapshot = await getDocs(tripsQuery);
-            const tripImages = tripsSnapshot.docs.map(tripDoc => tripDoc.data().images[0]).filter(Boolean);
-            return { ...collectionData, id: doc.id, images: tripImages };
-          })
-        );
-        setCollections(collectionsData);
-      } catch (error) {
-        console.error('Error fetching collections:', error);
-      }
+    const fetchTripsForCollections = async () => {
+      const updatedCollections = await Promise.all(
+        collections.map(async (collection) => {
+          const tripsQuery = query(
+            firestoreCollection(db, 'trips'),
+            where('collection', '==', collection.id),
+            limit(3)
+          );
+          const tripsSnapshot = await getDocs(tripsQuery);
+          const tripImages = tripsSnapshot.docs.map(tripDoc => tripDoc.data().images[0]).filter(Boolean);
+          return { ...collection, images: tripImages };
+        })
+      );
+      setCollectionsWithImages(updatedCollections);
     };
-    fetchCollections();
-  }, []);
 
-  console.log('collections:', collections, typeof collections);
+    if (collections.length > 0) {
+      fetchTripsForCollections();
+    }
+  }, [collections]);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error fetching collections: {error.message}</div>;
+  }
 
   return (
     <Stack
@@ -63,8 +72,8 @@ export default function CollectionsPage() {
           },
         }}
       >
-        {collections.map(collection => (
-          <CollectionTile key={collection.id} name={collection.title} images={collection.images} />
+        {collectionsWithImages.map(collection => (
+          <CollectionTile key={collection.id} id={collection.id} name={collection.title} images={collection.images} />
         ))}
       </Stack>
     </Stack>

@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Select, MenuItem, SelectChangeEvent, Stack, Box, TextField, Typography, InputAdornment, List, ListItem, ListItemButton, ListItemText, IconButton, useMediaQuery} from '@mui/material';
 import { Search, Adjust, Close } from '@mui/icons-material';
 import { useLocation } from '../context/LocationContext';
 import { menuBarHeight } from '../utils/styling';
 import { smallScreenBreakpoint } from '../utils/breakpoints'
+import { useVisibleTrips } from '../context/VisibleTripsContext';
+
 
 interface Suggestion {
   place_id: string;
@@ -15,13 +17,13 @@ interface Suggestion {
 export default function MenuBar() {
 
   const isMobile = useMediaQuery(smallScreenBreakpoint);
+  const { tripDetailOpen } = useVisibleTrips();
 
   const { mapRadius, setMapRadius, currentLocation, setSearchedLocation } = useLocation();
   const [query, setQuery] = useState('');
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [searched, setSearched] = useState(false);
-
   
   const handleRadiusChange = (event: SelectChangeEvent<number>) => {
     setMapRadius(Number(event.target.value));
@@ -65,7 +67,8 @@ export default function MenuBar() {
     setShowSuggestions(false);
     setSearched(true);
   };
-  
+
+  console.log('tripDetailOpen', tripDetailOpen);
   
   return (
     <>
@@ -88,6 +91,8 @@ export default function MenuBar() {
         }}
       >
 
+    {/* {tripDetailOpen ? null :  */}
+<>
       {isMobile ? 
       null 
       : 
@@ -96,6 +101,7 @@ export default function MenuBar() {
         <Box sx={{ flexGrow: 1, maxWidth: '40rem'}}>
           <Box sx={{ position: 'relative' }}>
           <TextField
+            disabled={tripDetailOpen}          
             placeholder="Current Location"
             value={query}
             onChange={handleSearchChange}
@@ -109,6 +115,10 @@ export default function MenuBar() {
                 height: '2.5rem',
               },
               backgroundColor: 'white',
+              '& .MuiInputBase-input::placeholder': {
+                color: '#333333', // Darker color for the placeholder
+                opacity: 1, // Ensure the color is applied
+              }
             }}
             InputProps={{
               startAdornment: (
@@ -173,16 +183,14 @@ export default function MenuBar() {
               </ListItem>
              </List>
             )}
-            {!showSuggestions && !searched && (
-              <></>
-            )}
           </Box>
         </Box>
       </>
       }
 
       <Select
-          value={mapRadius}
+        disabled={tripDetailOpen}          
+        value={mapRadius}
           onChange={handleRadiusChange}
           sx={{
             flex: '0 1 auto',
@@ -200,15 +208,16 @@ export default function MenuBar() {
             </InputAdornment>
             }
         >
-          <MenuItem value={5000}>5 km radius</MenuItem>
-          <MenuItem value={10000}>10 km radius</MenuItem>
+          <MenuItem value={7000}>7 km radius</MenuItem>
+          <MenuItem value={15000}>15 km radius</MenuItem>
           <MenuItem value={30000}>30 km radius</MenuItem>
-          <MenuItem value={50000}>50 km radius</MenuItem>
-          <MenuItem value={100000}>100 km radius</MenuItem>
-          <MenuItem value={300000}>300 km radius</MenuItem>
-          <MenuItem value={500000}>500 km radius</MenuItem>
+          <MenuItem value={60000}>60 km radius</MenuItem>
+          <MenuItem value={120000}>120 km radius</MenuItem>
+          <MenuItem value={240000}>240 km radius</MenuItem>
+          <MenuItem value={480000}>480 km radius</MenuItem>
       </Select>
-
+      </>
+{/* } */}
       </Stack>
     </>
   );
