@@ -27,7 +27,7 @@ export default function MapPage() {
      ) : (
       <>
       <MenuBar />
-      <Box sx={{ position: 'absolute', top: '6rem', right: 0, zIndex: 4000, width: '100vw'}}>
+      <Box sx={{ position: 'absolute', top: '3rem', right: 0, zIndex: 4000, width: '100vw'}}>
         <Stack sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', padding: 2 }}>
           {showAreaButton === false ? null : <Button onClick={handleAreaButton} variant='contained'>Search this area</Button>}
         </Stack>

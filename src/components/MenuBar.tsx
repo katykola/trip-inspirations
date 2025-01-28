@@ -73,6 +73,9 @@ export default function MenuBar() {
   
   return (
     <>
+    {isMobile ? 
+        null 
+        : 
       <Stack 
         direction='row' 
         sx={{
@@ -92,11 +95,6 @@ export default function MenuBar() {
         }}
       >
 
-      <>
-      {isMobile ? 
-      null 
-      : 
-      <>
       <Typography >Search your trips:</Typography>
         <Box sx={{ flexGrow: 1, maxWidth: '40rem'}}>
           <Box sx={{ position: 'relative' }}>
@@ -186,14 +184,12 @@ export default function MenuBar() {
             )}
           </Box>
         </Box>
-      </>
-      }
 
       <Select
         disabled={tripDetailOpen}          
         value={mapRadius}
-          onChange={handleRadiusChange}
-          sx={{
+        onChange={handleRadiusChange}
+        sx={{
             flex: '0 1 auto',
             maxWidth: 'max-content',
             backgroundColor: tripDetailOpen || selectedCollection ? '' : 'white',
@@ -208,7 +204,7 @@ export default function MenuBar() {
               <Adjust />
             </InputAdornment>
             }
-        >
+            >
           <MenuItem value={7000}>7 km radius</MenuItem>
           <MenuItem value={15000}>15 km radius</MenuItem>
           <MenuItem value={30000}>30 km radius</MenuItem>
@@ -217,9 +213,8 @@ export default function MenuBar() {
           <MenuItem value={240000}>240 km radius</MenuItem>
           <MenuItem value={480000}>480 km radius</MenuItem>
       </Select>
-      </>
-{/* } */}
       </Stack>
-    </>
+        }
+        </>
   );
 }

@@ -123,7 +123,7 @@ export default function TripScraperForm({ onBack, onSubmit, scrapedData, url }: 
   };
 
   return (
-    <Stack spacing={2} sx={{ p: 3, width: '100%', mt: isMobile ? '3rem' : 0 }}>
+    <Stack spacing={2} sx={{ py: 3, px: isMobile ? 0 : 3, width: '100%', mt: isMobile ? '3rem' : 0 }}>
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit(handleFormSubmit)}>
           <Grid container spacing={3}>

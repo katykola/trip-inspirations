@@ -1,11 +1,14 @@
 import { useState } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../config/firebase-config";
-import { TextField, Button, Typography, Stack } from "@mui/material";
+import { TextField, Button, Typography, Stack, useMediaQuery } from "@mui/material";
 import { menuBarHeight } from "../utils/styling";
 import BackgroundImage from "../components/BackgroundImage";
+import { smallScreenBreakpoint } from "../utils/breakpoints";
 
 const Signup = () => {
+  const isMobile = useMediaQuery(smallScreenBreakpoint);
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -32,6 +35,7 @@ const Signup = () => {
       justifyContent: "center",
       alignItems: "center",
       backgroundColor: "grey.50",
+      px: isMobile ? '2rem' : 0,
     }}
     >
       <BackgroundImage />

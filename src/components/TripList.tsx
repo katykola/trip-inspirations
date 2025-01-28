@@ -94,8 +94,9 @@ export default function TripList() {
       {isMobile ? null : 
       <Typography sx={{ color: 'grey', textAlign: 'left' }}>
         {(startIndex+1)} - { visibleTrips.length < endIndex ? visibleTrips.length : endIndex } out of {visibleTrips.length}  Trips</Typography>}
+
       {isMobile ? 
-      <Stack spacing={1}>
+      <Stack spacing={2} sx={{ px: '1rem' }}>
       {paginatedTrips.map((trip) => (
         <TripTile 
           ref={trip.id === selectedTripId ? tripTileRef : null} 

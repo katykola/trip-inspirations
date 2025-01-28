@@ -1,16 +1,19 @@
-import { Stack, Typography, Button, Box } from "@mui/material";
+import { Stack, Typography, Button, Box, useMediaQuery  } from "@mui/material";
 import add_new from '../images/add_new.webp';
 import map_list from '../images/map_list.webp';
 import collections from '../images/collections.webp';
 import trip_detail from '../images/trip_detail.webp';
+import { smallScreenBreakpoint } from "../utils/breakpoints";
 
 export default function HomePage() {
+
+  const isMobile = useMediaQuery(smallScreenBreakpoint);
+
     return (
-        <Stack sx={{ pb: 4}}
-        >
-        <Stack sx={{ position: 'relative', py: 4, width: '100%', maxWidth: '2400px', margin: 'auto' }}>
+        <Stack sx={{ pb: 4, px: isMobile ? '2rem' : 0 }}>
+        <Stack sx={{ position: 'relative', pt: 4, pb: isMobile ? 0 : 4, width: '100%', maxWidth: '2400px', margin: 'auto' }}>
           <Box sx={{ position: 'absolute', top: 0, left: 0, width: '80%', height: '80%', zIndex: 1, backgroundImage: `url(/path2.svg)`, backgroundSize: 'contain', backgroundRepeat: 'no-repeat', backgroundPosition: '90% center' }} />
-          <Stack sx={{ position: 'relative', zIndex: 2, display: 'flex', justifyContent: 'center', alignItems: 'center', py: 4 }}>
+          <Stack sx={{ position: 'relative', zIndex: 2, display: 'flex', justifyContent: 'center', alignItems: 'center', pt: 4, pb: isMobile ? 0 : 4 }}>
             <Stack spacing={5} sx={{ maxWidth: '500px', margin: 'auto', py: '2rem', textAlign: 'center' }}>
               <Stack spacing={2}>
                 <Typography variant="h2">Create your own <b style={{ color: '#FF6F61' }}>chest of trips</b> </Typography>

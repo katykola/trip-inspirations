@@ -2,12 +2,14 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../config/firebase-config";
-import { TextField, Button, Typography, Stack } from "@mui/material";
+import { TextField, Button, Typography, Stack, useMediaQuery } from "@mui/material";
 import { useAuth } from '../context/AuthContext';
 import { menuBarHeight } from "../utils/styling";
 import BackgroundImage from "../components/BackgroundImage";
+import { smallScreenBreakpoint } from "../utils/breakpoints";
 
 const Login = () => {
+  const isMobile = useMediaQuery(smallScreenBreakpoint);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { user } = useAuth();
@@ -42,6 +44,7 @@ const Login = () => {
             justifyContent: "center",
             alignItems: "center",
             backgroundColor: "grey.50",
+            px: isMobile ? '2rem' : 0,
           }}
         >
           <BackgroundImage />

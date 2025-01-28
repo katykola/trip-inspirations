@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Stack } from '@mui/material';
+import { Stack, useMediaQuery } from '@mui/material';
 import { useAuth } from '../context/AuthContext';
 import { menuBarHeight } from '../utils/styling';
 import CollectionTile from '../components/CollectionTile';
@@ -7,8 +7,11 @@ import { collection as firestoreCollection, getDocs, query, where, limit } from 
 import { db } from '../config/firebase-config';
 import { useCollections } from '../hooks/useCollections';
 import { Collection } from '../types/types';
+import { smallScreenBreakpoint } from '../utils/breakpoints';
 
 export default function CollectionsPage() {
+
+  const isMobile = useMediaQuery(smallScreenBreakpoint);
 
   const { user } = useAuth();
   const userId = user?.uid || '';
@@ -49,29 +52,29 @@ export default function CollectionsPage() {
     <Stack
       sx={{
         backgroundColor: '#F2EEE8',
-        height: `calc(100vh - ${menuBarHeight})`,
+        height: isMobile ? 'inherit' : `calc(100vh - ${menuBarHeight})`,
         padding: '2rem',
+        paddingTop: isMobile ? '4rem' : '2rem',
         overflowX: 'hidden', 
       }}
     >
       <Stack
-        direction="row"
-        // spacing={2}
-        sx={{
-          flexWrap: 'wrap', // Allow items to wrap to the next row     
-          alignItems: 'flex-start', // Align items to the start of the row     
-          paddingBottom: '1rem',
-          '&::-webkit-scrollbar': {
-            height: '8px',
-          },
-          '&::-webkit-scrollbar-thumb': {
-            backgroundColor: '#aaa',
-            borderRadius: '4px',
-          },
-          '&::-webkit-scrollbar-track': {
-            backgroundColor: '#f0f0f0',
-          },
-        }}
+      direction={isMobile ? "column" : "row"}
+      sx={{
+        flexWrap: 'wrap', // Allow items to wrap to the next row     
+        alignItems: 'flex-start', // Align items to the start of the row     
+        paddingBottom: '1rem',
+        '&::-webkit-scrollbar': {
+          height: '8px',
+        },
+        '&::-webkit-scrollbar-thumb': {
+          backgroundColor: '#aaa',
+          borderRadius: '4px',
+        },
+        '&::-webkit-scrollbar-track': {
+          backgroundColor: '#f0f0f0',
+        },
+      }}
       >
         {collectionsWithImages.map(collection => (
           <CollectionTile key={collection.id} id={collection.id} name={collection.title} images={collection.images} />

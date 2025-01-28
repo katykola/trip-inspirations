@@ -13,6 +13,7 @@ import ImagesCheckboxComponent from './ImagesChecboxComponent';
 import MapWithCoordinates from './MapWithCoordinates';
 import { smallScreenBreakpoint } from '../utils/breakpoints'
 import AddToCollection from './AddToCollection';
+import { menuBarHeight } from '../utils/styling';
 
 
 export default function TripEditForm() {
@@ -106,7 +107,13 @@ export default function TripEditForm() {
     };
 
     return(
-    <Stack spacing={2} sx={{ p: 3, width: '100%', mt: isMobile ? '3rem' : 0 }}>
+        <Stack
+        sx={{
+          position: "relative",
+          minHeight: `calc(100vh - ${menuBarHeight})`,
+          px: isMobile ? '2rem' : 0,
+        }}>
+    <Stack spacing={2} sx={{ py: 3, px: isMobile ? 0 : 3, width: '100%', mt: isMobile ? '3rem' : 0 }}>
         <FormProvider {...methods}>
             <form onSubmit={handleSubmit(handleFormSubmit)}>
               <Grid container spacing={3}>
@@ -174,6 +181,7 @@ export default function TripEditForm() {
             </Stack>
             </form>
         </FormProvider>
+    </Stack>
     </Stack>
     )
 }

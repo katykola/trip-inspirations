@@ -168,9 +168,9 @@ export default function MapComponent({areaSearched, setAreaSearched, setShowArea
           radius={mapRadius}
           color="black"
           fillColor="black"
-          fillOpacity={0.05} // More transparent fill
-          opacity={0.4} // More transparent border
-          weight={1} // Thinner border
+          fillOpacity={0.05} 
+          opacity={0.4} 
+          weight={1} 
           />
           <Marker position={circleCenter as L.LatLngExpression} icon={customIcon} />
         </>

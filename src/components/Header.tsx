@@ -85,6 +85,7 @@ export default function Header() {
         <Stack direction="row" spacing={2} alignItems='flex-end'  sx={{ color: 'black', cursor: 'pointer' }}>
           <Stack direction="row" alignItems="center" onClick={userLoggedId ? handleCollectionsPageClick : handleHomePageClick}>
             <Map sx={{ mr: 0.5, color: theme.palette.secondary.main  }} />
+            { isMobile && userLoggedId ? null :
             <Typography
               sx={{
                 fontFamily: '"Barlow", serif',
@@ -95,6 +96,7 @@ export default function Header() {
             >
               Trip Snap
             </Typography>
+             }
           </Stack>
           {userLoggedId && <Typography onClick={handleCollectionsPageClick}>Collections</Typography>}
           {userLoggedId && <Typography onClick={handleMapPageClick}>Map</Typography>}
@@ -103,9 +105,15 @@ export default function Header() {
         {userLoggedId ? (
           <>
             <Stack direction="row" sx={{ alignItems: 'center' }}>
-              <Button onClick={handleNewTripClick} variant="contained">
-                + New Trip
+              { isMobile ? 
+              <Button onClick={handleNewTripClick} variant="contained" sx={{ px: '0.5rem', py: '0.2rem' }}>
+                + New
               </Button>
+              :
+              <Button onClick={handleNewTripClick} variant="contained">
+              + New Trip
+              </Button>
+               }
 
               <Tooltip title="Account settings">
                 <IconButton

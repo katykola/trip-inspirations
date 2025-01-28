@@ -1,7 +1,9 @@
-import { Box, Typography } from '@mui/material';
+import { Box, Typography, useMediaQuery } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useCollection } from "../context/CollectionContext";
 import { useVisibleTrips } from '../context/VisibleTripsContext';
+import { smallScreenBreakpoint } from '../utils/breakpoints';
+
 
 
 interface CollectionTileProps {
@@ -11,6 +13,8 @@ interface CollectionTileProps {
 }
 
 export default function CollectionTile({ id, name, images }: CollectionTileProps) {
+
+    const isMobile = useMediaQuery(smallScreenBreakpoint);
 
     const navigate = useNavigate();
 
@@ -28,8 +32,8 @@ export default function CollectionTile({ id, name, images }: CollectionTileProps
         <Box
         onClick={handleClick}
         sx={{
-            flex: '0 0 auto', // Prevent boxes from shrinking
-            width: '350px', // Fixed width to fit in the container
+            flex: '0 0 auto', 
+            width: isMobile ? '100%' : '350px', 
             border: '1px solid #ddd',
             borderRadius: '1rem',
             padding: '1rem',
