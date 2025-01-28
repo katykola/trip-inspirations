@@ -3,7 +3,7 @@ import add_new from '../images/add_new.webp';
 import map_list from '../images/map_list.webp';
 import collections from '../images/collections.webp';
 import trip_detail from '../images/trip_detail.webp';
-import path from '../images/path2.svg';
+import path from '../../public/path2.svg';
 
 export default function HomePage() {
     return (
