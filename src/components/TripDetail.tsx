@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Box, Stack, Typography, Button, CircularProgress, Link as LinkHref, useMediaQuery } from '@mui/material';
+import { Box, Stack, Typography, Button, CircularProgress, Link as LinkHref, useMediaQuery, Grid } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 import { db } from '../config/firebase-config';
 import { doc, getDoc, deleteDoc } from 'firebase/firestore';
@@ -38,6 +38,7 @@ export default function TripDetail({ id }: TripDetailProps) {
   const navigate = useNavigate();
   const { setSelectedTripId, setTripDetailOpen } = useVisibleTrips();
   const { selectedCollection } = useCollection();
+  const [selectedImage, setSelectedImage] = useState(trip?.images?.[0]);
 
   useEffect(() => {
     const getTrip = async () => {
@@ -123,75 +124,79 @@ export default function TripDetail({ id }: TripDetailProps) {
 
   const displayUrl = trip.url.replace(/^https?:\/\/(www\.)?/, '').split('/')[0];
 
-  console.log('trip', trip);
-
       
     return(
-      <Stack spacing={3} sx={{ px: 3, py: 2, mt: isMobile ? '3rem' : 0 }}>
-      <Stack onClick={onBack} direction='row' sx={{ cursor: 'pointer' }}>
+      <Stack spacing={2} sx={{ px: 3, py: 2, mt: isMobile ? '3rem' : 0 }}>
+      <Stack onClick={onBack} direction='row' sx={{ cursor: 'pointer', alignItems: 'center' }}>
         <ChevronLeft sx={{ color: 'grey', mr: 0.5, fontSize: '0.9rem', verticalAlign: 'bottom' }}/>
         <Typography sx={{ color: 'grey', fontSize: '0.9rem' }}>Back to List</Typography>
       </Stack>
 
       {isMobile? 
       
-      <Box sx={{ width: '100%', overflow: 'hidden' }}>
-        {trip.images && trip.images.length > 1 ? 
-          <Slider {...settings}>
-            {trip.images && trip.images.length > 1 ? (
-              trip.images.map((image, index) => (
-                <Box key={index} sx={{ width: '100%', overflow: 'hidden' }}>
+      <Stack>
+        <Box sx={{ width: '100%', overflow: 'hidden' }}>
+          {trip.images && trip.images.length > 1 ?
+            <Slider {...settings}>
+              {trip.images && trip.images.length > 1 ? (
+                trip.images.map((image, index) => (
+                  <Box key={index} sx={{ width: '100%', overflow: 'hidden' }}>
+                    <img
+                      src={image}
+                      alt={`Trip Image ${index + 1}`}
+                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                      />
+                  </Box>
+                ))
+              ) : (
+                <Box sx={{ width: '100%', overflow: 'hidden' }}>
                   <img
-                    src={image}
-                    alt={`Trip Image ${index + 1}`}
+                    src={Nature}
+                    alt="Default Image"
                     style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                    />
+                  />
                 </Box>
-              ))
-            ) : (
-              <Box sx={{ width: '100%', overflow: 'hidden' }}>
-                <img
-                  src={Nature}
-                  alt="Default Image"
-                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                />
-              </Box>
-            )}
-          </Slider>
-      :
-      <Box sx={{ width: '100%', overflow: 'hidden' }}>
-      <img
-        src={trip.images && trip.images.length > 0 ? trip.images[0] : Nature}
-        alt="Trip Image"
-        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-      />
-      </Box>
-      }
-
-    </Box> 
-    :
-    <>
-      <Box sx={{ width: '100%', overflow: 'hidden' }}>
+              )}
+            </Slider>
+        :
+        <Box sx={{ width: '100%', overflow: 'hidden' }}>
         <img
           src={trip.images && trip.images.length > 0 ? trip.images[0] : Nature}
           alt="Trip Image"
           style={{ width: '100%', height: '100%', objectFit: 'cover' }}
         />
-      </Box>
-      <Stack direction='row' spacing={1}>
-        {trip.images && trip.images.length > 0 ?
-        (trip.images.slice(1).map((image, index) => (
-          <Box key={index} sx={{ width: '100%', overflow: 'hidden' }}>
+        </Box>
+        }
+        </Box>
+      </Stack>
+
+    :
+    <>
+      <Stack>
+        <Box sx={{ width: '100%', overflow: 'hidden' }}>
           <img
-          src={image}
-          alt={`Trip Image ${index + 1}`}
-          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+            src={selectedImage ? selectedImage : trip.images && trip.images.length > 0 ? trip.images[0] : Nature}
+            alt="Trip Image"
+            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
           />
-          </Box>
-        )))
-        : null
-      }
-      </Stack> 
+        </Box>
+        <Grid container spacing={1}>
+          {trip.images && trip.images.length > 1 && trip.images.map((image, index) => (
+            <Grid item xs={2} key={index}>
+              <Box
+                sx={{ width: '100%', overflow: 'hidden', cursor: 'pointer' }}
+                onClick={() => setSelectedImage(image)}
+              >
+                <img
+                  src={image}
+                  alt={`Trip Image ${index + 1}`}
+                  style={{ width: '100%', height: 'auto', objectFit: 'cover' }}
+                />
+              </Box>
+            </Grid>
+          ))}
+        </Grid>
+      </Stack>
     </>    
     }
 
@@ -208,9 +213,9 @@ export default function TripDetail({ id }: TripDetailProps) {
           <OpenInNew sx={{ ml: 0.5, fontSize: '1rem' }}/>
         </LinkHref>
       </Stack>
-      <Stack direction='row' sx={{ alignItems: 'center', justifyContent: 'space-between' }}>
+      <Stack direction='row' sx={{ alignItems: 'center', justifyContent: 'space-between', pt: 2 }}>
         <Link  to={`/trip/${id}/edit`}><Button variant='outlined'>Edit</Button></Link>
-        <Button variant='outlined' onClick={handleDelete}>Delete</Button>
+        <Button variant='outlined' onClick={handleDelete} sx={{mb: 2}}>Delete</Button>
       </Stack>
       </Stack>
     )

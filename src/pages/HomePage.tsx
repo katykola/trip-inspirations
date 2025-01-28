@@ -1,5 +1,8 @@
 import { Stack, Typography, Button, Box } from "@mui/material";
-import add_new from '../images/add_new.jpg';
+import add_new from '../images/add_new.webp';
+import map_list from '../images/map_list.webp';
+import collections from '../images/collections.webp';
+import trip_detail from '../images/trip_detail.webp';
 
 export default function HomePage() {
     return (
@@ -13,7 +16,7 @@ export default function HomePage() {
                   Save tips from travel blogs, organize them in collections and view them on the map.
                 </Typography>
             </Stack>
-              <Stack sx={{ alignItems: 'center' }}><Button variant="contained"><Typography>Get started. It's FREE</Typography></Button></Stack>
+              <Stack sx={{ alignItems: 'center' }}><Button variant="contained" sx={{py: 2, px: 3, borderRadius: '20px'}} ><Typography>Get started. It's FREE</Typography></Button></Stack>
             </Stack>
           </Stack>
 
@@ -42,7 +45,7 @@ export default function HomePage() {
             </Stack>
             <Box sx={{ width: '100%', margin: 'auto', borderRadius: '15px', overflow: 'hidden', boxShadow: '0 0 10px rgba(0,0,0,0.1)' }}>
               <img
-                src={add_new}
+                src={map_list}
                 alt="Add New"
                 style={{
                   width: '100%',
@@ -60,7 +63,7 @@ export default function HomePage() {
             </Stack>
             <Box sx={{ width: '100%', margin: 'auto', borderRadius: '15px', overflow: 'hidden', boxShadow: '0 0 10px rgba(0,0,0,0.1)' }}>
               <img
-                src={add_new}
+                src={collections}
                 alt="Add New"
                 style={{
                   width: '100%',
@@ -78,7 +81,7 @@ export default function HomePage() {
             </Stack>
             <Box sx={{ width: '100%', margin: 'auto', borderRadius: '15px', overflow: 'hidden', boxShadow: '0 0 10px rgba(0,0,0,0.1)' }}>
               <img
-                src={add_new}
+                src={trip_detail}
                 alt="Add New"
                 style={{
                   width: '100%',
@@ -90,9 +93,10 @@ export default function HomePage() {
           </Stack>
             
 
-          <Stack>
+
+          <Stack spacing={3}>
           <Typography>Ready to plan your next adventure?</Typography>
-          <Stack sx={{ alignItems: 'center' }}><Button variant="contained"><Typography>Get started.</Typography></Button></Stack>
+          <Stack sx={{ alignItems: 'center' }}><Button variant="contained" sx={{py: 2, px: 3, borderRadius: '20px'}}><Typography>Get started.</Typography></Button></Stack>
           </Stack>
 
         </Stack>
