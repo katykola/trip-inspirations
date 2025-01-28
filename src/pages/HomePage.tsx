@@ -9,22 +9,8 @@ export default function HomePage() {
     return (
         <Stack 
         >
-        <Stack sx={{ position: 'relative', py: 4, width: '100%', maxWidth: '1400px', margin: 'auto' }}>
-          <Box sx={{ position: 'absolute', top: 0, left: 0, width: '90%', height: '90%', zIndex: 1, backgroundImage: `url(${path})`, backgroundSize: 'contain', backgroundRepeat: 'no-repeat', backgroundPosition: '100% center' }} />
-          <Box
-              sx={{
-                position: 'absolute',
-                top: 0,
-                right: 0,
-                width: '90%',
-                height: '90%',
-                zIndex: 1,
-                backgroundImage: `url(${path})`,
-                backgroundSize: 'contain',
-                backgroundRepeat: 'no-repeat',
-                backgroundPosition: '10% center',
-              }}
-          />
+        <Stack sx={{ position: 'relative', py: 4, width: '100%', maxWidth: '2400px', margin: 'auto' }}>
+          <Box sx={{ position: 'absolute', top: 0, left: 0, width: '80%', height: '80%', zIndex: 1, backgroundImage: `url(${path})`, backgroundSize: 'contain', backgroundRepeat: 'no-repeat', backgroundPosition: '90% center' }} />
           <Stack sx={{ position: 'relative', zIndex: 2, display: 'flex', justifyContent: 'center', alignItems: 'center', py: 4 }}>
             <Stack spacing={5} sx={{ maxWidth: '500px', margin: 'auto', py: '2rem', textAlign: 'center' }}>
               <Stack spacing={2}>
