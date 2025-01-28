@@ -3,22 +3,44 @@ import add_new from '../images/add_new.webp';
 import map_list from '../images/map_list.webp';
 import collections from '../images/collections.webp';
 import trip_detail from '../images/trip_detail.webp';
+import path from '../images/path2.svg';
 
 export default function HomePage() {
     return (
-        <Stack>
-
-          <Stack sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <Stack spacing={5}  sx={{ maxWidth: '500px', margin: 'auto', py: '2rem', textAlign: 'center' }}>
-            <Stack spacing={2}>
-              <Typography variant="h2">Create your own <b style={{ color: '#FF6F61' }}>chest of trips</b> </Typography>
+        <Stack 
+        >
+        <Stack sx={{ position: 'relative', py: 4, width: '100%', maxWidth: '1400px', margin: 'auto' }}>
+          <Box sx={{ position: 'absolute', top: 0, left: 0, width: '90%', height: '90%', zIndex: 1, backgroundImage: `url(${path})`, backgroundSize: 'contain', backgroundRepeat: 'no-repeat', backgroundPosition: '100% center' }} />
+          <Box
+              sx={{
+                position: 'absolute',
+                top: 0,
+                right: 0,
+                width: '90%',
+                height: '90%',
+                zIndex: 1,
+                backgroundImage: `url(${path})`,
+                backgroundSize: 'contain',
+                backgroundRepeat: 'no-repeat',
+                backgroundPosition: '10% center',
+              }}
+          />
+          <Stack sx={{ position: 'relative', zIndex: 2, display: 'flex', justifyContent: 'center', alignItems: 'center', py: 4 }}>
+            <Stack spacing={5} sx={{ maxWidth: '500px', margin: 'auto', py: '2rem', textAlign: 'center' }}>
+              <Stack spacing={2}>
+                <Typography variant="h2">Create your own <b style={{ color: '#FF6F61' }}>chest of trips</b> </Typography>
                 <Typography>
                   Save tips from travel blogs, organize them in collections and view them on the map.
                 </Typography>
-            </Stack>
-              <Stack sx={{ alignItems: 'center' }}><Button variant="contained" sx={{py: 2, px: 3, borderRadius: '20px'}} ><Typography>Get started. It's FREE</Typography></Button></Stack>
+              </Stack>
+              <Stack sx={{ alignItems: 'center' }}>
+                <Button variant="contained" sx={{ py: 2, px: 3, borderRadius: '20px' }}>
+                  <Typography>Get started. It's FREE</Typography>
+                </Button>
+              </Stack>
             </Stack>
           </Stack>
+        </Stack>
 
           <Stack spacing={4} sx={{ maxWidth: '800px', margin: 'auto', py: '2rem', textAlign: 'center' }}>
             <Stack spacing={2} sx={{  margin: 'auto'}}>
