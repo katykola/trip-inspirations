@@ -27,11 +27,11 @@ L.Icon.Default.mergeOptions({
 });
 
 const selectedMarkerIcon = L.icon({
-  iconUrl: redMarkerIcon, // Path to your custom marker icon (imported above)
-  shadowUrl: markerShadow, // Default shadow
-  iconSize: [41, 41], // Adjust size as needed
-  iconAnchor: [12, 41], // Anchor point for the icon
-  popupAnchor: [1, -34], // Popup position relative to the icon
+  iconUrl: redMarkerIcon, 
+  shadowUrl: markerShadow, 
+  iconSize: [41, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34], 
 });
 
 interface MapCollectionProps {
@@ -68,6 +68,8 @@ const MapCollection: React.FC<MapCollectionProps> = ({ collectionId }) => {
   if (error) {
     return <div>Error loading trips: {error.message}</div>;
   }
+
+  console.log('selectedTripId', selectedTripId);  
 
   return (
     <MapContainer

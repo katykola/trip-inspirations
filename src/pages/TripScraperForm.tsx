@@ -103,6 +103,13 @@ export default function TripScraperForm({ onBack, onSubmit, scrapedData, url }: 
     });
 
     if (newTripId) {
+      // Add newTripId to the trip document
+      const tripRef = doc(db, 'trips', newTripId);
+      await updateDoc(tripRef, {
+        id: newTripId,
+      });}
+
+    if (newTripId) {
       if(collectionId){
         const collectionRef = doc(db, 'collections', collectionId);
           await updateDoc(collectionRef, {
