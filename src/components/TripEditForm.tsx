@@ -146,11 +146,14 @@ export default function TripEditForm() {
                             {...register('url')}
                         >
                         </TextField>
-                        <Grid container spacing={2} sx={{ ml: -2 }}>
-                            {trip.images.slice(0, 6).map((image, index) => (
-                            <ImagesCheckboxComponent key={index} index={index} image={image} selectedImages={selectedImages} handleImageCheckboxChange={handleImageCheckboxChange} />
-                            ))}
-                        </Grid>
+                        <Stack>
+                            <Typography sx={{ textAlign: 'left' }}>Select up to 6 images:</Typography>
+                            <Grid container spacing={2} >
+                                {trip.images.slice(0, 6).map((image, index) => (
+                                <ImagesCheckboxComponent key={index} index={index} image={image} selectedImages={selectedImages} handleImageCheckboxChange={handleImageCheckboxChange} />
+                                ))}
+                            </Grid>
+                        </Stack>
                     </Stack>
                 </Grid>
                 <Grid item xs={12} md={6}>
@@ -159,10 +162,13 @@ export default function TripEditForm() {
                     coordinates={coordinates}
                     setCoordinates={setCoordinates} 
                     />
+    
+              <Stack sx={{ mt: 2, alignItems: 'flex-end' }}>
                 <AddToCollection getCollectionId={getCollectionId} initialCollectionId={collectionId}/>
-               </Grid>
+              </Stack>               
               </Grid>
-            <Stack direction='row' sx={{ justifyContent: 'space-between' }}>
+              </Grid>
+            <Stack direction='row' sx={{ justifyContent: 'space-between', mt: 2  }}>
                 <Button onClick={onBack} variant='outlined'>Back</Button>
                 <Button type="submit" variant="contained" color="primary">Save</Button>
             </Stack>

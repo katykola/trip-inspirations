@@ -72,7 +72,7 @@ export default function AddToCollection({ getCollectionId, initialCollectionId }
 
   return (
     <>
-      <Button variant='outlined' color='secondary' onClick={handleOpen} startIcon={selectedCollection || newCollectionTitle ? <BookmarkIcon /> : <BookmarkBorderIcon />}>
+      <Button variant='contained' color='secondary' onClick={handleOpen} startIcon={selectedCollection || newCollectionTitle ? <BookmarkIcon /> : <BookmarkBorderIcon />}>
         {selectedCollectionTitle.trim() ? (
           <Typography>{selectedCollectionTitle}</Typography>
         ) : (
@@ -163,6 +163,7 @@ export default function AddToCollection({ getCollectionId, initialCollectionId }
                 placeholder="Collection name"
                 value={newCollectionTitle}
                 onChange={handleNewCollectionTitleChange}
+                inputProps={{ autoComplete: 'off' }}
               />
               <Button
                 fullWidth

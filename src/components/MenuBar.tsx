@@ -5,6 +5,7 @@ import { useLocation } from '../context/LocationContext';
 import { menuBarHeight } from '../utils/styling';
 import { smallScreenBreakpoint } from '../utils/breakpoints'
 import { useVisibleTrips } from '../context/VisibleTripsContext';
+import { useCollection } from '../context/CollectionContext';
 
 
 interface Suggestion {
@@ -24,6 +25,8 @@ export default function MenuBar() {
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [searched, setSearched] = useState(false);
+
+  const { selectedCollection } = useCollection();
   
   const handleRadiusChange = (event: SelectChangeEvent<number>) => {
     setMapRadius(Number(event.target.value));
@@ -67,8 +70,6 @@ export default function MenuBar() {
     setShowSuggestions(false);
     setSearched(true);
   };
-
-  console.log('tripDetailOpen', tripDetailOpen);
   
   return (
     <>
@@ -91,8 +92,7 @@ export default function MenuBar() {
         }}
       >
 
-    {/* {tripDetailOpen ? null :  */}
-<>
+      <>
       {isMobile ? 
       null 
       : 
@@ -114,7 +114,7 @@ export default function MenuBar() {
               '& .MuiInputAdornment-root': {
                 height: '2.5rem',
               },
-              backgroundColor: 'white',
+              backgroundColor: tripDetailOpen || selectedCollection ? '' : 'white',
               '& .MuiInputBase-input::placeholder': {
                 color: '#333333', // Darker color for the placeholder
                 opacity: 1, // Ensure the color is applied
@@ -133,6 +133,7 @@ export default function MenuBar() {
                   </IconButton>
                 </InputAdornment>
               ),
+              autoComplete: 'off', // Disable autocomplete
             }}
           />
           {showSuggestions && (
@@ -195,7 +196,7 @@ export default function MenuBar() {
           sx={{
             flex: '0 1 auto',
             maxWidth: 'max-content',
-            backgroundColor: 'white',
+            backgroundColor: tripDetailOpen || selectedCollection ? '' : 'white',
             maxHeight: '2.5rem', // Restricting height to 3rem
             overflow: 'hidden', // Ensures no content spills out
             '& .MuiSelect-select': {

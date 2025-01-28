@@ -46,7 +46,7 @@ const Login = () => {
         >
           <BackgroundImage />
           <Stack
-            spacing={2}
+            spacing={3}
             sx={{
               maxWidth: "400px",
               width: "100%",

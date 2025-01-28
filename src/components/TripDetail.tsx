@@ -171,7 +171,6 @@ export default function TripDetail({ id }: TripDetailProps) {
       </Stack>
 
     :
-    <>
       <Stack>
         <Box sx={{ width: '100%', overflow: 'hidden' }}>
           <img
@@ -197,7 +196,6 @@ export default function TripDetail({ id }: TripDetailProps) {
           ))}
         </Grid>
       </Stack>
-    </>    
     }
 
       {collectionName && 

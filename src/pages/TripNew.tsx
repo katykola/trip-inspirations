@@ -62,7 +62,6 @@ export default function TripNew() {
         }
         setScrapedData(data);
         setShowForm(true);
-        console.log('Scraped data:', data.images);
       } else {
         setError("Sorry can't get images from here. Try another url adress.")
       }
@@ -80,14 +79,11 @@ export default function TripNew() {
   };
 
   const handleSubmit = async (data: Trip, reset: () => void) => {
-    console.log('Form submitted:', data);
-    console.log('Data lat lng', [data.lat, data.lng]);
     if(data.lat === 0 && data.lng === 0){
       setSelectedLocation([data.lat, data.lng]);
     }
     try {
       const docRef = await addDoc(collection(db, 'trips'), data);
-      console.log('Document written with ID: ', docRef.id);
       reset();
       return docRef.id; 
     } catch (e) {
@@ -126,8 +122,11 @@ export default function TripNew() {
               value={url}
               onChange={handleUrlChange}
               sx={{ mt: 2 }}
-              error={!!error} // Highlight field if there's an error
-              helperText={error || ''} // Show error message below the field
+              error={!!error} 
+              helperText={error || ''} 
+              inputProps={{
+                autoComplete: 'off', // Disable autocomplete
+              }}
             />
             <Stack direction='row' sx={{ justifyContent: 'space-between' }}>
               <Link to="/"><Button variant='outlined'>Back</Button></Link>

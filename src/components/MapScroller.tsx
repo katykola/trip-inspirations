@@ -27,9 +27,7 @@ export default function MapScroller({ singleTripId, setShowAreaButton }: MapScro
           } else {
             console.error('Selected trip does not have lat/lng:', selectedTrip);
           }
-        } else {
-          console.error('Selected trip not found:', singleTripId);
-        }
+        } 
       }
     }, [singleTripId, isLoading, trips, map, setShowAreaButton]);
 

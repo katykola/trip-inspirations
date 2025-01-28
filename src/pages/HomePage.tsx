@@ -7,7 +7,7 @@ import path from '../images/path2.svg';
 
 export default function HomePage() {
     return (
-        <Stack 
+        <Stack sx={{ pb: 4}}
         >
         <Stack sx={{ position: 'relative', py: 4, width: '100%', maxWidth: '2400px', margin: 'auto' }}>
           <Box sx={{ position: 'absolute', top: 0, left: 0, width: '80%', height: '80%', zIndex: 1, backgroundImage: `url(${path})`, backgroundSize: 'contain', backgroundRepeat: 'no-repeat', backgroundPosition: '90% center' }} />
@@ -20,7 +20,7 @@ export default function HomePage() {
                 </Typography>
               </Stack>
               <Stack sx={{ alignItems: 'center' }}>
-                <Button variant="contained" sx={{ py: 2, px: 3, borderRadius: '20px' }}>
+                <Button variant="contained" sx={{ py: 2, px: 3, borderRadius: '20px' }} href="/signup">
                   <Typography>Get started. It's FREE</Typography>
                 </Button>
               </Stack>
@@ -82,7 +82,7 @@ export default function HomePage() {
             </Box>
           </Stack>
 
-          <Stack spacing={4} sx={{ maxWidth: '800px', margin: 'auto', py: '2rem', textAlign: 'center' }}>
+          <Stack spacing={4} sx={{ maxWidth: '800px', margin: 'auto', py: '2rem', textAlign: 'center'}}>
             <Stack spacing={2} sx={{  margin: 'auto'}}>
               <Typography variant="h4" sx={{ fontWeight: 'bold'}}>4. Filter and <b style={{ color: '#FF6F61' }}>Explore</b> </Typography>
               <Typography>Narrow down your trips based on location, distance, or type of adventure.</Typography>
@@ -104,7 +104,7 @@ export default function HomePage() {
 
           <Stack spacing={3}>
           <Typography>Ready to plan your next adventure?</Typography>
-          <Stack sx={{ alignItems: 'center' }}><Button variant="contained" sx={{py: 2, px: 3, borderRadius: '20px'}}><Typography>Get started.</Typography></Button></Stack>
+          <Stack sx={{ alignItems: 'center' }}><Button variant="contained" sx={{py: 2, px: 3, borderRadius: '20px'}} href="/signup"><Typography>Get started.</Typography></Button></Stack>
           </Stack>
 
         </Stack>

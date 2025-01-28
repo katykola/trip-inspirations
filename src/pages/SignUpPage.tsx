@@ -50,7 +50,7 @@ const Signup = () => {
       >
           <Typography variant="h4">Sign Up</Typography>
           <form onSubmit={handleSignup}>
-            <Stack spacing={2}>
+            <Stack spacing={3}>
                 <TextField
                   type="email"
                   placeholder="Email"
@@ -63,7 +63,11 @@ const Signup = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
-                <Button type="submit" variant="contained">Signup</Button>
+                <Button type="submit" variant="contained">Sign Up</Button>
+                <Stack spacing={1}>
+                  <Typography variant="body2">Have you alreay signed up?</Typography>
+                  <Button variant="outlined" href="/login">Log In</Button>
+                </Stack>
             </Stack>
           </form>
       </Stack>

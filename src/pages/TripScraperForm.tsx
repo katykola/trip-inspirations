@@ -5,16 +5,16 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import schemaNew from '../utils/schemaNew';
 import { z } from 'zod';
 import { useImageSelection } from '../hooks/useImageSelection';
-import { TextField, Button, Stack, Grid, Typography, TextareaAutosize, Box } from '@mui/material';
+import { TextField, Button, Stack, Grid, Typography, TextareaAutosize, Box, useMediaQuery } from '@mui/material';
 import MapWithCoordinates from '../components/MapWithCoordinates';
 import ImagesCheckboxComponent from '../components/ImagesChecboxComponent';
 import { useLocation } from '../context/LocationContext';
 import { useAuth } from '../context/AuthContext';
-import { useTrips } from '../hooks/useTrips';
 import { Trip } from '../types/types';
 import { db } from '../config/firebase-config';
 import { doc, updateDoc, arrayUnion } from 'firebase/firestore';
 import AddToCollection from '../components/AddToCollection';
+import { smallScreenBreakpoint } from '../utils/breakpoints'
 
 
 interface TripScraperFormProps {
@@ -25,6 +25,8 @@ interface TripScraperFormProps {
 }
 
 export default function TripScraperForm({ onBack, onSubmit, scrapedData, url }: TripScraperFormProps) {
+
+  const isMobile = useMediaQuery(smallScreenBreakpoint);
 
   const { user } = useAuth();
   const userId = user?.uid || '';
@@ -47,8 +49,6 @@ export default function TripScraperForm({ onBack, onSubmit, scrapedData, url }: 
   const { setSearchedLocation } = useLocation();
   const [ collectionId, setCollectionId ] = useState<string | null>(null);
 
-  const { data: trips } = useTrips(userId);
-
   const handleImageSelectionChange = (image: string) => {
     const updatedImages = selectedImages.includes(image)
       ? selectedImages.filter((selectedImage) => selectedImage !== image)
@@ -64,8 +64,6 @@ export default function TripScraperForm({ onBack, onSubmit, scrapedData, url }: 
   };
 
   const handleFormSubmit = async (data: z.infer<typeof schemaNew>) => {
-    console.log('handleSubmit');
-    console.log('url', url);
     if (!url) {
       console.log('url is required')
       return;
@@ -73,7 +71,6 @@ export default function TripScraperForm({ onBack, onSubmit, scrapedData, url }: 
     if (Object.keys(errors).length > 0) {
       console.error('Validation errors:', errors);
     }
-    console.log('Form submitted with:', data); // Check if this logs data
     data.images = selectedImages;
     data.url = url;
     if (user !== null) {
@@ -100,36 +97,26 @@ export default function TripScraperForm({ onBack, onSubmit, scrapedData, url }: 
       console.error('Coordinates are required');
       return;
     }
-    if (trips && url){
-      const matchingTrips = trips.filter(trip => trip.url === url);
-      if (matchingTrips.length > 0) {
-        console.log('tripSaved');
-      } else {
-        console.log('No matching trips found');
-      }
-    }
-    console.log('Form submitted:', data);
     const newTripId = await onSubmit(data as Trip, async () => {
       reset();
       return undefined;
     });
 
     if (newTripId) {
-      console.log('Navigating to:', `/trip/${newTripId}`);
       if(collectionId){
         const collectionRef = doc(db, 'collections', collectionId);
           await updateDoc(collectionRef, {
             trips: arrayUnion(newTripId),
           });
       }
-      navigate(`/trip/${newTripId}`); // Navigate to the new trip's detail page
+      navigate(`/trip/${newTripId}`); 
     }
     
-    reset(); // Reset the form fields after submission
+    reset(); 
   };
 
   return (
-    <Stack sx={{ px: '2rem', py: '1rem', backgroundColor: 'grey.50' }}>
+    <Stack spacing={2} sx={{ p: 3, width: '100%', mt: isMobile ? '3rem' : 0 }}>
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit(handleFormSubmit)}>
           <Grid container spacing={3}>
@@ -167,27 +154,27 @@ export default function TripScraperForm({ onBack, onSubmit, scrapedData, url }: 
                     </Typography>
                   )}
                 </Box>
-                <Box>
-                  <Typography sx={{ textAlign: 'left' }}>Select up to 6 images:</Typography>
-                  {errors.images && (
-                    <Typography color="error" sx={{ textAlign: 'left', fontSize: '0.8rem', ml: '14px' }}>
-                      {errors.images.message as string}
-                    </Typography>
-                  )}
-                  {scrapedData?.images && scrapedData.images.length > 0 && (
-                    <Grid container spacing={2} >
-                      {scrapedData.images.slice(0, 6).map((image, index) => (
-                        <ImagesCheckboxComponent
-                          key={index}
-                          index={index}
-                          image={image}
-                          selectedImages={selectedImages}
-                          handleImageCheckboxChange={handleImageSelectionChange}
-                        />
-                      ))}
-                    </Grid>
-                  )}
-                </Box>
+                  <Stack>
+                    <Typography sx={{ textAlign: 'left' }}>Select up to 6 images:</Typography>
+                    {errors.images && (
+                      <Typography color="error" sx={{ textAlign: 'left', fontSize: '0.8rem', ml: '14px' }}>
+                        {errors.images.message as string}
+                      </Typography>
+                    )}
+                    {scrapedData?.images && scrapedData.images.length > 0 && (
+                      <Grid container spacing={2} >
+                        {scrapedData.images.slice(0, 6).map((image, index) => (
+                          <ImagesCheckboxComponent
+                            key={index}
+                            index={index}
+                            image={image}
+                            selectedImages={selectedImages}
+                            handleImageCheckboxChange={handleImageSelectionChange}
+                          />
+                        ))}
+                      </Grid>
+                    )}
+                  </Stack>
               </Stack>
             </Grid>
             <Grid item xs={12} md={6}>
@@ -195,7 +182,9 @@ export default function TripScraperForm({ onBack, onSubmit, scrapedData, url }: 
                 coordinates={coordinates}
                 setCoordinates={setCoordinates}
               />
-              <AddToCollection getCollectionId={getCollectionId} initialCollectionId={collectionId}/>
+              <Stack sx={{ mt: 2, alignItems: 'flex-end' }}>
+                <AddToCollection getCollectionId={getCollectionId} initialCollectionId={collectionId}/>
+              </Stack>
             </Grid>
           </Grid>
           <Stack direction="row" sx={{ justifyContent: 'space-between', mt: 2 }}>

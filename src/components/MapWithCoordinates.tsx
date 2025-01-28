@@ -70,7 +70,6 @@ const MapWithCoordinates: React.FC<MapWithCoordinatesProps> = ({
           )}&format=json&addressdetails=1&limit=5`
         );
         const data = await response.json();
-        console.log(data);
         setSuggestions(data);
         setShowSuggestions(true);
       } catch (error) {
@@ -125,7 +124,6 @@ const MapWithCoordinates: React.FC<MapWithCoordinatesProps> = ({
   return (
     <>
     <Box sx={{ position: 'relative', height: '400px' }}>
-      {/* Search Box */}
       <Box
         sx={{
           position: 'absolute',
@@ -162,6 +160,7 @@ const MapWithCoordinates: React.FC<MapWithCoordinatesProps> = ({
                 </IconButton>
               </InputAdornment>
             ),
+            autoComplete: 'off', 
           }}
         />
         {showSuggestions && (

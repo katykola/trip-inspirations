@@ -43,6 +43,7 @@ export default function TripList() {
   }, [selectedTripId]);
 
   const onBack = () => {
+    setSelectedCollection(null);
     navigate('/collections');
   };
 
