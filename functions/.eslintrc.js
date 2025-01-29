@@ -3,8 +3,8 @@ import ts from "@typescript-eslint/eslint-plugin";
 import tsParser from "@typescript-eslint/parser";
 
 export default [
-  js.configs.recommended, // Replaces "eslint:recommended"
-  ts.configs.recommended, // Replaces "plugin:@typescript-eslint/recommended"
+  js.configs.recommended, 
+  // ts.configs.recommended, 
   {
     languageOptions: {
       parser: tsParser,
@@ -21,3 +21,4 @@ export default [
     },
   },
 ];
+
