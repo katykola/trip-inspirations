@@ -4,8 +4,7 @@ import MarkerClusterGroup from 'react-leaflet-markercluster';
 import 'leaflet/dist/leaflet.css';
 import { Trip } from '../types/types';
 import L from 'leaflet';
-import { useTrips } from '../hooks/useTrips';
-import { useAuth } from '../context/AuthContext';
+import { useTripsByCollectionId } from '../hooks/useTripsByCollectionId';
 import { useMediaQuery } from '@mui/material';
 import { smallScreenBreakpoint } from '../utils/breakpoints';
 import { headerHeight, menuBarHeight } from '../utils/styling';
@@ -39,14 +38,12 @@ interface MapCollectionProps {
 }
 
 const MapCollection: React.FC<MapCollectionProps> = ({ collectionId }) => {
-  const { user } = useAuth();
-  const userId = user?.uid;
   const isMobile = useMediaQuery(smallScreenBreakpoint);
   const { selectedTripId } = useVisibleTrips();
 
   const mapRef = useRef<L.Map>(null);
 
-  const { data: trips = [], isLoading, error } = useTrips(userId);
+  const { data: trips = [], isLoading, error, readCount } = useTripsByCollectionId(collectionId);
 
   const validTrips = trips.filter(trip => trip.collection === collectionId && trip.lat !== undefined && trip.lng !== undefined);
 
@@ -69,7 +66,7 @@ const MapCollection: React.FC<MapCollectionProps> = ({ collectionId }) => {
     return <div>Error loading trips: {error.message}</div>;
   }
 
-  console.log('selectedTripId', selectedTripId);  
+  console.log('read count', readCount);  
 
   return (
     <MapContainer

@@ -17,6 +17,7 @@ export default function CollectionsPage() {
   const userId = user?.uid || '';
   const { data: collections = [], isLoading, error } = useCollections(userId);
   const [collectionsWithImages, setCollectionsWithImages] = useState<Collection[]>([]);
+  const [readCount, setReadCount] = useState(0); // State variable to track Firestore reads
 
   useEffect(() => {
     const fetchTripsForCollections = async () => {
@@ -28,6 +29,7 @@ export default function CollectionsPage() {
             limit(3)
           );
           const tripsSnapshot = await getDocs(tripsQuery);
+          setReadCount(prevCount => prevCount + tripsSnapshot.size); // Increment read count
           const tripImages = tripsSnapshot.docs.map(tripDoc => tripDoc.data().images[0]).filter(Boolean);
           return { ...collection, images: tripImages };
         })
@@ -38,6 +40,7 @@ export default function CollectionsPage() {
     if (collections.length > 0) {
       fetchTripsForCollections();
     }
+
   }, [collections]);
 
   if (isLoading) {
@@ -47,6 +50,8 @@ export default function CollectionsPage() {
   if (error) {
     return <div>Error fetching collections: {error.message}</div>;
   }
+
+  console.log(`Read count: ${readCount}`);
 
   return (
     <Stack

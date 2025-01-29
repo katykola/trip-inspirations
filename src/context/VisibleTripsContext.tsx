@@ -16,6 +16,7 @@ interface VisibleTripsContextProps {
   isLoading: boolean;
   tripDetailOpen: boolean;
   setTripDetailOpen: (tripDetailOpen: boolean) => void;
+  readCount: number; // Add readCount to context
 }
 
 const VisibleTripsContext = createContext<VisibleTripsContextProps | undefined>(undefined);
@@ -30,7 +31,7 @@ export const VisibleTripsProvider = ({ children }: { children: ReactNode }) => {
   const [tripDetailOpen, setTripDetailOpen] = useState(false);
   
   const userId = user?.uid;
-  const { data: trips, isLoading: tripsLoading } = useTrips(userId);
+  const { data: trips, isLoading: tripsLoading, readCount } = useTrips(userId);
 
 
   // Determine the base location
@@ -70,6 +71,8 @@ export const VisibleTripsProvider = ({ children }: { children: ReactNode }) => {
 
   const isLoading = tripsLoading;
 
+  console.log('read count', readCount);
+
 
   return (
     <VisibleTripsContext.Provider
@@ -83,7 +86,8 @@ export const VisibleTripsProvider = ({ children }: { children: ReactNode }) => {
         visibleTrips,
         isLoading,
         tripDetailOpen,
-        setTripDetailOpen
+        setTripDetailOpen,
+        readCount
       }}
     >
       {children}
