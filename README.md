@@ -8,14 +8,17 @@ This project allows users to save tips from travel blogs, organize them in colle
 
 1. **Save Travel Inspiration**  
    Easily save destinations, activities, and tips from travel blogs and articles. Store valuable details for future trips.
+   ![Trip Add New](./src/images/add_new.webp)
 
-2. **Interactive Map**  
+3. **Interactive Map**  
    Add your saved cards to the map for a clear overview of your plans. Use **OpenStreetMap** and **Leaflet** to visualize locations in real-time.
+   ![Trip Map List](./src/images/map_list.webp)
 
-3. **Build Collections**  
+4. **Build Collections**  
    Group destinations into trips or thematic collections such as "Wandering in the Alps" or "City Life in Vienna". Organize your inspiration into customized collections.
+   ![Trip Collections](./src/images/collections.webp)
 
-4. **Filter and Explore**  
+5. **Filter and Explore**  
    Narrow down your trips based on location, distance, or type of adventure. Find what excites you most by applying various filters.
    ![Trip Detail](./src/images/trip_detail.webp)
 
