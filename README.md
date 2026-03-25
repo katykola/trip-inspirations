@@ -4,6 +4,9 @@
 
 This project allows users to save tips from travel blogs, organize them in collections, and view them on an interactive map. Whether you're planning a trip or gathering ideas, this app lets you easily manage and explore your travel inspiration.
 
+See demo video:
+https://drive.google.com/file/d/1THITJZ3i6O2tOeFsI03jiE8Xs5GR8tDd/view?usp=sharing
+
 ## Features
 
 1. **Save Travel Inspiration**  
